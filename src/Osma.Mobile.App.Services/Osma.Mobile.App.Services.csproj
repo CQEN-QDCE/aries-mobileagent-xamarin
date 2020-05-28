@@ -19,8 +19,8 @@
     <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="5.1.2" />
-    <PackageReference Include="Hyperledger.Aries.Routing.Edge" Version="1.2.9" />
+    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="Hyperledger.Aries.Routing.Edge" Version="1.2.11" />
   </ItemGroup>
 
   <ItemGroup>
