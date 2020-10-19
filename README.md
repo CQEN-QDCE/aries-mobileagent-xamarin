@@ -76,4 +76,10 @@ Après logon, se placer dans le répertoire mediator situé à la racine du proj
     
     oc get route
 
-P.S.: Pour redéployer l'application, réexécuter la commande `oc start-build sqin-mediator-agent --from-dir=.` et attendre que le pod soit déployé à nouveau.
+###Redéploiement de l'agent médiateur
+
+    dotnet build
+    
+    oc start-build sqin-mediator-agent --from-dir=.
+
+ attendre que le pod soit déployé à nouveau.
