@@ -62,6 +62,8 @@ Faire logon au cluster openshift avec la commande `oc login` (voir la référenc
 
 Après logon, se placer dans le répertoire mediator situé à la racine du projet. 
 
+Dans le fichier Startup.cs, modifier la ligne `options.EndpointUri = "url public de l'agent sur Openshift";`.
+
     oc new-project sqin-mediator-agent
     
     oc adm policy add-scc-to-user anyuid -z default -n sqin-mediator-agent
