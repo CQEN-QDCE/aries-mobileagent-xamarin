@@ -53,3 +53,27 @@ This mobile apps primary dependency is upon the open source project [Aries Frame
 ### Indy
 
 Much of the emerging standards AMA-X and Aries Framework implement are born out of the [Indy-Agent]() community.
+
+## Déploiement de l'agent médiateur sur Openshift 
+
+Pour faire le déploiement sur Openshift, il faut avoir l'outil `oc` installé sur le poste local. Référez-vous à la page d'instalation de `oc` pour détails. 
+
+Faire logon au cluster openshift avec la commande `oc login` (voir la référence d'openshift). 
+
+Après logon, se placer dans le répertoire mediator situé à la racine du projet. 
+
+    oc new-project sqin-mediator-agent
+
+    oc new-build --name sqin-mediator-agent --binary --strategy docker
+
+    oc start-build sqin-mediator-agent --from-dir=.
+
+    oc logs sqin-mediator-agent-1-build -f
+
+    oc new-app sqin-mediator-agent --allow-missing-imagestream-tags 
+
+    oc expose svc sqin-mediator-agent --name=ma
+    
+    oc get route
+
+P.S.: Pour redéployer l'application, réexécuter la commande `oc start-build sqin-mediator-agent --from-dir=.` et attendre que le pod soit déployé à nouveau.
