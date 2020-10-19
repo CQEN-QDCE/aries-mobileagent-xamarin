@@ -63,6 +63,8 @@ Faire logon au cluster openshift avec la commande `oc login` (voir la référenc
 Après logon, se placer dans le répertoire mediator situé à la racine du projet. 
 
     oc new-project sqin-mediator-agent
+    
+    oc adm policy add-scc-to-user anyuid -z default -n sqin-mediator-agent
 
     oc new-build --name sqin-mediator-agent --binary --strategy docker
 
@@ -76,7 +78,7 @@ Après logon, se placer dans le répertoire mediator situé à la racine du proj
     
     oc get route
 
-###Redéploiement de l'agent médiateur
+### Redéploiement de l'agent médiateur
 
     dotnet build
     
