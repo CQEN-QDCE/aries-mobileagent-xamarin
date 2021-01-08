@@ -1,17 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
+using Hyperledger.Aries.Agents;
+using Hyperledger.Aries.Configuration;
+using Hyperledger.Aries.Contracts;
+using Hyperledger.Aries.Features.DidExchange;
+using Hyperledger.Aries.Storage;
 using Osma.Mobile.App.Events;
 using Osma.Mobile.App.Services.Interfaces;
 using ReactiveUI;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
-using Hyperledger.Aries.Configuration;
-using Hyperledger.Aries.Features.DidExchange;
-using Hyperledger.Aries.Agents;
-using Hyperledger.Aries.Contracts;
-using Hyperledger.Aries;
 
 namespace Osma.Mobile.App.ViewModels.Connections
 {
@@ -21,6 +19,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         private readonly IConnectionService _connectionService;
         private readonly IMessageService _messageService;
         private readonly IAgentProvider _contextProvider;
+        private readonly IWalletRecordService _walletRecordService;
         private readonly IEventAggregator _eventAggregator;
 
         private ConnectionInvitationMessage _invite;
@@ -31,6 +30,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
                                      IConnectionService connectionService,
                                      IMessageService messageService,
                                      IAgentProvider contextProvider,
+                                     IWalletRecordService walletRecordService,
                                      IEventAggregator eventAggregator)
                                      : base("Accept Invitiation", userDialogs, navigationService)
         {
@@ -39,6 +39,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
             _contextProvider = contextProvider;
             _messageService = messageService;
             _contextProvider = contextProvider;
+            _walletRecordService = walletRecordService;
             _eventAggregator = eventAggregator;
         }
 
@@ -55,15 +56,19 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         #region Bindable Commands
+
         public ICommand AcceptInviteCommand => new Command(async () =>
         {
             var loadingDialog = DialogService.Loading("Processing");
             var context = await _contextProvider.GetContextAsync();
-
             try
             {
                 var (msg, rec) = await _connectionService.CreateRequestAsync(context, _invite);
-                await _messageService.SendAsync(context.Wallet, msg, rec);
+                rec.SetTag("RecipientKeys", string.Join(",", _invite.RecipientKeys));
+                await _walletRecordService.UpdateAsync(context.Wallet, rec);
+
+                msg.Label = "Oui";
+                //await _messageService.SendAsync(context.Wallet, msg, rec);
 
                 _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.ConnectionsUpdated });
             }
@@ -76,10 +81,12 @@ namespace Osma.Mobile.App.ViewModels.Connections
 
         public ICommand RejectInviteCommand => new Command(async () => await NavigationService.PopModalAsync());
 
-        #endregion
+        #endregion Bindable Commands
 
         #region Bindable Properties
+
         private string _inviteTitle;
+
         public string InviteTitle
         {
             get => _inviteTitle;
@@ -87,6 +94,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private string _inviteContents = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua";
+
         public string InviteContents
         {
             get => _inviteContents;
@@ -94,11 +102,13 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private string _inviterUrl;
+
         public string InviterUrl
         {
             get => _inviterUrl;
             set => this.RaiseAndSetIfChanged(ref _inviterUrl, value);
         }
-        #endregion
+
+        #endregion Bindable Properties
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -12,7 +11,6 @@ namespace Osma.Mobile.App.Views.Account
             InitializeComponent();
         }
 
-
         public static readonly BindableProperty TitleProperty =
             BindableProperty.Create("Title", typeof(string), typeof(AccountMenuButtonView), "", propertyChanged: TitlePropertyChanged);
 
@@ -20,10 +18,9 @@ namespace Osma.Mobile.App.Views.Account
         {
             get { return (string)GetValue(TitleProperty); }
             set { SetValue(TitleProperty, value); }
-
         }
 
-        static void TitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void TitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             AccountMenuButtonView view = (AccountMenuButtonView)bindable;
             view.TitleLabel.Text = newValue.ToString();
@@ -38,7 +35,7 @@ namespace Osma.Mobile.App.Views.Account
             set { SetValue(SubtitleProperty, value); }
         }
 
-        static void SubtitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void SubtitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             AccountMenuButtonView view = (AccountMenuButtonView)bindable;
             Device.BeginInvokeOnMainThread(() =>
@@ -56,7 +53,7 @@ namespace Osma.Mobile.App.Views.Account
             set { SetValue(ImageProperty, value); }
         }
 
-        static void ImagePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void ImagePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             AccountMenuButtonView view = (AccountMenuButtonView)bindable;
             Device.BeginInvokeOnMainThread(() =>
@@ -64,7 +61,6 @@ namespace Osma.Mobile.App.Views.Account
                 view.IconImage.Source = newValue.ToString();
             });
         }
-
 
         public static readonly BindableProperty TappedCommandProperty =
             BindableProperty.Create("TappedCommand", typeof(ICommand), typeof(AccountMenuButtonView), null, propertyChanged: TappedCommandPropertyChanged);
@@ -75,12 +71,11 @@ namespace Osma.Mobile.App.Views.Account
             set { SetValue(ImageProperty, value); }
         }
 
-        static void TappedCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void TappedCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             AccountMenuButtonView view = (AccountMenuButtonView)bindable;
             view.TapGestureRecognizer.Command = (ICommand)newValue;
         }
-
 
         public static readonly BindableProperty NumberOfTapsRequiredProperty =
             BindableProperty.Create("NumberOfTapsRequired", typeof(Int32), typeof(AccountMenuButtonView), 1, propertyChanged: NumberOfTapsRequiredPropertyChanged);
@@ -91,7 +86,7 @@ namespace Osma.Mobile.App.Views.Account
             set { SetValue(ImageProperty, value); }
         }
 
-        static void NumberOfTapsRequiredPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void NumberOfTapsRequiredPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             AccountMenuButtonView view = (AccountMenuButtonView)bindable;
             view.TapGestureRecognizer.NumberOfTapsRequired = (Int32)newValue;

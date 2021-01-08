@@ -1,25 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Views.Components
 {
     public partial class DetailedCell : ViewCell
     {
-
         // It may be worth it in the future to write custom renderers for each platform as this will give performance benefits
 
         public static readonly BindableProperty TitleProperty =
             BindableProperty.Create("Title", typeof(string), typeof(DetailedCell), "", propertyChanged: TitlePropertyChanged);
 
-
         public string Title
         {
-            get { return (string)GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
+            get
+            {
+                return (string)GetValue(TitleProperty);
+            }
+            set
+            {
+                SetValue(TitleProperty, value);
+            }
         }
 
-        static void TitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void TitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             DetailedCell cell = (DetailedCell)bindable;
             Device.BeginInvokeOnMainThread(() =>
@@ -38,12 +40,39 @@ namespace Osma.Mobile.App.Views.Components
             set { SetValue(SubtitleProperty, value); }
         }
 
-        static void SubtitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void SubtitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             DetailedCell cell = (DetailedCell)bindable;
             Device.BeginInvokeOnMainThread(() =>
             {
-                cell.SubtitleLabel.Text = newValue.ToString();
+                cell.SubtitleLabel.Text = newValue == null ? string.Empty : newValue.ToString();
+                if (newValue == null || string.IsNullOrWhiteSpace(newValue.ToString()))
+                {
+                    Grid.SetRowSpan(cell.TitleLabel, 2);
+                }
+                else
+                {
+                    Grid.SetRowSpan(cell.TitleLabel, 1);
+                }
+            });
+        }
+
+        public static readonly BindableProperty DateTimeProperty =
+            BindableProperty.Create("DateTime", typeof(string), typeof(DetailedCell), "",
+            propertyChanged: DateTimePropertyChanged);
+
+        public string DateTime
+        {
+            get { return (string)GetValue(DateTimeProperty); }
+            set { SetValue(DateTimeProperty, value); }
+        }
+
+        private static void DateTimePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            DetailedCell cell = (DetailedCell)bindable;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                cell.DateTimeLabel.Text = newValue.ToString();
                 if (string.IsNullOrWhiteSpace(newValue.ToString()))
                 {
                     Grid.SetRowSpan(cell.TitleLabel, 2);
@@ -55,6 +84,32 @@ namespace Osma.Mobile.App.Views.Components
             });
         }
 
+        public static readonly BindableProperty TextAnnotationProperty =
+BindableProperty.Create("TextAnnotation", typeof(string), typeof(DetailedCell), "",
+propertyChanged: TextAnnotationPropertyChanged);
+
+        public string TextAnnotation
+        {
+            get { return (string)GetValue(TextAnnotationProperty); }
+            set { SetValue(TextAnnotationProperty, value); }
+        }
+
+        private static void TextAnnotationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            DetailedCell cell = (DetailedCell)bindable;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                //cell.TextAnnotationLabel.Text = (newValue == null ? string.Empty : newValue.ToString());
+                if (newValue == null || string.IsNullOrWhiteSpace(newValue.ToString()))
+                {
+                    Grid.SetRowSpan(cell.TitleLabel, 2);
+                }
+                else
+                {
+                    Grid.SetRowSpan(cell.TitleLabel, 1);
+                }
+            });
+        }
 
         public static readonly BindableProperty ImageURLProperty =
             BindableProperty.Create("ImageURL", typeof(string), typeof(DetailedCell), "", propertyChanged: ImageURLPropertyChanged);
@@ -65,7 +120,7 @@ namespace Osma.Mobile.App.Views.Components
             set { SetValue(ImageURLProperty, value); }
         }
 
-        static void ImageURLPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void ImageURLPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             DetailedCell cell = (DetailedCell)bindable;
             Device.BeginInvokeOnMainThread(() =>
@@ -84,7 +139,7 @@ namespace Osma.Mobile.App.Views.Components
             set { SetValue(IsNewProperty, value); }
         }
 
-        static void IsNewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void IsNewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             DetailedCell cell = (DetailedCell)bindable;
             bool isNew = (bool)newValue;
@@ -100,7 +155,6 @@ namespace Osma.Mobile.App.Views.Components
         public DetailedCell()
         {
             InitializeComponent();
-
         }
     }
 }

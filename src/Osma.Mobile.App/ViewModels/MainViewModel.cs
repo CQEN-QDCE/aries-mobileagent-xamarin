@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
+using Osma.Mobile.App.Services;
 using Osma.Mobile.App.Services.Interfaces;
 using Osma.Mobile.App.ViewModels.Account;
 using Osma.Mobile.App.ViewModels.Connections;
 using Osma.Mobile.App.ViewModels.CreateInvitation;
 using Osma.Mobile.App.ViewModels.Credentials;
+using Osma.Mobile.App.ViewModels.ProofRequests;
 using ReactiveUI;
+using System.Threading.Tasks;
 
 namespace Osma.Mobile.App.ViewModels
 {
@@ -17,6 +19,7 @@ namespace Osma.Mobile.App.ViewModels
             ConnectionsViewModel connectionsViewModel,
             CredentialsViewModel credentialsViewModel,
             AccountViewModel accountViewModel,
+            ProofRequestsViewModel proofRequestsViewModel,
             CreateInvitationViewModel createInvitationViewModel
         ) : base(
                 nameof(MainViewModel),
@@ -27,6 +30,7 @@ namespace Osma.Mobile.App.ViewModels
             Connections = connectionsViewModel;
             Credentials = credentialsViewModel;
             Account = accountViewModel;
+            ProofRequests = proofRequestsViewModel;
             CreateInvitation = createInvitationViewModel;
         }
 
@@ -36,11 +40,14 @@ namespace Osma.Mobile.App.ViewModels
             await Credentials.InitializeAsync(null);
             await Account.InitializeAsync(null);
             await CreateInvitation.InitializeAsync(null);
+            await ProofRequests.InitializeAsync(null);
             await base.InitializeAsync(navigationData);
         }
 
         #region Bindable Properties
+
         private ConnectionsViewModel _connections;
+
         public ConnectionsViewModel Connections
         {
             get => _connections;
@@ -48,6 +55,7 @@ namespace Osma.Mobile.App.ViewModels
         }
 
         private CredentialsViewModel _credentials;
+
         public CredentialsViewModel Credentials
         {
             get => _credentials;
@@ -55,18 +63,29 @@ namespace Osma.Mobile.App.ViewModels
         }
 
         private AccountViewModel _account;
+
         public AccountViewModel Account
         {
             get => _account;
             set => this.RaiseAndSetIfChanged(ref _account, value);
         }
 
+        private ProofRequestsViewModel _proofRequests;
+
+        public ProofRequestsViewModel ProofRequests
+        {
+            get => _proofRequests;
+            set => this.RaiseAndSetIfChanged(ref _proofRequests, value);
+        }
+
         private CreateInvitationViewModel _createInvitation;
+
         public CreateInvitationViewModel CreateInvitation
         {
             get => _createInvitation;
             set => this.RaiseAndSetIfChanged(ref _createInvitation, value);
         }
-        #endregion
+
+        #endregion Bindable Properties
     }
 }

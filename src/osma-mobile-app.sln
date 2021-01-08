@@ -116,6 +116,7 @@ Global
 		{C5E413A2-5D83-4D67-A9B6-9B216E7689F9}.Debug|Any CPU.ActiveCfg = Debug|iPhone
 		{C5E413A2-5D83-4D67-A9B6-9B216E7689F9}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{C5E413A2-5D83-4D67-A9B6-9B216E7689F9}.Debug|iPhone.Build.0 = Debug|iPhone
+		{C5E413A2-5D83-4D67-A9B6-9B216E7689F9}.Debug|iPhone.Deploy.0 = Debug|iPhone
 		{C5E413A2-5D83-4D67-A9B6-9B216E7689F9}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
 		{C5E413A2-5D83-4D67-A9B6-9B216E7689F9}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
 		{C5E413A2-5D83-4D67-A9B6-9B216E7689F9}.Gorilla|Any CPU.ActiveCfg = Gorilla|iPhone
@@ -161,8 +162,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0EABE5EB-BBF0-4FFC-B518-3D38B6D23919}

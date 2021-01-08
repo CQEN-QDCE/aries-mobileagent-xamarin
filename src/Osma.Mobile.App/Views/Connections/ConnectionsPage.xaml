@@ -22,10 +22,11 @@
     <ContentPage.Content>
         <StackLayout>
             <StackLayout
-                IsVisible="{Binding HasConnections}">
-                <ListView
+                IsVisible="{Binding HasConnections}" VerticalOptions="FillAndExpand">
+                <ListView x:Name="MyListView"
+                    ios:ListView.RowAnimationsEnabled="false"
                     HasUnevenRows="True"
-                    IsPullToRefreshEnabled="True"
+                    IsPullToRefreshEnabled="False"
                     IsRefreshing="{Binding RefreshingConnections}"
                     RefreshCommand="{Binding RefreshCommand}"
                     IsEnabled="{Binding RefreshingConnections, Converter={StaticResource BooleanInverse}}"
@@ -35,6 +36,7 @@
                             <components:DetailedCell
                             Title="{Binding ConnectionName}"
                             Subtitle="{Binding ConnectionSubtitle}"
+                            DateTime="{Binding DateTime}"
                             ImageURL="{Binding ConnectionImageUrl}"
                         />
                         </DataTemplate>

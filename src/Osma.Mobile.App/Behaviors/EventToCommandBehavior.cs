@@ -3,45 +3,47 @@ using System.Reflection;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-
 namespace Osma.Mobile.App.Behaviors
 {
     public class EventToCommandBehavior : BehaviorBase<View>
     {
-        Delegate eventHandler;
+        private Delegate eventHandler;
 
         public static readonly BindableProperty EventNameProperty = BindableProperty.Create(
-            "EventName", 
-            typeof(string), 
-            typeof(EventToCommandBehavior), 
+            "EventName",
+            typeof(string),
+            typeof(EventToCommandBehavior),
             null,
             propertyChanged: OnEventNameChanged
         );
+
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(
             "Command",
             typeof(ICommand),
             typeof(EventToCommandBehavior),
             null
         );
+
         public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(
             "CommandParameter",
             typeof(object),
             typeof(EventToCommandBehavior),
             null
         );
+
         public static readonly BindableProperty InputConverterProperty = BindableProperty.Create(
             "Converter",
             typeof(IValueConverter),
             typeof(EventToCommandBehavior),
             null
         );
+
         public static readonly BindableProperty DeselectOnClickProperty = BindableProperty.Create(
             "DeselectOnClick",
             typeof(bool),
             typeof(EventToCommandBehavior),
             false
         );
-
 
         public string EventName
         {
@@ -85,7 +87,7 @@ namespace Osma.Mobile.App.Behaviors
             base.OnDetachingFrom(bindable);
         }
 
-        void RegisterEvent(string name)
+        private void RegisterEvent(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) { return; }
 
@@ -102,7 +104,7 @@ namespace Osma.Mobile.App.Behaviors
             eventInfo.AddEventHandler(AssociatedObject, eventHandler);
         }
 
-        void DeregisterEvent(string name)
+        private void DeregisterEvent(string name)
         {
             if (string.IsNullOrWhiteSpace(name) || eventHandler == null)
             {
@@ -117,7 +119,7 @@ namespace Osma.Mobile.App.Behaviors
             eventHandler = null;
         }
 
-        void OnEvent(object sender, object eventArgs)
+        private void OnEvent(object sender, object eventArgs)
         {
             if (Command == null)
             {
@@ -151,7 +153,7 @@ namespace Osma.Mobile.App.Behaviors
             }
         }
 
-        static void OnEventNameChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnEventNameChanged(BindableObject bindable, object oldValue, object newValue)
         {
             EventToCommandBehavior behavior = (EventToCommandBehavior)bindable;
             if (behavior.AssociatedObject == null) { return; }

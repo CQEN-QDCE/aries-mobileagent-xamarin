@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Input;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using Osma.Mobile.App.Services;
 using Osma.Mobile.App.Services.Interfaces;
-using ReactiveUI;
-using Xamarin.Forms;
-using Xamarin.Essentials;
 using Osma.Mobile.App.Views.Legal;
+using ReactiveUI;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Osma.Mobile.App.ViewModels.Account
 {
@@ -28,7 +28,6 @@ namespace Osma.Mobile.App.ViewModels.Account
             _avatarUrl = "http://i.pravatar.cc/100";
 #endif
         }
-
 
         public async Task NavigateToBackup()
         {
@@ -61,11 +60,12 @@ namespace Osma.Mobile.App.ViewModels.Account
 
         public ICommand NavigateToDebugCommand => new Command(async () => await NavigateToDebug());
 
-        #endregion
+        #endregion Bindable Command
 
         #region Bindable Properties
 
         private string _fullName;
+
         public string FullName
         {
             get => _fullName;
@@ -73,6 +73,7 @@ namespace Osma.Mobile.App.ViewModels.Account
         }
 
         private string _avatarUrl;
+
         public string AvatarUrl
         {
             get => _avatarUrl;
@@ -80,6 +81,7 @@ namespace Osma.Mobile.App.ViewModels.Account
         }
 
         private bool _showDebug;
+
         public bool ShowDebug
         {
             get => _showDebug;
@@ -87,6 +89,7 @@ namespace Osma.Mobile.App.ViewModels.Account
         }
 
         private string _appVersion;
+
         public string AppVersion
         {
             get => _appVersion;
@@ -94,12 +97,13 @@ namespace Osma.Mobile.App.ViewModels.Account
         }
 
         private string _buildVersion;
+
         public string BuildVersion
         {
             get => _buildVersion;
             set => this.RaiseAndSetIfChanged(ref _buildVersion, value);
         }
 
-        #endregion
+        #endregion Bindable Properties
     }
 }

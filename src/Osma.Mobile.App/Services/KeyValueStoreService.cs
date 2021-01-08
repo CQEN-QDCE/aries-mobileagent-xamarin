@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Osma.Mobile.App.Services.Interfaces;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Osma.Mobile.App.Services.Interfaces;
 using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Services

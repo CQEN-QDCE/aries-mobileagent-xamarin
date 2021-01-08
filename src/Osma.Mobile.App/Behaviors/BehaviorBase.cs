@@ -1,6 +1,5 @@
 using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 public class BehaviorBase<T> : Behavior<T> where T : BindableObject
 {
@@ -25,7 +24,7 @@ public class BehaviorBase<T> : Behavior<T> where T : BindableObject
         AssociatedObject = null;
     }
 
-    void OnBindingContextChanged(object sender, EventArgs e)
+    private void OnBindingContextChanged(object sender, EventArgs e)
     {
         OnBindingContextChanged();
     }

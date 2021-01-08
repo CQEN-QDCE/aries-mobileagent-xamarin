@@ -12,11 +12,11 @@ namespace Osma.Mobile.App.Services.Interfaces
         Task NavigateToAsync(Page page, NavigationType type = NavigationType.Normal);
 
         Task NavigateToAsync<TViewModel>(object parameter = null, NavigationType type = NavigationType.Normal) where TViewModel : IABaseViewModel;
-        
+
         Task NavigateToAsync<TViewModel>(TViewModel viewModel, object parameter = null, NavigationType type = NavigationType.Normal) where TViewModel : IABaseViewModel;
 
         Task AddTabChildToMainView<TViewModel>(TViewModel viewModel, object parameter, int atIndex = -1) where TViewModel : IABaseViewModel;
-        
+
         Task NavigateBackAsync();
 
         Task RemoveLastFromBackStackAsync();

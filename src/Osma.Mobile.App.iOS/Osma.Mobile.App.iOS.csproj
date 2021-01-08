@@ -14,6 +14,7 @@
     <AssemblyName>Osma.Mobile.App.iOS</AssemblyName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <ProvisioningType>automatic</ProvisioningType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,7 +29,8 @@
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
     <MtouchExtraArgs>-gcc_flags -dead_strip -v</MtouchExtraArgs>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Development: Martin St-Pierre (KQ6YBBNPH5)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -51,11 +53,15 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Development: Martin St-Pierre (KQ6YBBNPH5)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <MtouchExtraArgs>-gcc_flags -dead_strip -v</MtouchExtraArgs>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchInterpreter>-all</MtouchInterpreter>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <MtouchFloat32>true</MtouchFloat32>
+    <MtouchNoSymbolStrip>false</MtouchNoSymbolStrip>
+    <IOSDebugOverWiFi>false</IOSDebugOverWiFi>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -171,6 +177,9 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon87.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\clock_icon.imageset\clock.png">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\connection_icon.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -185,6 +194,9 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\credentials_icon.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\clock_icon.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\keyboard_down_icon.imageset\Contents.json">
@@ -325,6 +337,11 @@
     <ImageAsset Include="Assets.xcassets\camera_icon.imageset\outline_photo_camera_white_24pt_3x.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <BundleResource Include="Resources\pool_transactions_bcovrin_test_genesis" />
+    <BundleResource Include="Resources\pool_transactions_builder_genesis" />
+    <BundleResource Include="Resources\pool_transactions_sandbox_genesis" />
+    <BundleResource Include="Resources\pool_transactions_live_genesis" />
+    <BundleResource Include="Resources\pool_transactions_vonx_pocquebec_genesis" />
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="..\..\libs\ios\libcrypto.a">
@@ -357,10 +374,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>3.2.2</Version>
+      <Version>4.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>3.2.2</Version>
+      <Version>4.0.0</Version>
     </PackageReference>
     <PackageReference Include="UXDivers.GorillaPlayer.SDK">
       <Version>1.5.5</Version>
@@ -368,7 +385,7 @@
     <PackageReference Include="Xamarin.FFImageLoading.Forms">
       <Version>2.4.11.982</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.800" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
     <PackageReference Include="ZXing.Net.Mobile.Forms">
       <Version>2.4.1</Version>
     </PackageReference>
@@ -400,4 +417,9 @@
     <Folder Include="Assets.xcassets\security_icon.imageset\" />
     <Folder Include="libs\" />
   </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties XamarinHotReloadWrongLinkerErrorInfoBarOsmaMobileAppiOSHideInfoBar="True" TriggeredFromHotReload="False" XamarinHotReloadDebuggerTimeoutExceptionOsmaMobileAppiOSHideInfoBar="True" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

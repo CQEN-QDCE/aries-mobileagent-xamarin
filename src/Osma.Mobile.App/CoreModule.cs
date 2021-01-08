@@ -10,7 +10,7 @@ namespace Osma.Mobile.App
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            
+
             builder
                 .Register(x => UserDialogs.Instance)
                 .As<IUserDialogs>()

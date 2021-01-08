@@ -6,6 +6,7 @@
     xmlns:views="clr-namespace:Osma.Mobile.App.Views.Connections;assembly=Osma.Mobile.App"
     xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
     x:Class="Osma.Mobile.App.Views.Connections.ConnectionPage"
+    Disappearing="Disappearing"
 >
     <ContentPage.Resources>
         <ResourceDictionary>

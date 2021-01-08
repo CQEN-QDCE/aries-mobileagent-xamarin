@@ -1,14 +1,12 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.WebUtilities;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using Hyperledger.Aries.Agents;
+﻿using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Extensions;
 using Hyperledger.Aries.Features.DidExchange;
 using Hyperledger.Aries.Features.IssueCredential;
 using Hyperledger.Aries.Features.PresentProof;
+using Microsoft.AspNetCore.WebUtilities;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Osma.Mobile.App.Utilities
 {
@@ -63,11 +61,15 @@ namespace Osma.Mobile.App.Utilities
                 case MessageTypes.ConnectionInvitation:
                     return unpackedMessage.GetMessage<ConnectionInvitationMessage>();
                 //case MessageTypes.EphemeralChallenge:
-                //    return unpackedMessage.GetMessage<EphemeralChallengeMessage>();
-                //case MessageTypes.PresentProofNames.RequestPresentation:
-                //    return unpackedMessage.GetMessage<RequestPresentationMessage>();
-                //case MessageTypes.IssueCredentialNames.OfferCredential:
-                //    return unpackedMessage.GetMessage<CredentialOfferMessage>();
+                //  return unpackedMessage.GetMessage<EphemeralChallengeMessage>();
+                case MessageTypes.PresentProofNames.RequestPresentation:
+                    return unpackedMessage.GetMessage<RequestPresentationMessage>();
+
+                case "https://didcomm.org/present-proof/1.0/request-presentation":
+                    return unpackedMessage.GetMessage<RequestPresentationMessage>();
+
+                case MessageTypes.IssueCredentialNames.OfferCredential:
+                    return unpackedMessage.GetMessage<CredentialOfferMessage>();
             }
             return null;
         }

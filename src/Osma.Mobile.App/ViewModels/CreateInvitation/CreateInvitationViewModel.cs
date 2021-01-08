@@ -1,13 +1,13 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Extensions;
 using Hyperledger.Aries.Features.DidExchange;
 using Osma.Mobile.App.Services.Interfaces;
 using ReactiveUI;
+using System;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 using ZXing.Net.Mobile.Forms;
 
@@ -73,14 +73,13 @@ namespace Osma.Mobile.App.ViewModels.CreateInvitation
             barcode.BarcodeValue = barcodeValue;
 
             return barcode;
-
         }
 
         #region Bindable Command
 
         public ICommand CreateInvitationCommand => new Command(async () => await CreateInvitation());
 
-        #endregion
+        #endregion Bindable Command
 
         #region Bindable Properties
 
@@ -92,6 +91,6 @@ namespace Osma.Mobile.App.ViewModels.CreateInvitation
             set => this.RaiseAndSetIfChanged(ref _qrCodeValue, value);
         }
 
-        #endregion
+        #endregion Bindable Properties
     }
 }

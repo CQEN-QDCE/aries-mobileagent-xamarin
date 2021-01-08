@@ -1,9 +1,7 @@
-﻿using System;
-namespace Osma.Mobile.App.ViewModels.Credentials
+﻿namespace Osma.Mobile.App.ViewModels.Credentials
 {
     public class CredentialAttribute
     {
-
         public string Type { get; set; }
 
         public string Name { get; set; }

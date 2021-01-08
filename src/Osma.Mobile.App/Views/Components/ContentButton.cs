@@ -40,4 +40,3 @@ namespace Osma.Mobile.App.Views.Components
         }
     }
 }
-

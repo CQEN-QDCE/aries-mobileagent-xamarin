@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    x:Class="Osma.Mobile.App.Views.Components.CardCell">
+    <ViewCell.View>
+        <Frame Margin="10" 
+               CornerRadius="20"
+               Padding="0"
+               IsClippedToBounds="True" 
+               HasShadow="False"  
+               BackgroundColor="#32A0FF"
+               AbsoluteLayout.LayoutFlags="XProportional">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="100"></RowDefinition>
+                    <RowDefinition Height="100"></RowDefinition>
+                </Grid.RowDefinitions>
+                <BoxView Grid.Row="1" Grid.Column="0" Color="#5AB9FF" />
+                <Label x:Name="DateTimeLabel"
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       VerticalOptions="Center"
+                       TextColor="White"
+                       HorizontalTextAlignment="End"
+                       Margin="0,0,20,0"
+                       FontSize="Small"/>
+                <Grid Grid.Row="3" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label x:Name="TitleLabel"
+                           Grid.Row="0"
+                           Grid.Column="1"
+                           VerticalOptions="Center"
+                           TextColor="White"
+                           FontSize="Medium"/>
+                    <Label x:Name="SubtitleLabel"
+                           Grid.Row="1"
+                           Grid.Column="1"
+                           VerticalOptions="Center"
+                           TextColor="White"
+                           FontSize="Small"/>
+                </Grid>
+            </Grid>
+        </Frame>
+    </ViewCell.View>
+</ViewCell>

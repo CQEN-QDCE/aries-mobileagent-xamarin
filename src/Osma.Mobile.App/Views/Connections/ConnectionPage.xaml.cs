@@ -5,7 +5,6 @@ namespace Osma.Mobile.App.Views.Connections
 {
     public partial class ConnectionPage : ContentPage
     {
-
         public ConnectionPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -16,5 +15,7 @@ namespace Osma.Mobile.App.Views.Connections
         {
             moreModal.IsVisible = !moreModal.IsVisible;
         }
+
+        private new void Disappearing(object sender, System.EventArgs e) => NavigationPage.SetHasNavigationBar(this, true);
     }
 }

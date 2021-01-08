@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:connections="clr-namespace:Osma.Mobile.App.Views.Connections;assembly=Osma.Mobile.App"
     xmlns:credentials="clr-namespace:Osma.Mobile.App.Views.Credentials;assembly=Osma.Mobile.App"
+    xmlns:proofRequests="clr-namespace:Osma.Mobile.App.Views.ProofRequests;assembly=Osma.Mobile.App"
     xmlns:account="clr-namespace:Osma.Mobile.App.Views.Account;assembly=Osma.Mobile.App"
     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     x:Class="Osma.Mobile.App.Views.MainPage"
@@ -20,6 +21,12 @@
         ios:NavigationPage.PrefersLargeTitles="true"
         BindingContext="{Binding Credentials}">
     </credentials:CredentialsPage>
+    <proofRequests:ProofRequestsPage
+        Icon="credentials_icon.png"
+        Title="Proofs"
+        ios:NavigationPage.PrefersLargeTitles="true"
+        BindingContext="{Binding ProofRequests}">
+    </proofRequests:ProofRequestsPage>
     <account:AccountPage
         Icon="account_icon.png"
         ios:NavigationPage.PrefersLargeTitles="true"

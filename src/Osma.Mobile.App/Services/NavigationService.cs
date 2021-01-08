@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Osma.Mobile.App.Services.Interfaces;
 using Osma.Mobile.App.Views;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Services
@@ -23,13 +23,13 @@ namespace Osma.Mobile.App.Services
         protected readonly IList<Tuple<Type, Type, bool>> Mappings;
 
         protected Application CurrentApplication => Application.Current;
-        
+
         public NavigationService(ILifetimeScope scope)
         {
             _scope = scope;
             Mappings = new List<Tuple<Type, Type, bool>>();
         }
-        
+
         public void SetCurrentTabOnMainView<TViewModel>()
         {
             var mainPage = CurrentApplication.MainPage as TabbedPage;
@@ -117,9 +117,9 @@ namespace Osma.Mobile.App.Services
         }
 
         public Task NavigateToAsync<TViewModel>(TViewModel viewModel, object parameter = null, NavigationType type = NavigationType.Normal) where TViewModel : IABaseViewModel => InternalNavigateToAsync(typeof(TViewModel), type, viewModel, null);
-        
+
         public Task NavigateToAsync<TViewModel>(object parameter, NavigationType type = NavigationType.Normal) where TViewModel : IABaseViewModel => InternalNavigateToAsync(typeof(TViewModel), type, null, parameter);
-        
+
         public async Task NavigateToAsync(Page page, NavigationType type = NavigationType.Normal)
         {
             var mainPage = CurrentApplication.MainPage;
@@ -133,7 +133,10 @@ namespace Osma.Mobile.App.Services
         public async Task NavigateBackAsync()
         {
             if (CurrentApplication.MainPage != null)
+            {
+                NavigationPage.SetHasNavigationBar((CurrentApplication.MainPage as NavigationPage).CurrentPage, true);
                 await CurrentApplication.MainPage.Navigation.PopAsync();
+            }
         }
 
         public async Task PopModalAsync() => await CurrentApplication.MainPage.Navigation.PopModalAsync();
@@ -185,7 +188,6 @@ namespace Osma.Mobile.App.Services
                 await PopupNavigation.Instance.PushAsync(page as PopupPage, animate);
             else
                 throw new ArgumentException($"The type ${typeof(TViewModel)} its not a PopupPage type");
-
         }
 
         public async Task CloseAllPopupsAsync() => await PopupNavigation.Instance.PopAllAsync(true);
@@ -195,7 +197,7 @@ namespace Osma.Mobile.App.Services
             Page page = CreateAndBindPage(viewModelType, viewModel, parameter, false);
 
             if (type == NavigationType.Modal)
-                    await CurrentApplication.MainPage.Navigation.PushModalAsync(page);
+                await CurrentApplication.MainPage.Navigation.PushModalAsync(page);
             else
             {
                 if (page is IRootView)
@@ -217,12 +219,12 @@ namespace Osma.Mobile.App.Services
 
         protected Type GetPageTypeForViewModel(Type viewModelType, bool isPopup)
         {
-            var pageType = !isPopup ? Mappings.FirstOrDefault(_ => (_.Item1 == viewModelType) && !_.Item3).Item2 : 
+            var pageType = !isPopup ? Mappings.FirstOrDefault(_ => (_.Item1 == viewModelType) && !_.Item3).Item2 :
                 Mappings.FirstOrDefault(_ => (_.Item1 == viewModelType) && _.Item3).Item2;
 
             if (pageType == null)
                 throw new KeyNotFoundException($"No map for ${viewModelType} was found on navigation mappings");
-            
+
             return pageType;
         }
 
@@ -235,14 +237,14 @@ namespace Osma.Mobile.App.Services
 
             //TODO OS-195 throw an exception if this resolution was null i.e the bound type is not of type Page
             Page page = _scope.Resolve(pageType) as Page;
-            
+
             IABaseViewModel viewModel;
             if (viewModelObj != null)
                 viewModel = viewModelObj as IABaseViewModel;
             else
                 viewModel = _scope.Resolve(viewModelType) as IABaseViewModel;
             page.BindingContext = viewModel;
-            
+
             return page;
         }
 

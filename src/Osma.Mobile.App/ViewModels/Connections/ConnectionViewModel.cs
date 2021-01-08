@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Contracts;
 using Hyperledger.Aries.Features.DidExchange;
@@ -14,6 +9,11 @@ using Osma.Mobile.App.Extensions;
 using Osma.Mobile.App.Services.Interfaces;
 using Osma.Mobile.App.Views.Connections;
 using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Osma.Mobile.App.ViewModels.Connections
@@ -60,6 +60,8 @@ namespace Osma.Mobile.App.ViewModels.Connections
             await base.InitializeAsync(navigationData);
         }
 
+        public string Id { get { return _record.Id; } }
+
         public async Task RefreshTransactions()
         {
             RefreshingTransactions = true;
@@ -69,16 +71,16 @@ namespace Osma.Mobile.App.ViewModels.Connections
 
             DiscoveryDiscloseMessage protocols = null;
 
-            try
-            {
-                var response = await _messageService.SendReceiveAsync(context.Wallet, message, _record) as UnpackedMessageContext;
-                protocols = response.GetMessage<DiscoveryDiscloseMessage>();
-            }
-            catch (Exception)
-            {
-                //Swallow exception
-                //TODO more granular error protection
-            }
+            //try
+            //{
+            //    var response = await _messageService.SendReceiveAsync(context.Wallet, message, _record) as UnpackedMessageContext;
+            //    protocols = response.GetMessage<DiscoveryDiscloseMessage>();
+            //}
+            //catch (Exception)
+            //{
+            //    //Swallow exception
+            //    //TODO more granular error protection
+            //}
 
             IList<TransactionItem> transactions = new List<TransactionItem>();
 
@@ -127,17 +129,17 @@ namespace Osma.Mobile.App.ViewModels.Connections
             };
 
             bool success = false;
-            try
-            {
-                var response = await _messageService.SendReceiveAsync(context.Wallet, message, _record) as UnpackedMessageContext;
-                var trustPingResponse = response.GetMessage<TrustPingResponseMessage>();
-                success = true;
-            }
-            catch (Exception)
-            {
-                //Swallow exception
-                //TODO more granular error protection
-            }
+            //try
+            //{
+            //    var response = await _messageService.SendReceiveAsync(context.Wallet, message, _record) as UnpackedMessageContext;
+            //    var trustPingResponse = response.GetMessage<TrustPingResponseMessage>();
+            //    success = true;
+            //}
+            //catch (Exception)
+            //{
+            //    //Swallow exception
+            //    //TODO more granular error protection
+            //}
 
             if (dialog.IsShowing)
             {
@@ -153,6 +155,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         #region Bindable Command
+
         public ICommand NavigateBackCommand => new Command(async () =>
         {
             await NavigationService.NavigateBackAsync();
@@ -177,10 +180,13 @@ namespace Osma.Mobile.App.ViewModels.Connections
         });
 
         public ICommand RefreshTransactionsCommand => new Command(async () => await RefreshTransactions());
-        #endregion
+
+        #endregion Bindable Command
 
         #region Bindable Properties
+
         private string _connectionName;
+
         public string ConnectionName
         {
             get => _connectionName;
@@ -188,6 +194,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private string _myDid;
+
         public string MyDid
         {
             get => _myDid;
@@ -195,6 +202,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private string _theirDid;
+
         public string TheirDid
         {
             get => _theirDid;
@@ -202,6 +210,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private string _connectionImageUrl;
+
         public string ConnectionImageUrl
         {
             get => _connectionImageUrl;
@@ -209,6 +218,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private string _connectionSubtitle = "Lorem ipsum dolor sit amet";
+
         public string ConnectionSubtitle
         {
             get => _connectionSubtitle;
@@ -216,6 +226,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private RangeEnabledObservableCollection<TransactionItem> _transactions = new RangeEnabledObservableCollection<TransactionItem>();
+
         public RangeEnabledObservableCollection<TransactionItem> Transactions
         {
             get => _transactions;
@@ -223,6 +234,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private bool _refreshingTransactions;
+
         public bool RefreshingTransactions
         {
             get => _refreshingTransactions;
@@ -230,11 +242,21 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private bool _hasTransactions;
+
         public bool HasTransactions
         {
             get => _hasTransactions;
             set => this.RaiseAndSetIfChanged(ref _hasTransactions, value);
         }
-        #endregion
+
+        private DateTime? _datetime;
+
+        public DateTime? DateTime
+        {
+            get => _datetime;
+            set => this.RaiseAndSetIfChanged(ref _datetime, value);
+        }
+
+        #endregion Bindable Properties
     }
 }

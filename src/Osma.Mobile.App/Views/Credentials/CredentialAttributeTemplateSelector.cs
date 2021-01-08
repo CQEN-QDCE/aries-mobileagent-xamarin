@@ -1,5 +1,5 @@
-using System;
 using Osma.Mobile.App.ViewModels.Credentials;
+using System;
 using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Views.Credentials
@@ -8,9 +8,9 @@ namespace Osma.Mobile.App.Views.Credentials
     {
         None,
         Text = 1,
-        File = 2, 
-    
+        File = 2,
     }
+
     public class CredentialAttributeTemplateSelector : DataTemplateSelector
     {
         public DataTemplate TextTemplate { get; set; }
@@ -19,7 +19,6 @@ namespace Osma.Mobile.App.Views.Credentials
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-
             if (item is null)
             {
                 return ErrorTemplate;
@@ -27,7 +26,6 @@ namespace Osma.Mobile.App.Views.Credentials
 
             CredentialAttributeType credentialAttributeType;
             var credentialAttribute = item as CredentialAttribute;
-
 
             if (credentialAttribute is null)
             {
@@ -46,11 +44,12 @@ namespace Osma.Mobile.App.Views.Credentials
             {
                 case CredentialAttributeType.Text:
                     return TextTemplate;
+
                 case CredentialAttributeType.File:
                     return FileTemplate;
+
                 default:
                     return ErrorTemplate;
-
             }
         }
     }

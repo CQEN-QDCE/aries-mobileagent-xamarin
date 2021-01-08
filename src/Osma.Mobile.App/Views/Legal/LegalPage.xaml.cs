@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Views.Legal
 {

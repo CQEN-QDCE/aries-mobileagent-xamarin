@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Osma.Mobile.App.Extensions;
+﻿using Osma.Mobile.App.Extensions;
 using Osma.Mobile.App.ViewModels.Credentials;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Osma.Mobile.App.Utilities
 {

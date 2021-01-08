@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using Autofac;
 using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Contracts;
 using Hyperledger.Aries.Features.DidExchange;
-using Hyperledger.Aries.Utils;
+using Hyperledger.Aries.Features.PresentProof;
+using Newtonsoft.Json.Linq;
 using Osma.Mobile.App.Events;
 using Osma.Mobile.App.Extensions;
 using Osma.Mobile.App.Services;
@@ -18,8 +12,13 @@ using Osma.Mobile.App.Services.Interfaces;
 using Osma.Mobile.App.Utilities;
 using Osma.Mobile.App.ViewModels.CreateInvitation;
 using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
-using ZXing.Net.Mobile.Forms;
 
 namespace Osma.Mobile.App.ViewModels.Connections
 {
@@ -28,6 +27,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         private readonly IConnectionService _connectionService;
         private readonly IAgentProvider _agentContextProvider;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IProofService _proofService;
         private readonly ILifetimeScope _scope;
 
         public ConnectionsViewModel(IUserDialogs userDialogs,
@@ -35,12 +35,14 @@ namespace Osma.Mobile.App.ViewModels.Connections
                                     IConnectionService connectionService,
                                     IAgentProvider agentContextProvider,
                                     IEventAggregator eventAggregator,
+                                    IProofService proofService,
                                     ILifetimeScope scope) :
                                     base("Connections", userDialogs, navigationService)
         {
             _connectionService = connectionService;
             _agentContextProvider = agentContextProvider;
             _eventAggregator = eventAggregator;
+            _proofService = proofService;
             _scope = scope;
         }
 
@@ -55,27 +57,62 @@ namespace Osma.Mobile.App.ViewModels.Connections
             await base.InitializeAsync(navigationData);
         }
 
-
         public async Task RefreshConnections()
         {
-            RefreshingConnections = true;
+            //RefreshingConnections = true;
 
             var context = await _agentContextProvider.GetContextAsync();
             var records = await _connectionService.ListAsync(context);
-
-            IList<ConnectionViewModel> connectionVms = new List<ConnectionViewModel>();
+            records = records.OrderBy(r => r.CreatedAtUtc).ToList();
             foreach (var record in records)
             {
-                var connection = _scope.Resolve<ConnectionViewModel>(new NamedParameter("record", record));
-                connectionVms.Add(connection);
+                AddOrUpdateConnection(record);
+            }
+            var connectionsToRemove = new List<ConnectionViewModel>();
+            foreach (ConnectionViewModel connection in Connections)
+            {
+                var found = false;
+                foreach (var record in records)
+                {
+                    if (record.Id == connection.Id)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    connectionsToRemove.Add(connection);
+                }
             }
 
-            //TODO need to compare with the currently displayed connections rather than disposing all of them
-            Connections.Clear();
-            Connections.InsertRange(connectionVms);
-            HasConnections = connectionVms.Any();
+            foreach (ConnectionViewModel connection in connectionsToRemove)
+            {
+                Connections.Remove(connection);
+            }
+            HasConnections = Connections.Any();
 
-            RefreshingConnections = false;
+            //RefreshingConnections = false;
+        }
+
+        private void AddOrUpdateConnection(ConnectionRecord record)
+        {
+            foreach (ConnectionViewModel connection in Connections)
+            {
+                if (record.Id == connection.Id)
+                {
+                    connection.ConnectionSubtitle = record.State.ToString();
+                    return;
+                }
+            }
+            var con = _scope.Resolve<ConnectionViewModel>(new NamedParameter("record", record));
+            DateTime datetime = DateTime.Now;
+            if (record.CreatedAtUtc.HasValue)
+            {
+                datetime = record.CreatedAtUtc.Value.ToLocalTime();
+                con.DateTime = datetime;
+            }
+            Connections.Insert(0, con);
         }
 
         public async Task ScanInvite()
@@ -83,33 +120,67 @@ namespace Osma.Mobile.App.ViewModels.Connections
             var expectedFormat = ZXing.BarcodeFormat.QR_CODE;
             var opts = new ZXing.Mobile.MobileBarcodeScanningOptions { PossibleFormats = new List<ZXing.BarcodeFormat> { expectedFormat } };
 
+            var context = await _agentContextProvider.GetContextAsync();
+
             var scanner = new ZXing.Mobile.MobileBarcodeScanner();
 
             var result = await scanner.Scan(opts);
+
             if (result == null) return;
+            AgentMessage message = await MessageDecoder.ParseMessageAsync(result.Text);
 
-            ConnectionInvitationMessage invitation;
+            //AgentMessage message = await MessageDecoder.ParseMessageAsync("https://vc-authn-controller-vc-auth.apps.exp.lab.pocquebec.org/url/d0173a4f-d442-4303-b4ad-81ff1df157a6");
 
-            try
+            switch (message)
             {
-                invitation = await MessageDecoder.ParseMessageAsync(result.Text) as ConnectionInvitationMessage
-                    ?? throw new Exception("Unknown message type");
-            }
-            catch (Exception)
-            {
-                DialogService.Alert("Invalid invitation!");
-                return;
+                case ConnectionInvitationMessage invitation:
+                    break;
+
+                case RequestPresentationMessage presentation:
+                    RequestPresentationMessage proofRequest = (RequestPresentationMessage)presentation;
+                    var theirVk = string.Empty;
+                    foreach (JProperty prop in proofRequest.GetDecorators())
+                    {
+                        if (prop.Name == "~service")
+                        {
+                            foreach (JProperty prop2 in prop.Children().First().Children())
+                            {
+                                if (prop2.Name == "recipientKeys")
+                                {
+                                    theirVk = prop2.Value.First().ToString();
+                                }
+                            }
+                        }
+                    }
+                    var connection = new ConnectionRecord
+                    {
+                        TheirVk = theirVk,
+                        //Sso = false
+                    };
+                    await _proofService.ProcessRequestAsync(context, proofRequest, connection);
+                    _eventAggregator.Publish(new ApplicationEvent { Type = ApplicationEventType.ProofRequestUpdated });
+                    break;
+
+                default:
+                    DialogService.Alert("Invalid invitation!");
+                    return;
             }
 
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await NavigationService.NavigateToAsync<AcceptInviteViewModel>(invitation, NavigationType.Modal);
+                if (message is ConnectionInvitationMessage)
+                {
+                    await NavigationService.NavigateToAsync<AcceptInviteViewModel>(message as ConnectionInvitationMessage, NavigationType.Modal);
+                }
             });
         }
 
         public async Task SelectConnection(ConnectionViewModel connection) => await NavigationService.NavigateToAsync(connection);
 
+        //        public async Task SelectConnection(ConnectionViewModel connection) => await NavigationService.NavigateToAsync(connection, NavigationType.Modal);
+
         #region Bindable Command
+
         public ICommand RefreshCommand => new Command(async () => await RefreshConnections());
 
         public ICommand ScanInviteCommand => new Command(async () => await ScanInvite());
@@ -121,17 +192,28 @@ namespace Osma.Mobile.App.ViewModels.Connections
             if (connection != null)
                 await SelectConnection(connection);
         });
-        #endregion
+
+        #endregion Bindable Command
 
         #region Bindable Properties
+
         private RangeEnabledObservableCollection<ConnectionViewModel> _connections = new RangeEnabledObservableCollection<ConnectionViewModel>();
+
+        //  private IList<ConnectionViewModel> _connections = new List<ConnectionViewModel>();
         public RangeEnabledObservableCollection<ConnectionViewModel> Connections
         {
             get => _connections;
             set => this.RaiseAndSetIfChanged(ref _connections, value);
         }
 
+        //public IList<ConnectionViewModel> Connections
+        //{
+        //    get => _connections;
+        //    set => this.RaiseAndSetIfChanged(ref _connections, value);
+        //}
+
         private bool _hasConnections;
+
         public bool HasConnections
         {
             get => _hasConnections;
@@ -139,11 +221,13 @@ namespace Osma.Mobile.App.ViewModels.Connections
         }
 
         private bool _refreshingConnections;
+
         public bool RefreshingConnections
         {
             get => _refreshingConnections;
             set => this.RaiseAndSetIfChanged(ref _refreshingConnections, value);
         }
-        #endregion
+
+        #endregion Bindable Properties
     }
 }

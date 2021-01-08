@@ -1,32 +1,37 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Timers;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Hyperledger.Aries.Agents;
+using Hyperledger.Aries.Contracts;
 using Hyperledger.Aries.Routing;
 using Hyperledger.Aries.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Osma.Mobile.App.Events;
+using Osma.Mobile.App.Services;
 using Osma.Mobile.App.Services.Interfaces;
-using Osma.Mobile.App.Utilities;
 using Osma.Mobile.App.ViewModels;
 using Osma.Mobile.App.ViewModels.Account;
 using Osma.Mobile.App.ViewModels.Connections;
 using Osma.Mobile.App.ViewModels.CreateInvitation;
 using Osma.Mobile.App.ViewModels.Credentials;
+using Osma.Mobile.App.ViewModels.ProofRequests;
 using Osma.Mobile.App.Views;
 using Osma.Mobile.App.Views.Account;
 using Osma.Mobile.App.Views.Connections;
 using Osma.Mobile.App.Views.CreateInvitation;
 using Osma.Mobile.App.Views.Credentials;
+using Osma.Mobile.App.Views.ProofRequests;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Timers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+
 namespace Osma.Mobile.App
 {
     public partial class App : Application
@@ -36,6 +41,7 @@ namespace Osma.Mobile.App
 
         // Timer to check new messages in the configured mediator agent every 10sec
         private readonly Timer timer;
+
         private static IHost Host { get; set; }
 
         public App()
@@ -60,7 +66,8 @@ namespace Osma.Mobile.App
                     services.AddAriesFramework(builder => builder.RegisterEdgeAgent(
                         options: options =>
                         {
-                            options.EndpointUri = "http://localhost:5000";
+                            options.EndpointUri = "http://ma-sqin-mediator-agent.apps.exp.lab.pocquebec.org";
+                            //options.EndpointUri = "http://9834838da88f.ngrok.io";
 
                             options.WalletConfiguration.StorageConfiguration =
                                 new WalletConfiguration.WalletStorageConfiguration
@@ -70,14 +77,30 @@ namespace Osma.Mobile.App
                                         path2: ".indy_client",
                                         path3: "wallets")
                                 };
+                            
                             options.WalletConfiguration.Id = "MobileWallet";
                             options.WalletCredentials.Key = "SecretWalletKey";
                             options.RevocationRegistryDirectory = Path.Combine(
                                 path1: FileSystem.AppDataDirectory,
                                 path2: ".indy_client",
                                 path3: "tails");
+
+                            // Available network configurations (see PoolConfigurator.cs):
+                            //   sovrin-live
+                            //   sovrin-staging
+                            //   sovrin-builder
+                            //   bcovrin-test
+                            options.PoolName = "vonx-pocquebec";
+                            options.ProtocolVersion = 2;
+                            //options.GenesisFilename = Path.Combine(
+                            //            path1: FileSystem.AppDataDirectory,
+                            //            path2: ".indy_client",
+                            //            path3: "pool\\pocquebec\\pocquebec.txn");
                         },
                         delayProvisioning: true));
+
+                    services.AddSingleton<IPoolConfigurator, PoolConfigurator>();
+                    services.AddSingleton<IWalletRecordService, SqinWalletRecordService>();
 
                     var containerBuilder = new ContainerBuilder();
                     containerBuilder.RegisterAssemblyModules(typeof(CoreModule).Assembly);
@@ -92,6 +115,8 @@ namespace Osma.Mobile.App
 
         protected override async void OnStart()
         {
+            //Preferences.Clear();
+
             await Host.StartAsync();
 
             // View models and pages mappings
@@ -105,6 +130,8 @@ namespace Osma.Mobile.App
             _navigationService.AddPageViewModelBinding<CredentialViewModel, CredentialPage>();
             _navigationService.AddPageViewModelBinding<AccountViewModel, AccountPage>();
             _navigationService.AddPageViewModelBinding<CreateInvitationViewModel, CreateInvitationPage>();
+            _navigationService.AddPageViewModelBinding<ProofRequestsViewModel, ProofRequestsPage>();
+            _navigationService.AddPageViewModelBinding<ProofRequestViewModel, ProofRequestPage>();
 
             if (Preferences.Get(AppConstant.LocalWalletProvisioned, false))
             {
@@ -128,7 +155,13 @@ namespace Osma.Mobile.App
                     try
                     {
                         var context = await Container.Resolve<IAgentProvider>().GetContextAsync();
-                        await Container.Resolve<IEdgeClientService>().FetchInboxAsync(context);
+                        var result = await Container.Resolve<IEdgeClientService>().FetchInboxAsync(context);
+                        if (result.processedCount > 0)
+                        {
+                            Container.Resolve<IEventAggregator>().Publish(new ApplicationEvent() { Type = ApplicationEventType.ConnectionsUpdated });
+                            Container.Resolve<IEventAggregator>().Publish(new ApplicationEvent() { Type = ApplicationEventType.CredentialUpdated });
+                            Container.Resolve<IEventAggregator>().Publish(new ApplicationEvent() { Type = ApplicationEventType.ProofRequestUpdated });
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -137,6 +170,7 @@ namespace Osma.Mobile.App
                 });
             }
         }
+
         protected override void OnSleep() =>
             // Stop timer when application goes to background
             timer.Enabled = false;

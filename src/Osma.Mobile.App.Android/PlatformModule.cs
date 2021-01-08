@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Osma.Mobile.App.Services;
 
 namespace Osma.Mobile.App.Droid
 {

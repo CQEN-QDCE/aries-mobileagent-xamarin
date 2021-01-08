@@ -1,24 +1,21 @@
-﻿using System;
-using Osma.Mobile.App.ViewModels.Connections;
+﻿using Osma.Mobile.App.ViewModels.Connections;
+using System;
 using Xamarin.Forms;
-
 
 namespace Osma.Mobile.App.Views.Connections
 {
     public class ConnectionTransactionTemplateSelector : DataTemplateSelector
     {
-
         public DataTemplate MultiActionTemplate { get; set; }
         public DataTemplate ActionTemplate { get; set; }
         public DataTemplate StatusTemplate { get; set; }
         public DataTemplate ErrorTemplate { get; set; }
 
-
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
             if (item is null)
             {
-                // TODO Add Logging 
+                // TODO Add Logging
                 return ErrorTemplate;
             }
 
@@ -45,10 +42,13 @@ namespace Osma.Mobile.App.Views.Connections
             {
                 case TransactionItemType.Action:
                     return ActionTemplate;
+
                 case TransactionItemType.MultiAction:
                     return MultiActionTemplate;
+
                 case TransactionItemType.Status:
                     return StatusTemplate;
+
                 default:
                     return ErrorTemplate;
             }

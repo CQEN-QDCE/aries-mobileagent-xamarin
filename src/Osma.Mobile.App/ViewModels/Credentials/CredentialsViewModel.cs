@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using Autofac;
 using Hyperledger.Aries.Agents;
+using Hyperledger.Aries.Contracts;
+using Hyperledger.Aries.Features.DidExchange;
 using Hyperledger.Aries.Features.IssueCredential;
+using Osma.Mobile.App.Events;
 using Osma.Mobile.App.Extensions;
 using Osma.Mobile.App.Services;
 using Osma.Mobile.App.Services.Interfaces;
 using Osma.Mobile.App.Utilities;
 using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Osma.Mobile.App.ViewModels.Credentials
@@ -20,14 +23,18 @@ namespace Osma.Mobile.App.ViewModels.Credentials
     public class CredentialsViewModel : ABaseViewModel
     {
         private readonly ICredentialService _credentialService;
+        private readonly IConnectionService _connectionService;
         private readonly IAgentProvider _agentContextProvider;
         private readonly ILifetimeScope _scope;
+        private readonly IEventAggregator _eventAggregator;
 
         public CredentialsViewModel(
             IUserDialogs userDialogs,
             INavigationService navigationService,
             ICredentialService credentialService,
+            IConnectionService connectionService,
             IAgentProvider agentContextProvider,
+            IEventAggregator eventAggregator,
             ILifetimeScope scope
             ) : base(
                 "Credentials",
@@ -35,9 +42,10 @@ namespace Osma.Mobile.App.ViewModels.Credentials
                 navigationService
            )
         {
-
             _credentialService = credentialService;
+            _connectionService = connectionService;
             _agentContextProvider = agentContextProvider;
+            _eventAggregator = eventAggregator;
             _scope = scope;
 
             this.WhenAnyValue(x => x.SearchTerm)
@@ -48,6 +56,11 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         public override async Task InitializeAsync(object navigationData)
         {
             await RefreshCredentials();
+
+            _eventAggregator.GetEventByType<ApplicationEvent>()
+               .Where(_ => _.Type == ApplicationEventType.CredentialUpdated)
+               .Subscribe(async _ => await RefreshCredentials());
+
             await base.InitializeAsync(navigationData);
         }
 
@@ -58,37 +71,25 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             var context = await _agentContextProvider.GetContextAsync();
             var credentialsRecords = await _credentialService.ListAsync(context);
 
-#if DEBUG
-            credentialsRecords.Add(new CredentialRecord
-            {
-                ConnectionId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                CredentialDefinitionId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                CredentialId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                CredentialRevocationId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                State = CredentialState.Issued,
-            });
-            credentialsRecords.Add(new CredentialRecord
-            {
-                ConnectionId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                CredentialDefinitionId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                CredentialId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                CredentialRevocationId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                State = CredentialState.Issued,
-            });
-            credentialsRecords.Add(new CredentialRecord
-            {
-                ConnectionId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                CredentialDefinitionId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                CredentialId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                CredentialRevocationId = Guid.NewGuid().ToString().ToLowerInvariant(),
-                State = CredentialState.Issued,
-            });
-#endif
-
             IList<CredentialViewModel> credentialsVms = new List<CredentialViewModel>();
             foreach (var credentialRecord in credentialsRecords)
             {
                 CredentialViewModel credential = _scope.Resolve<CredentialViewModel>(new NamedParameter("credential", credentialRecord));
+
+                var credentialDefinitionId = CredentialDefinitionId.Parse(credentialRecord.CredentialDefinitionId);
+                credential.CredentialName = credentialDefinitionId.Tag;
+                var connectionRecord = await _connectionService.GetAsync(context, credentialRecord.ConnectionId);
+                credential.CredentialSubtitle = connectionRecord.Alias.Name;
+                credential.IssuedAt = connectionRecord.CreatedAtUtc.HasValue ? connectionRecord.CreatedAtUtc.Value.ToLocalTime() : (DateTime?)null;
+                if (credentialRecord.State == CredentialState.Offered)
+                {
+                    var attributes = new List<CredentialAttribute>();
+                    credential.Attributes = attributes;
+                    foreach (var credentialPreviewAttribute in credentialRecord.CredentialAttributesValues)
+                    {
+                        attributes.Add(new CredentialAttribute { Name = credentialPreviewAttribute.Name, Value = credentialPreviewAttribute.Value.ToString(), Type = "Text" });
+                    }
+                }
                 credentialsVms.Add(credential);
             }
 
@@ -101,7 +102,6 @@ namespace Osma.Mobile.App.ViewModels.Credentials
 
             HasCredentials = Credentials.Any();
             RefreshingCredentials = false;
-
         }
 
         public async Task SelectCredential(CredentialViewModel credential) => await NavigationService.NavigateToAsync(credential, null, NavigationType.Modal);
@@ -123,7 +123,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             .OrderBy(credentialViewModel => credentialViewModel.CredentialName)
             .GroupBy(credentialViewModel =>
             {
-                if(string.IsNullOrWhiteSpace(credentialViewModel.CredentialName))
+                if (string.IsNullOrWhiteSpace(credentialViewModel.CredentialName))
                 {
                     return "*";
                 }
@@ -136,12 +136,10 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             );
 
             return grouped;
-
         }
 
-
-
         #region Bindable Command
+
         public ICommand SelectCredentialCommand => new Command<CredentialViewModel>(async (credentials) =>
         {
             if (credentials != null)
@@ -150,10 +148,12 @@ namespace Osma.Mobile.App.ViewModels.Credentials
 
         public ICommand RefreshCommand => new Command(async () => await RefreshCredentials());
 
-        #endregion
+        #endregion Bindable Command
 
         #region Bindable Properties
+
         private RangeEnabledObservableCollection<CredentialViewModel> _credentials = new RangeEnabledObservableCollection<CredentialViewModel>();
+
         public RangeEnabledObservableCollection<CredentialViewModel> Credentials
         {
             get => _credentials;
@@ -161,6 +161,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         }
 
         private bool _hasCredentials;
+
         public bool HasCredentials
         {
             get => _hasCredentials;
@@ -168,6 +169,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         }
 
         private bool _refreshingCredentials;
+
         public bool RefreshingCredentials
         {
             get => _refreshingCredentials;
@@ -175,6 +177,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         }
 
         private string _searchTerm;
+
         public string SearchTerm
         {
             get => _searchTerm;
@@ -182,12 +185,13 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         }
 
         private IEnumerable<Grouping<string, CredentialViewModel>> _credentialsGrouped;
+
         public IEnumerable<Grouping<string, CredentialViewModel>> CredentialsGrouped
         {
             get => _credentialsGrouped;
             set => this.RaiseAndSetIfChanged(ref _credentialsGrouped, value);
         }
 
-        #endregion
+        #endregion Bindable Properties
     }
 }

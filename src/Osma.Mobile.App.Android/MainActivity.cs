@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android;
+﻿using Android;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -9,6 +6,8 @@ using FFImageLoading.Forms.Platform;
 using Java.Lang;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Droid
@@ -51,7 +50,7 @@ namespace Osma.Mobile.App.Droid
             CheckAndRequestRequiredPermissions();
         }
 
-        readonly string[] _permissionsRequired =
+        private readonly string[] _permissionsRequired =
         {
             Manifest.Permission.ReadExternalStorage,
             Manifest.Permission.WriteExternalStorage,
@@ -83,10 +82,9 @@ namespace Osma.Mobile.App.Droid
                 System.Diagnostics.Debug.WriteLine("All permissions required that werent granted, have now been granted");
             else
                 System.Diagnostics.Debug.WriteLine("Some permissions requested were denied by the user");
-           
-           Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-           base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }
-

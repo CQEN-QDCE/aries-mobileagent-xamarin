@@ -1,23 +1,41 @@
+using Acr.UserDialogs;
+using Hyperledger.Aries.Agents;
+using Hyperledger.Aries.Contracts;
+using Hyperledger.Aries.Features.DidExchange;
+using Hyperledger.Aries.Features.IssueCredential;
+using Osma.Mobile.App.Events;
+using Osma.Mobile.App.Services;
+using Osma.Mobile.App.Services.Interfaces;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using Acr.UserDialogs;
-using Osma.Mobile.App.Services.Interfaces;
-using ReactiveUI;
 using Xamarin.Forms;
-using Hyperledger.Aries.Features.IssueCredential;
 
 namespace Osma.Mobile.App.ViewModels.Credentials
 {
     public class CredentialViewModel : ABaseViewModel
     {
         private readonly CredentialRecord _credential;
+        private readonly IAgentProvider _agentContextProvider;
+        private readonly ICredentialService _credentialService;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IMessageService _messageService;
+        private readonly IConnectionService _connectionService;
+        private readonly IPoolConfigurator _poolConfigurator;
 
         public CredentialViewModel(
             IUserDialogs userDialogs,
             INavigationService navigationService,
-            CredentialRecord credential
+            IAgentProvider agentContextProvider,
+            ICredentialService credentialService,
+            IEventAggregator eventAggregator,
+            IMessageService messageService,
+            IPoolConfigurator poolConfigurator,
+            IConnectionService connectionService,
+        CredentialRecord credential
         ) : base(
             nameof(CredentialViewModel),
             userDialogs,
@@ -25,65 +43,131 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         )
         {
             _credential = credential;
+            _agentContextProvider = agentContextProvider;
+            _credentialService = credentialService;
+            _eventAggregator = eventAggregator;
+            _messageService = messageService;
+            _connectionService = connectionService;
             _isNew = IsCredentialNew(_credential);
+            _poolConfigurator = poolConfigurator;
 
-            #if DEBUG
-            _credentialName = "Credential Name";
-            _credentialImageUrl = "http://placekitten.com/g/200/200";
-            _credentialSubtitle = "10/22/2017";
-            _credentialType = "Bank Statement";
-            _qRImageUrl = "http://placekitten.com/g/100/100";
+            if (credential.State == CredentialState.Offered)
+            {
+                IsPending = true;
+            }
 
-            var attributes = new List<CredentialAttribute>( new CredentialAttribute[] {
-                new CredentialAttribute
+            if (credential.State == CredentialState.Issued)
+            {
+                IsIssued = true;
+                AreButtonsVisible = false;
+                if (credential.CredentialAttributesValues != null)
                 {
-                    Type="Text",
-                    Name="First Name",
-                    Value="Jamie"
-                },
-                new CredentialAttribute
-                {
-                    Type="Text",
-                    Name="Last Name",
-                    Value="Doe"
-                },
-                new CredentialAttribute
-                {
-                    Type = "Text",
-                    Name = "Country of Residence",
-                    Value = "New Zealand"
-                },
-                new CredentialAttribute
-                {
-                    Type="File",
-                    Name="Statement",
-                    Value="Statement.pdf",
-                    FileExt="PDF",
-                    Date="05 Aug 2018"
+                    Attributes = credential.CredentialAttributesValues
+                        .Select(p =>
+                            new CredentialAttribute()
+                            {
+                                Name = p.Name,
+                                Value = p.Value?.ToString(),
+                                Type = "Text"
+                            })
+                        .ToList();
                 }
-            });
-            _attributes = attributes
-                .OrderByDescending(o=>o.Type).OrderBy(o=>o.Date);
-            #endif
+            }
+            else if (credential.State == CredentialState.Offered)
+            {
+                AreButtonsVisible = true;
+            }
+            else
+            {
+                AreButtonsVisible = false;
+            }
         }
 
+        private async Task AcceptCredentialOffer(CredentialRecord credentialRecord)
+        {
+            //            MessagingCenter.Unsubscribe<PassCodeViewModel, CredentialRecord>(this, ApplicationEventType.PassCodeAuthorisedCredentialAccept.ToString());
+            //          MessagingCenter.Unsubscribe<PassCodeViewModel>(this, ApplicationEventType.PassCodeAuthorisedCredentialAccept.ToString());
+            if (credentialRecord.State != CredentialState.Offered)
+            {
+                await DialogService.AlertAsync(string.Format("res-CredentialStateShouldBe", CredentialState.Offered));
+                //                await DialogService.AlertAsync(string.Format(AppResources.CredentialStateShouldBe, CredentialState.Offered.ToString()));
+                await NavigationService.PopModalAsync();
+                return;
+            }
+            await _poolConfigurator.ConfigurePoolsAsync();
+            var context = await _agentContextProvider.GetContextAsync();
+            
+            var test = await context.Pool;
+            var (msg, rec) = await _credentialService.CreateRequestAsync(context, credentialRecord.Id);
+            var conectionRecord = await _connectionService.GetAsync(context, credentialRecord.ConnectionId);
+            //await _messageService.SendAsync(context.Wallet, msg, conectionRecord.TheirVk ?? rec.GetTag("InvitationKey") ?? throw new InvalidOperationException("Cannot locate recipient Key"), conectionRecord.Endpoint.Uri,
+            //    conectionRecord.Endpoint?.Verkey == null ? null : conectionRecord.Endpoint.Verkey, conectionRecord.MyVk);
+
+            _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.CredentialUpdated });
+
+            await NavigationService.PopModalAsync();
+        }
+
+        private async Task RejectCredentialOffer()
+        {
+            if (_credential.State != CredentialState.Offered)
+            {
+                //await DialogService.AlertAsync(string.Format(AppResources.CredentialStateShouldBe, CredentialState.Offered));
+                await DialogService.AlertAsync(string.Format("res-CredentialStateShouldBe", CredentialState.Offered));
+                await NavigationService.PopModalAsync();
+                return;
+            }
+
+            var context = await _agentContextProvider.GetContextAsync();
+            await _credentialService.RejectOfferAsync(context, _credential.Id);
+
+            _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.CredentialUpdated });
+
+            await NavigationService.PopModalAsync();
+        }
 
         private bool IsCredentialNew(CredentialRecord credential)
         {
-            // TODO OS-200, Currently a Placeholder for a mix of new and not new cells
-            Random random = new Random();
-            return random.Next(0, 2) == 1;
+            return credential.State == CredentialState.Offered;
         }
 
-#region Bindable Command
+        #region Bindable Command
+
         public ICommand NavigateBackCommand => new Command(async () =>
         {
             await NavigationService.PopModalAsync();
         });
-#endregion
 
-#region Bindable Properties
+        public ICommand AcceptCredentialOfferCommand => new Command(async () =>
+        {
+            //if (await isAuthenticatedAsync(ApplicationEventType.PassCodeAuthorisedCredentialAccept))
+            //{
+            await AcceptCredentialOffer(_credential);
+            //}
+        });
+
+        public ICommand RejectCredentialOfferCommand => new Command(async () =>
+        {
+            //if (await isAuthenticatedAsync(ApplicationEventType.PassCodeAuthorisedCredentialReject))
+            //{
+            await RejectCredentialOffer();
+            //}
+        });
+
+        #endregion Bindable Command
+
+        #region Bindable Properties
+
+        private DateTime? _issuedAt;
+
+        public DateTime? IssuedAt
+        {
+            get => _issuedAt;
+            set => this.RaiseAndSetIfChanged(ref _issuedAt, value);
+        }
+
         private string _credentialName;
+
         public string CredentialName
         {
             get => _credentialName;
@@ -91,13 +175,39 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         }
 
         private string _credentialType;
+
         public string CredentialType
         {
             get => _credentialType;
             set => this.RaiseAndSetIfChanged(ref _credentialType, value);
         }
 
+        private bool _areButtonsVisible;
+
+        public bool AreButtonsVisible
+        {
+            get => _areButtonsVisible;
+            set => this.RaiseAndSetIfChanged(ref _areButtonsVisible, value);
+        }
+
+        private bool _IsIssued;
+
+        public bool IsIssued
+        {
+            get => _IsIssued;
+            set => this.RaiseAndSetIfChanged(ref _IsIssued, value);
+        }
+
+        private bool _IsPending;
+
+        public bool IsPending
+        {
+            get => _IsPending;
+            set => this.RaiseAndSetIfChanged(ref _IsPending, value);
+        }
+
         private string _credentialImageUrl;
+
         public string CredentialImageUrl
         {
             get => _credentialImageUrl;
@@ -105,6 +215,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         }
 
         private string _credentialSubtitle;
+
         public string CredentialSubtitle
         {
             get => _credentialSubtitle;
@@ -112,6 +223,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         }
 
         private bool _isNew;
+
         public bool IsNew
         {
             get => _isNew;
@@ -119,6 +231,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         }
 
         private string _qRImageUrl;
+
         public string QRImageUrl
         {
             get => _qRImageUrl;
@@ -126,12 +239,13 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         }
 
         private IEnumerable<CredentialAttribute> _attributes;
+
         public IEnumerable<CredentialAttribute> Attributes
         {
             get => _attributes;
             set => this.RaiseAndSetIfChanged(ref _attributes, value);
         }
 
-#endregion
+        #endregion Bindable Properties
     }
 }

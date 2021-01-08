@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using Osma.Mobile.App.Services.Interfaces;
 using ReactiveUI;
+using System.Threading.Tasks;
 
 namespace Osma.Mobile.App.ViewModels
 {
@@ -18,6 +18,7 @@ namespace Osma.Mobile.App.ViewModels
         }
 
         private string _name;
+
         public string Name
         {
             get => _name;
@@ -25,6 +26,7 @@ namespace Osma.Mobile.App.ViewModels
         }
 
         private string _title;
+
         public string Title
         {
             get => _title;
@@ -32,6 +34,7 @@ namespace Osma.Mobile.App.ViewModels
         }
 
         private bool _isBusy;
+
         public bool IsBusy
         {
             get => _isBusy;

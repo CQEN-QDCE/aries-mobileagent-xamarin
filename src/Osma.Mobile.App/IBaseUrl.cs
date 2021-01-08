@@ -1,5 +1,4 @@
-﻿using System;
-namespace Osma.Mobile.App
+﻿namespace Osma.Mobile.App
 {
     public interface IBaseUrl
     {
