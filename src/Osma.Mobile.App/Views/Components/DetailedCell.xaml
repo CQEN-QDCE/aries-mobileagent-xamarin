@@ -36,8 +36,9 @@
                    Grid.Column="1"
                    Grid.RowSpan="2"
                    VerticalOptions="Center"
+                   LineHeight="60"
                    FontSize="Medium"/>
-            <BoxView Grid.Row="1" Grid.Column="1" Color="Green" />
+            <BoxView Grid.Row="1" Grid.Column="1" Color="LightBlue" />
             <Label x:Name="SubtitleLabel"
                    Grid.Row="1"
                    Grid.Column="1"
@@ -49,13 +50,12 @@
                    Grid.Column="1"
                    VerticalOptions="Center"
                    FontSize="Small"/>
-            <Frame IsVisible="false"
+            <Frame x:Name="NewLabelContainer"
+                   IsVisible="false"
                    Grid.Row="0"
                    Grid.RowSpan="2"
                    Grid.Column="2"
-                   x:Name="NewLabelContainer"
-                   BackgroundColor="#87b938"
-                   Padding="6, 2"
+                   Padding="0, 0"
                    VerticalOptions="Center"
                    HorizontalOptions="Center"
                    HasShadow="false">
@@ -73,7 +73,7 @@
                    Grid.Column="2"
                    x:Name="DeleteLabelContainer"
                    BackgroundColor="Black"
-                   Padding="6, 2"
+                   Padding="0, 0"
                    VerticalOptions="Center"
                    HorizontalOptions="Center"
                    HasShadow="false">

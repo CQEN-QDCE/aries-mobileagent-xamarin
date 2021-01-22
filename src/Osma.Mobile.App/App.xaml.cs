@@ -23,6 +23,7 @@ using Osma.Mobile.App.Views.Credentials;
 using Osma.Mobile.App.Views.ProofRequests;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Timers;
@@ -55,6 +56,7 @@ namespace Osma.Mobile.App
                 Interval = TimeSpan.FromSeconds(10).TotalMilliseconds
             };
             timer.Elapsed += Timer_Elapsed;
+            CultureInfo.CurrentUICulture = new CultureInfo("fr", false); /* 1 */
         }
 
         public App(IHost host) : this() => Host = host;

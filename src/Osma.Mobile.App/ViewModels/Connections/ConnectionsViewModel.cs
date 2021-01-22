@@ -2,9 +2,11 @@
 using Autofac;
 using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Contracts;
+using Hyperledger.Aries.Decorators;
+using Hyperledger.Aries.Decorators.Service;
 using Hyperledger.Aries.Features.DidExchange;
 using Hyperledger.Aries.Features.PresentProof;
-using Newtonsoft.Json.Linq;
+using Hyperledger.Aries.Storage;
 using Osma.Mobile.App.Events;
 using Osma.Mobile.App.Extensions;
 using Osma.Mobile.App.Services;
@@ -28,6 +30,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         private readonly IAgentProvider _agentContextProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly IProofService _proofService;
+        private readonly IWalletRecordService _recordService;
         private readonly ILifetimeScope _scope;
 
         public ConnectionsViewModel(IUserDialogs userDialogs,
@@ -36,13 +39,15 @@ namespace Osma.Mobile.App.ViewModels.Connections
                                     IAgentProvider agentContextProvider,
                                     IEventAggregator eventAggregator,
                                     IProofService proofService,
+                                    IWalletRecordService recordService,
                                     ILifetimeScope scope) :
-                                    base("Connections", userDialogs, navigationService)
+                                    base(AppResources.ConnectionsPageTitle, userDialogs, navigationService)
         {
             _connectionService = connectionService;
             _agentContextProvider = agentContextProvider;
             _eventAggregator = eventAggregator;
             _proofService = proofService;
+            _recordService = recordService;
             _scope = scope;
         }
 
@@ -95,21 +100,22 @@ namespace Osma.Mobile.App.ViewModels.Connections
             //RefreshingConnections = false;
         }
 
-        private void AddOrUpdateConnection(ConnectionRecord record)
+        private void AddOrUpdateConnection(ConnectionRecord connectionRecord)
         {
             foreach (ConnectionViewModel connection in Connections)
             {
-                if (record.Id == connection.Id)
+                if (connectionRecord.Id == connection.Id)
                 {
-                    connection.ConnectionSubtitle = record.State.ToString();
+                    connection.ConnectionSubtitle = ConnectionStateTranslator.Translate(connectionRecord.State);
                     return;
                 }
             }
-            var con = _scope.Resolve<ConnectionViewModel>(new NamedParameter("record", record));
+            var con = _scope.Resolve<ConnectionViewModel>(new NamedParameter("record", connectionRecord));
+            con.ConnectionSubtitle = ConnectionStateTranslator.Translate(connectionRecord.State);
             DateTime datetime = DateTime.Now;
-            if (record.CreatedAtUtc.HasValue)
+            if (connectionRecord.CreatedAtUtc.HasValue)
             {
-                datetime = record.CreatedAtUtc.Value.ToLocalTime();
+                datetime = connectionRecord.CreatedAtUtc.Value.ToLocalTime();
                 con.DateTime = datetime;
             }
             Connections.Insert(0, con);
@@ -117,19 +123,21 @@ namespace Osma.Mobile.App.ViewModels.Connections
 
         public async Task ScanInvite()
         {
-            var expectedFormat = ZXing.BarcodeFormat.QR_CODE;
-            var opts = new ZXing.Mobile.MobileBarcodeScanningOptions { PossibleFormats = new List<ZXing.BarcodeFormat> { expectedFormat } };
+            //var expectedFormat = ZXing.BarcodeFormat.QR_CODE;
+            
+            //var opts = new ZXing.Mobile.MobileBarcodeScanningOptions { PossibleFormats = new List<ZXing.BarcodeFormat> { expectedFormat } };
 
             var context = await _agentContextProvider.GetContextAsync();
 
-            var scanner = new ZXing.Mobile.MobileBarcodeScanner();
+            //var scanner = new ZXing.Mobile.MobileBarcodeScanner();
 
-            var result = await scanner.Scan(opts);
+            //var result = await scanner.Scan(opts);
 
-            if (result == null) return;
-            AgentMessage message = await MessageDecoder.ParseMessageAsync(result.Text);
+            //if (result == null) return;
 
-            //AgentMessage message = await MessageDecoder.ParseMessageAsync("https://vc-authn-controller-vc-auth.apps.exp.lab.pocquebec.org/url/d0173a4f-d442-4303-b4ad-81ff1df157a6");
+            //AgentMessage message = await MessageDecoder.ParseMessageAsync(result.Text);
+
+            AgentMessage message = await MessageDecoder.ParseMessageAsync("https://vc-authn-controller-vc-auth.apps.exp.lab.pocquebec.org/url/a6659ab9-4878-450e-8731-fb2910dd672c");
 
             switch (message)
             {
@@ -138,26 +146,11 @@ namespace Osma.Mobile.App.ViewModels.Connections
 
                 case RequestPresentationMessage presentation:
                     RequestPresentationMessage proofRequest = (RequestPresentationMessage)presentation;
-                    var theirVk = string.Empty;
-                    foreach (JProperty prop in proofRequest.GetDecorators())
-                    {
-                        if (prop.Name == "~service")
-                        {
-                            foreach (JProperty prop2 in prop.Children().First().Children())
-                            {
-                                if (prop2.Name == "recipientKeys")
-                                {
-                                    theirVk = prop2.Value.First().ToString();
-                                }
-                            }
-                        }
-                    }
-                    var connection = new ConnectionRecord
-                    {
-                        TheirVk = theirVk,
-                        //Sso = false
-                    };
-                    await _proofService.ProcessRequestAsync(context, proofRequest, connection);
+                    var service = message.GetDecorator<ServiceDecorator>(DecoratorNames.ServiceDecorator);
+                    ProofRecord proofRecord = await _proofService.ProcessRequestAsync(context, proofRequest, null);
+                    proofRecord.SetTag("RecipientKey", service.RecipientKeys.ToList()[0]);
+                    proofRecord.SetTag("ServiceEndpoint", service.ServiceEndpoint);
+                    await _recordService.UpdateAsync(context.Wallet, proofRecord);
                     _eventAggregator.Publish(new ApplicationEvent { Type = ApplicationEventType.ProofRequestUpdated });
                     break;
 

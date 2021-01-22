@@ -68,7 +68,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
                 await _walletRecordService.UpdateAsync(context.Wallet, rec);
 
                 msg.Label = "Oui";
-                //await _messageService.SendAsync(context.Wallet, msg, rec);
+                await _messageService.SendAsync(context.Wallet, msg, rec);
 
                 _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.ConnectionsUpdated });
             }

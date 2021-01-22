@@ -94,14 +94,26 @@ namespace Osma.Mobile.App.ViewModels.Credentials
                 await NavigationService.PopModalAsync();
                 return;
             }
+
             await _poolConfigurator.ConfigurePoolsAsync();
+
             var context = await _agentContextProvider.GetContextAsync();
             
-            var test = await context.Pool;
             var (msg, rec) = await _credentialService.CreateRequestAsync(context, credentialRecord.Id);
-            var conectionRecord = await _connectionService.GetAsync(context, credentialRecord.ConnectionId);
-            //await _messageService.SendAsync(context.Wallet, msg, conectionRecord.TheirVk ?? rec.GetTag("InvitationKey") ?? throw new InvalidOperationException("Cannot locate recipient Key"), conectionRecord.Endpoint.Uri,
-            //    conectionRecord.Endpoint?.Verkey == null ? null : conectionRecord.Endpoint.Verkey, conectionRecord.MyVk);
+
+            var connectionRecord = await _connectionService.GetAsync(context, credentialRecord.ConnectionId);
+
+            if (connectionRecord == null)
+            {
+                //await _messageService.SendAsync(context.Wallet, msg, conectionRecord.TheirVk ?? rec.GetTag("InvitationKey") ?? throw new InvalidOperationException("Cannot locate recipient Key"), conectionRecord.Endpoint.Uri,
+                //    conectionRecord.Endpoint?.Verkey == null ? null : conectionRecord.Endpoint.Verkey, conectionRecord.MyVk);
+                await DialogService.AlertAsync("Connection-less credentials not supported.");
+                return;
+            }
+            else
+            {
+                await _messageService.SendAsync(context.Wallet, msg, connectionRecord);
+            }
 
             _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.CredentialUpdated });
 

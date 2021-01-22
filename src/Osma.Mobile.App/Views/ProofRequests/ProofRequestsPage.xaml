@@ -1,19 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
-    xmlns:behaviours="clr-namespace:Osma.Mobile.App.Behaviors;assembly=Osma.Mobile.App"
-    xmlns:components="clr-namespace:Osma.Mobile.App.Views.Components;assembly=Osma.Mobile.App"
-    x:Class="Osma.Mobile.App.Views.ProofRequests.ProofRequestsPage"
-    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
-    ios:Page.LargeTitleDisplay="Always"
-    Title="{Binding ProofRequestTitle}"
-    BackgroundImage="qcb1.png">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:Osma.Mobile.App.Views.Components;assembly=Osma.Mobile.App"
+             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
+             xmlns:behaviours="clr-namespace:Osma.Mobile.App.Behaviors;assembly=Osma.Mobile.App"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:resources="clr-namespace:Osma.Mobile.App"
+             ios:Page.LargeTitleDisplay="Always"
+             x:Class="Osma.Mobile.App.Views.ProofRequests.ProofRequestsPage"
+             Title="{x:Static resources:AppResources.ProofRequestTitle}">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <converters:InverseBooleanConverter x:Key="BooleanInverse" />
             <converters:SelecteditemEventArgsToSelectedItemConverter x:Key="SelectedItemConverter" />
+            <converters:InverseBooleanConverter x:Key="BooleanInverse" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -23,29 +22,23 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <SearchBar
-                Text="{Binding SearchTerm}"
-                Placeholder="{Binding SearchProofRequests}"
-                BackgroundColor="Transparent" />
-            <Label Text="{Binding ProofRequestsCount}"></Label>
-            <ListView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                HasUnevenRows="true"
-                IsPullToRefreshEnabled="true"
-                IsRefreshing="{Binding RefreshingProofRequests}"
-                RefreshCommand="{Binding RefreshCommand}"
-                IsEnabled="{Binding RefreshingProofRequests, Converter={StaticResource BooleanInverse}}"
-                ItemsSource="{Binding ProofRequestsGrouped}"
-                IsGroupingEnabled="true"
-                GroupDisplayBinding="{Binding Key}"
-                GroupShortNameBinding="{Binding Key}"
-            >
+            <SearchBar Text="{Binding SearchTerm}"
+                       Placeholder="{x:Static resources:AppResources.SearchProofRequestsPlaceholder}"
+                       BackgroundColor="Transparent" />
+            <ListView HorizontalOptions="FillAndExpand" 
+                      VerticalOptions="FillAndExpand"
+                      HasUnevenRows="true"
+                      IsPullToRefreshEnabled="true"
+                      IsRefreshing="{Binding RefreshingProofRequests}"
+                      RefreshCommand="{Binding RefreshCommand}"
+                      IsEnabled="{Binding RefreshingProofRequests, Converter={StaticResource BooleanInverse}}"
+                      ItemsSource="{Binding ProofRequests}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <components:DetailedCell
-                        Title="{Binding ProofName}"
-                        Subtitle="{Binding ProofVersion}"
-                        TextAnnotation="{Binding Alias}"
-                        />
+                        <components:DetailedCell Title="{Binding ProofName}"
+                                                 Subtitle="{Binding ProofState}"
+                                                 DateTime="{Binding Alias}"
+                                                 TextAnnotation="{Binding Alias}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Behaviors>

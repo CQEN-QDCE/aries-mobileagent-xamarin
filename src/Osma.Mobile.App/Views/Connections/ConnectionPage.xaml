@@ -5,6 +5,7 @@
     xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:views="clr-namespace:Osma.Mobile.App.Views.Connections;assembly=Osma.Mobile.App"
     xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
+    xmlns:resources="clr-namespace:Osma.Mobile.App"
     x:Class="Osma.Mobile.App.Views.Connections.ConnectionPage"
     Disappearing="Disappearing"
 >
@@ -183,16 +184,10 @@
                                 FontSize="Small"
                             />
                         </StackLayout>
-                        <Button
-                            HorizontalOptions="FillAndExpand"
-                            Text="Delete Connection"
-                            Command="{Binding DeleteConnectionCommand}"
-                            Style="{StaticResource ButtonStyleDestructive}"
-                        />
+                        <Button HorizontalOptions="FillAndExpand" Text="{x:Static resources:AppResources.DeleteConnectionButton}" Command="{Binding DeleteConnectionCommand}" Style="{StaticResource ButtonStyleDestructive}"/>
                     </StackLayout>
                 </Frame>    
             </Frame>
-            
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

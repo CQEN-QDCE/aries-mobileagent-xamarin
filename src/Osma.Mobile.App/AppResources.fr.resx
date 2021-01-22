@@ -118,66 +118,66 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountTabTitle" xml:space="preserve">
-    <value>Account</value>
+    <value>Compte</value>
   </data>
   <data name="ConnectionsPageTitle" xml:space="preserve">
-    <value>Connections</value>
+    <value>Connexions</value>
   </data>
   <data name="ConnectionsTabTitle" xml:space="preserve">
-    <value>Connections</value>
+    <value>Connexions</value>
   </data>
   <data name="ConnectionStateConnected" xml:space="preserve">
-    <value>Connected</value>
+    <value>Connecté</value>
   </data>
   <data name="ConnectionStateInvited" xml:space="preserve">
-    <value>Invited</value>
+    <value>Invité</value>
   </data>
   <data name="ConnectionStateNegotiating" xml:space="preserve">
-    <value>Negotiating</value>
+    <value>En négotiation</value>
   </data>
   <data name="CreateInvitationToolbarItemLabel" xml:space="preserve">
-    <value>Create invitation</value>
+    <value>Inviter</value>
   </data>
   <data name="CredentialsPageTitle" xml:space="preserve">
-    <value>Credentials</value>
+    <value>Attestations</value>
   </data>
   <data name="CredentialsTabTitle" xml:space="preserve">
-    <value>Credentials</value>
+    <value>Attestations</value>
   </data>
   <data name="CrendentialIssuedLabel" xml:space="preserve">
-    <value>Issued</value>
+    <value>Émis</value>
   </data>
   <data name="DeleteConnectionButton" xml:space="preserve">
-    <value>Delete</value>
+    <value>Supprimer</value>
   </data>
   <data name="ProofRequestTitle" xml:space="preserve">
-    <value>Test</value>
+    <value>TestFrançais</value>
   </data>
   <data name="ProofsPageTitle" xml:space="preserve">
-    <value>Proofs</value>
+    <value>Preuves</value>
   </data>
   <data name="ProofsTabTitle" xml:space="preserve">
-    <value>Proofs</value>
+    <value>Preuves</value>
   </data>
   <data name="ProofStateAccepted" xml:space="preserve">
-    <value>Accepted</value>
+    <value>Accepté</value>
   </data>
   <data name="ProofStateProposed" xml:space="preserve">
-    <value>Proposed</value>
+    <value>Proposé</value>
   </data>
   <data name="ProofStateRejected" xml:space="preserve">
-    <value>Rejected</value>
+    <value>Rejeté</value>
   </data>
   <data name="ProofStateRequested" xml:space="preserve">
-    <value>Requested</value>
+    <value>Demandé</value>
   </data>
   <data name="ScanToolbarItemLabel" xml:space="preserve">
-    <value>Scan</value>
+    <value>Scanner</value>
   </data>
   <data name="SearchCredentialsPlaceholder" xml:space="preserve">
-    <value>Search credentials</value>
+    <value>Recherche attestations</value>
   </data>
   <data name="SearchProofRequestsPlaceholder" xml:space="preserve">
-    <value>Search proof requests</value>
+    <value>Recherche demandes preuve</value>
   </data>
 </root>

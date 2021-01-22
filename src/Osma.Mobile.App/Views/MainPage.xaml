@@ -7,28 +7,32 @@
     xmlns:proofRequests="clr-namespace:Osma.Mobile.App.Views.ProofRequests;assembly=Osma.Mobile.App"
     xmlns:account="clr-namespace:Osma.Mobile.App.Views.Account;assembly=Osma.Mobile.App"
     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:resources="clr-namespace:Osma.Mobile.App"
     x:Class="Osma.Mobile.App.Views.MainPage"
     CurrentPageChanged="CurrentPageChanged"
     Appearing="Appearing"
 >
     <connections:ConnectionsPage
         Icon="connection_icon.png"
+        Title="{x:Static resources:AppResources.ConnectionsTabTitle}"
         ios:NavigationPage.PrefersLargeTitles="true"
         BindingContext="{Binding Connections}">
     </connections:ConnectionsPage>
     <credentials:CredentialsPage
         Icon="credentials_icon.png"
+        Title="{x:Static resources:AppResources.CredentialsTabTitle}"
         ios:NavigationPage.PrefersLargeTitles="true"
         BindingContext="{Binding Credentials}">
     </credentials:CredentialsPage>
     <proofRequests:ProofRequestsPage
         Icon="credentials_icon.png"
-        Title="Proofs"
+        Title="{x:Static resources:AppResources.ProofsTabTitle}"
         ios:NavigationPage.PrefersLargeTitles="true"
         BindingContext="{Binding ProofRequests}">
     </proofRequests:ProofRequestsPage>
     <account:AccountPage
         Icon="account_icon.png"
+        Title="{x:Static resources:AppResources.AccountTabTitle}"
         ios:NavigationPage.PrefersLargeTitles="true"
         BindingContext="{Binding Account}">
     </account:AccountPage>

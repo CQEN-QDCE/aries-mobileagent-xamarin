@@ -88,8 +88,11 @@
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="textTemplate">
-                <ViewCell>
+                <ViewCell >
                     <StackLayout Padding="24, 16">
+                        <Label 
+                            Text="textTemplate"
+                            FontSize="Small" />
                         <Label 
                             Text="{Binding Name}"
                             FontSize="Small" />
@@ -103,6 +106,9 @@
             <DataTemplate x:Key="nameTemplate">
                 <ViewCell>
                     <StackLayout Padding="24, 16">
+                        <Label 
+                            Text="nameTemplate"
+                            FontSize="Small" />
                         <Label 
                             Text="{Binding Name}"
                             FontSize="Small" />

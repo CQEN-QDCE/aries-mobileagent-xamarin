@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System.Globalization;
+using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Views.Components
 {
@@ -74,7 +75,7 @@ namespace Osma.Mobile.App.Views.Components
             CardCell cell = (CardCell)bindable;
             Device.BeginInvokeOnMainThread(() =>
             {
-                cell.DateTimeLabel.Text = string.IsNullOrWhiteSpace(newValue.ToString()) ? string.Empty : "Issued " + System.DateTime.Parse(newValue.ToString()).ToString("yyyy-MM-dd");
+                cell.DateTimeLabel.Text = string.IsNullOrWhiteSpace(newValue.ToString()) ? string.Empty : AppResources.CrendentialIssuedLabel + " " + newValue.ToString().Split(' ')[0];
                 if (string.IsNullOrWhiteSpace(newValue.ToString()))
                 {
                     Grid.SetRowSpan(cell.TitleLabel, 2);

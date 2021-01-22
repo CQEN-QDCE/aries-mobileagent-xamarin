@@ -37,7 +37,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             IEventAggregator eventAggregator,
             ILifetimeScope scope
             ) : base(
-                "Credentials",
+                AppResources.CredentialsPageTitle,
                 userDialogs,
                 navigationService
            )

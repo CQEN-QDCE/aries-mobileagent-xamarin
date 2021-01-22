@@ -4,11 +4,11 @@
              xmlns:components="clr-namespace:Osma.Mobile.App.Views.Components;assembly=Osma.Mobile.App"
              xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
              xmlns:behaviours="clr-namespace:Osma.Mobile.App.Behaviors;assembly=Osma.Mobile.App"
-             x:Class="Osma.Mobile.App.Views.Connections.ConnectionsPage"
-             Title="{Binding Name}"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:resources="clr-namespace:Osma.Mobile.App"
              ios:Page.LargeTitleDisplay="Always"
-    >
+             x:Class="Osma.Mobile.App.Views.Connections.ConnectionsPage"
+             Title="{Binding Name}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:SelecteditemEventArgsToSelectedItemConverter x:Key="SelectedItemConverter" />
@@ -16,8 +16,8 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Name="Add Connection" Order="Primary" Text="Connect" Priority="0" Command ="{Binding ScanInviteCommand}"/>
-        <ToolbarItem Name="CreateInvitation" Order="Secondary" Text="Create Invitation" ios:NavigationPage.PrefersLargeTitles="true" Priority="0" Command ="{Binding CreateInvitationCommand}"/>
+        <ToolbarItem Name="Add Connection" Order="Primary" Text="{x:Static resources:AppResources.ScanToolbarItemLabel}" Priority="0" Command ="{Binding ScanInviteCommand}"/>
+        <ToolbarItem Name="CreateInvitation" Order="Secondary" Text="{x:Static resources:AppResources.CreateInvitationToolbarItemLabel}" ios:NavigationPage.PrefersLargeTitles="true" Priority="0" Command ="{Binding CreateInvitationCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>

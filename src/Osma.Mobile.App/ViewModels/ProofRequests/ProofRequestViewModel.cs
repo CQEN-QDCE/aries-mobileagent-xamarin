@@ -33,6 +33,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         private readonly IMessageService _messageService;
         private readonly INavigationService _navigationService;
         private readonly ProofRecord _proof;
+        private readonly ProofRequest _proofRequest;
 
         private readonly IDictionary<string, bool> _proofAttributes = new Dictionary<string, bool>();
         private readonly IDictionary<string, bool> _proofAttributesRevealed = new Dictionary<string, bool>();
@@ -47,6 +48,8 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         private readonly Dictionary<string, RequestedAttribute> _requestedPredicatesMap = new Dictionary<string, RequestedAttribute>();
         private readonly IUserDialogs _userDialogs;
         private IDictionary<string, bool> _previousProofAttribute = new Dictionary<string, bool>();
+
+        private string _attributeNameInEdition;
 
         public ProofRequestViewModel(
             IUserDialogs userDialogs,
@@ -78,6 +81,8 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             GetConnectionAlias();
 
             var requestJson = (JObject)JsonConvert.DeserializeObject(_proof.RequestJson);
+
+            _proofRequest = JsonConvert.DeserializeObject<ProofRequest>(_proof.RequestJson);
 
             ProofName = requestJson["name"]?.ToString();
             ProofVersion = "Version - " + requestJson["version"];
@@ -181,59 +186,30 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             _requestedAttributesRevealedMap.ForEach(attr =>
                 _requestedAttributesMap[attr.Key].Revealed = attr.Value);
 
-            var requestedCredentials = new RequestedCredentials
+            var requestedCredentials = new RequestedCredentials();
+            foreach (var keyValue in _requestedAttributesMap)
             {
-                RequestedAttributes = _requestedAttributesMap,
-                RequestedPredicates = _requestedPredicatesMap
-            };
+                requestedCredentials.RequestedAttributes.Add(keyValue.Key, keyValue.Value);
+            }
+            foreach (var keyValue in _requestedPredicatesMap)
+            {
+                requestedCredentials.RequestedPredicates.Add(keyValue.Key, keyValue.Value);
+            }
+            // TODO: Mettre le Timestamp à null car lorsqu'il est présent, la création de la preuve ne marche pas. Pourquoi?
+            foreach (var keyValue in requestedCredentials.RequestedAttributes.Values)
+            {
+                keyValue.Timestamp = null;
+            }
+            //{
+            //    RequestedAttributes = _requestedAttributesMap,
+            //    RequestedPredicates = _requestedPredicatesMap
+            //};
 
             var context = await _agentContextProvider.GetContextAsync();
 
-            //var provisioningRecord = await ProvisioningService.GetProvisioningAsync(agentContext.Wallet);
-
-            //var credentialObjects = new List<CredentialInfo>();
-            //foreach (var credId in requestedCredentials.GetCredentialIdentifiers())
-            //{
-            //    credentialObjects.Add(
-            //        JsonConvert.DeserializeObject<CredentialInfo>(
-            //            await AnonCreds.ProverGetCredentialAsync(context.Wallet, credId)));
-            //}
-
-            //var schemas = await BuildSchemasAsync(await agentContext.Pool,
-            //    credentialObjects
-            //        .Select(x => x.SchemaId)
-            //        .Distinct());
-
-            //var definitions = await BuildCredentialDefinitionsAsync(await agentContext.Pool,
-            //    credentialObjects
-            //        .Select(x => x.CredentialDefinitionId)
-            //        .Distinct());
-
-            //var revocationStates = await BuildRevocationStatesAsync(await agentContext.Pool,
-            //    credentialObjects,
-            //    requestedCredentials);
-
-            //var proofJson = await AnonCreds.ProverCreateProofAsync(agentContext.Wallet, proofRequest.ToJson(),
-            //    requestedCredentials.ToJson(), provisioningRecord.MasterSecretId, schemas, definitions,
-            //    revocationStates);
-
-            //      var proofJson = await _proofService.CreatePresentationAsync(
-            //context,
-            //_proof.RequestJson.ToObject<ProofRequest>(),
-            //requestedCredentials);
-            //      /* This is required */
-            //      if (proofJson.Contains("\"rev_reg_id\":null"))
-            //      {
-            //          String[] separator = { "\"rev_reg_id\":null" };
-            //          String[] proofJsonList = proofJson.Split(separator, StringSplitOptions.None);
-            //          proofJson = proofJsonList[0] + "\"rev_reg_id\":null,\"timestamp\":null}]}";
-            //      }
-
-
             var (msg, rec) = await _proofService.CreatePresentationAsync(context, _proof.Id, requestedCredentials);
-            // TODO: Trouver comment faire fonctionner cet appel.
-            //await _messageService.SendAsync(context.Wallet, msg, rec);
-            throw new Exception("Trouver comment faire fonctionner cet appel");
+
+            await _messageService.SendAsync(context.Wallet, msg, _proof.GetTag("RecipientKey"), _proof.GetTag("ServiceEndpoint"));
 
             _eventAggregator.Publish(new ApplicationEvent { Type = ApplicationEventType.ProofRequestUpdated });
 
@@ -253,7 +229,14 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             var attributeName = _requestedAttributesKeys
                 .SingleOrDefault(k =>
                     _requestedAttributes[k]["name"]?.ToString() == _previousProofAttribute.Keys.Single());
-
+            string value = string.Empty;
+            foreach(var credentialAttributesValue in proofCredential.CredentialAttributesValues)
+            {
+                if (credentialAttributesValue.Name == _attributeNameInEdition)
+                {
+                    value = credentialAttributesValue.Value.ToString();
+                }
+            }
             var isPredicate = false;
             if (attributeName == null)
             {
@@ -270,7 +253,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
                     {
                         if (attributeName != null &&
                             a.Name == _requestedAttributes[attributeName]["name"]?.ToString())
-                            a.Value = proofCredential.SchemaId;
+                            a.Value = value;
                     }
                     else
                     {
@@ -280,10 +263,27 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
                     }
                 });
 
+            IList<ProofAttribute> newList = new List<ProofAttribute>();
+            foreach(var attr in Attributes)
+            {
+                newList.Add(attr);
+            }
+
+            Attributes = newList;
+
             _eventAggregator.Publish(new ApplicationEvent
             {
                 Type = ApplicationEventType.ProofRequestAtrributeUpdated
             });
+
+            string key = null;
+            foreach (var requestedAttribute2 in _proofRequest.RequestedAttributes)
+            {
+                if (requestedAttribute2.Value.Name == attributeName)
+                {
+                    key = requestedAttribute2.Key;
+                }
+            }
 
             if (!isPredicate)
             {
@@ -444,12 +444,12 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             }
             if (_previousProofAttribute.Any() && !_previousProofAttribute.ContainsKey(proofAttribute.Name))
                 _proofAttributes[_previousProofAttribute.Keys.Single()] = false;
-
+            
             if (!_proofAttributes.ContainsKey(proofAttribute.Name))
             {
                 _proofAttributes.Add(proofAttribute.Name, true);
                 _previousProofAttribute = new Dictionary<string, bool> { { proofAttribute.Name, true } };
-
+                _attributeNameInEdition = proofAttribute.Name;
                 IsFrameVisible = true;
             }
             else
@@ -473,15 +473,15 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             switch (proofState)
             {
                 case Hyperledger.Aries.Features.PresentProof.ProofState.Requested:
-                    strOut = "ProofStateRequestedLabel"; // AppResources.ProofStateRequestedLabel;
+                    strOut = "Requested"; // AppResources.ProofStateRequestedLabel;
                     break;
 
                 case Hyperledger.Aries.Features.PresentProof.ProofState.Accepted:
-                    strOut = "ProofStateAcceptedLabel"; // AppResources.ProofStateAcceptedLabel;
+                    strOut = "Accepted"; // AppResources.ProofStateAcceptedLabel;
                     break;
 
                 case Hyperledger.Aries.Features.PresentProof.ProofState.Rejected:
-                    strOut = "ProofStateRejectedLabel"; // AppResources.ProofStateRejectedLabel;
+                    strOut = "Rejected"; // AppResources.ProofStateRejectedLabel;
                     break;
 
                 default:
@@ -546,6 +546,10 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         private IList<CredentialRecord> _proofCredentials;
         private string _proofName;
 
+        private string _id;
+
+        private bool _isNew;
+
         private string _proofState;
 
         private string _proofVersion;
@@ -566,6 +570,18 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         {
             get => _alias;
             set => this.RaiseAndSetIfChanged(ref _alias, value);
+        }
+
+        public string Id
+        {
+            get => _id;
+            set => _id = value;
+        }
+
+        public bool IsNew
+        {
+            get => _isNew;
+            set => _isNew = value;
         }
 
         public bool AreButtonsVisible
