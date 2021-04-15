@@ -2,17 +2,15 @@
 using Autofac;
 using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Contracts;
-using Hyperledger.Aries.Decorators;
-using Hyperledger.Aries.Decorators.Service;
 using Hyperledger.Aries.Features.DidExchange;
 using Hyperledger.Aries.Features.PresentProof;
+using Hyperledger.Aries.Models.Events;
 using Hyperledger.Aries.Storage;
 using Osma.Mobile.App.Events;
 using Osma.Mobile.App.Extensions;
-using Osma.Mobile.App.Services;
 using Osma.Mobile.App.Services.Interfaces;
 using Osma.Mobile.App.Utilities;
-using Osma.Mobile.App.ViewModels.CreateInvitation;
+using Osma.Mobile.App.ViewModels.Account;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -32,7 +30,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         private readonly IProofService _proofService;
         private readonly IWalletRecordService _recordService;
         private readonly ILifetimeScope _scope;
-
+        private IDisposable _subscription;
         public ConnectionsViewModel(IUserDialogs userDialogs,
                                     INavigationService navigationService,
                                     IConnectionService connectionService,
@@ -56,9 +54,14 @@ namespace Osma.Mobile.App.ViewModels.Connections
             await RefreshConnections();
 
             _eventAggregator.GetEventByType<ApplicationEvent>()
-                            .Where(_ => _.Type == ApplicationEventType.ConnectionsUpdated)
+                            .Where(_ => _.Type == ApplicationEventType.ConnectionUpdated)
                             .Subscribe(async _ => await RefreshConnections());
 
+            _subscription = _eventAggregator.GetEventByType<ServiceMessageProcessingEvent>()
+            .Where(x => x.MessageType == MessageTypes.ConnectionRequest)
+            .Subscribe(async x => {
+                int bla = 1;
+            });
             await base.InitializeAsync(navigationData);
         }
 
@@ -66,18 +69,23 @@ namespace Osma.Mobile.App.ViewModels.Connections
         {
             //RefreshingConnections = true;
 
-            var context = await _agentContextProvider.GetContextAsync();
-            var records = await _connectionService.ListAsync(context);
-            records = records.OrderBy(r => r.CreatedAtUtc).ToList();
-            foreach (var record in records)
+            IAgentContext context = await _agentContextProvider.GetContextAsync();
+            
+            IList<ConnectionRecord> connectionRecords = await _connectionService.ListAsync(context);
+
+            connectionRecords = connectionRecords.OrderBy(r => r.CreatedAtUtc).ToList();
+
+            foreach (var record in connectionRecords)
             {
                 AddOrUpdateConnection(record);
             }
-            var connectionsToRemove = new List<ConnectionViewModel>();
+
+            IList<ConnectionViewModel> connectionsToRemove = new List<ConnectionViewModel>();
+
             foreach (ConnectionViewModel connection in Connections)
             {
                 var found = false;
-                foreach (var record in records)
+                foreach (var record in connectionRecords)
                 {
                     if (record.Id == connection.Id)
                     {
@@ -111,6 +119,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
                 }
             }
             var con = _scope.Resolve<ConnectionViewModel>(new NamedParameter("record", connectionRecord));
+            if (string.IsNullOrWhiteSpace(con.ConnectionName)) con.ConnectionName = "Agent Médiateur";
             con.ConnectionSubtitle = ConnectionStateTranslator.Translate(connectionRecord.State);
             DateTime datetime = DateTime.Now;
             if (connectionRecord.CreatedAtUtc.HasValue)
@@ -121,70 +130,27 @@ namespace Osma.Mobile.App.ViewModels.Connections
             Connections.Insert(0, con);
         }
 
-        public async Task ScanInvite()
+        private async Task ConfigureSettings()
         {
-            //var expectedFormat = ZXing.BarcodeFormat.QR_CODE;
-            
-            //var opts = new ZXing.Mobile.MobileBarcodeScanningOptions { PossibleFormats = new List<ZXing.BarcodeFormat> { expectedFormat } };
-
-            var context = await _agentContextProvider.GetContextAsync();
-
-            //var scanner = new ZXing.Mobile.MobileBarcodeScanner();
-
-            //var result = await scanner.Scan(opts);
-
-            //if (result == null) return;
-
-            //AgentMessage message = await MessageDecoder.ParseMessageAsync(result.Text);
-
-            AgentMessage message = await MessageDecoder.ParseMessageAsync("https://vc-authn-controller-vc-auth.apps.exp.lab.pocquebec.org/url/a6659ab9-4878-450e-8731-fb2910dd672c");
-
-            switch (message)
-            {
-                case ConnectionInvitationMessage invitation:
-                    break;
-
-                case RequestPresentationMessage presentation:
-                    RequestPresentationMessage proofRequest = (RequestPresentationMessage)presentation;
-                    var service = message.GetDecorator<ServiceDecorator>(DecoratorNames.ServiceDecorator);
-                    ProofRecord proofRecord = await _proofService.ProcessRequestAsync(context, proofRequest, null);
-                    proofRecord.SetTag("RecipientKey", service.RecipientKeys.ToList()[0]);
-                    proofRecord.SetTag("ServiceEndpoint", service.ServiceEndpoint);
-                    await _recordService.UpdateAsync(context.Wallet, proofRecord);
-                    _eventAggregator.Publish(new ApplicationEvent { Type = ApplicationEventType.ProofRequestUpdated });
-                    break;
-
-                default:
-                    DialogService.Alert("Invalid invitation!");
-                    return;
-            }
-
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                if (message is ConnectionInvitationMessage)
-                {
-                    await NavigationService.NavigateToAsync<AcceptInviteViewModel>(message as ConnectionInvitationMessage, NavigationType.Modal);
-                }
-            });
+            await NavigationService.NavigateToAsync<AccountViewModel>();
         }
 
-        public async Task SelectConnection(ConnectionViewModel connection) => await NavigationService.NavigateToAsync(connection);
-
-        //        public async Task SelectConnection(ConnectionViewModel connection) => await NavigationService.NavigateToAsync(connection, NavigationType.Modal);
+        private async Task SelectConnection(ConnectionViewModel connection)
+        {
+            await NavigationService.NavigateToAsync(connection);
+        }
 
         #region Bindable Command
 
         public ICommand RefreshCommand => new Command(async () => await RefreshConnections());
 
-        public ICommand ScanInviteCommand => new Command(async () => await ScanInvite());
-
-        public ICommand CreateInvitationCommand => new Command(async () => await NavigationService.NavigateToAsync<CreateInvitationViewModel>());
-
         public ICommand SelectConnectionCommand => new Command<ConnectionViewModel>(async (connection) =>
         {
-            if (connection != null)
-                await SelectConnection(connection);
+            if (connection != null) await SelectConnection(connection);
         });
+
+        public ICommand ConfigureSettingsCommand => new Command(async () => await ConfigureSettings());
+
 
         #endregion Bindable Command
 

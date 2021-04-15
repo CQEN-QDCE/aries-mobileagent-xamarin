@@ -5,6 +5,21 @@
     <Application.Resources>
         <ResourceDictionary>
 
+            <OnPlatform x:TypeArguments="x:String" x:Key="FontAwesomeBrands">
+                <On Platform="Android" Value="FontAwesome5Brands.otf#Regular" />
+                <On Platform="iOS" Value="FontAwesome5Brands-Regular" />
+            </OnPlatform>
+
+            <OnPlatform x:TypeArguments="x:String" x:Key="FontAwesomeSolid">
+                <On Platform="Android" Value="FontAwesome5Solid.otf#Regular" />
+                <On Platform="iOS" Value="FontAwesome5Free-Solid" />
+            </OnPlatform>
+
+            <OnPlatform x:TypeArguments="x:String" x:Key="FontAwesomeRegular">
+                <On Platform="Android" Value="FontAwesome5Regular.otf#Regular" />
+                <On Platform="iOS" Value="FontAwesome5Free-Regular" />
+            </OnPlatform>
+            
             <Color x:Key="BasePageColor">#EFEFF4</Color>
             <Color x:Key="DarkPageColor">#F8F8F8</Color>
             <Color x:Key="BaseContentViewColor">#FFFFFF</Color>
@@ -14,7 +29,7 @@
             <Color x:Key="LightTextColor">#FFFFFF</Color>
             
             <Color x:Key="BlueAccentColor">#3891D6</Color>
-            <Color x:Key="RedAccentColor">#EE3A24</Color>
+            <Color x:Key="RedAccentColor">#be282d</Color>
             <Color x:Key="GreenAccentColor">#73DA73</Color>
 
             <Color x:Key="NavigationBarColor">#2196f3</Color>

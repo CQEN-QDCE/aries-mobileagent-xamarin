@@ -2,7 +2,6 @@
 using Autofac;
 using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Contracts;
-using Hyperledger.Aries.Features.DidExchange;
 using Hyperledger.Aries.Features.IssueCredential;
 using Hyperledger.Aries.Features.PresentProof;
 using Hyperledger.Aries.Storage;
@@ -22,30 +21,29 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Osma.Mobile.App.Assemblers;
 
 namespace Osma.Mobile.App.ViewModels.ProofRequests
 {
     public class ProofRequestsViewModel : ABaseViewModel
     {
         private readonly IAgentProvider _agentContextProvider;
-        private readonly IConnectionService _connectionService;
         private readonly IWalletRecordService _recordService;
         private readonly IEventAggregator _eventAggregator;
-        private readonly IMessageService _messageService;
         private readonly IProofService _proofService;
+        private readonly IProofAssembler _proofAssembler;
         private readonly ICredentialService _credentialService;
-
         private readonly ILifetimeScope _scope;
+
         public ProofRequestsViewModel(
             IUserDialogs userDialogs,
             INavigationService navigationService,
             IProofService proofService,
             ICredentialService credentialService,
             IAgentProvider agentContextProvider,
-            IMessageService messageService,
             IWalletRecordService recordService,
             IEventAggregator eventAggregator,
-            IConnectionService connectionService,
+            IProofAssembler proofAssembler,
             ILifetimeScope scope
             ) : base(
                 AppResources.ProofsPageTitle,
@@ -55,12 +53,11 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         {
             _proofService = proofService;
             _agentContextProvider = agentContextProvider;
-            _messageService = messageService;
             _scope = scope;
-            _connectionService = connectionService;
             _eventAggregator = eventAggregator;
             _recordService = recordService;
             _credentialService = credentialService;
+            _proofAssembler = proofAssembler;
 
             this.WhenAnyValue(x => x.SearchTerm)
                 .Throttle(TimeSpan.FromMilliseconds(200))
@@ -99,70 +96,33 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         {
             RefreshingProofRequests = true;
 
-            var context = await _agentContextProvider.GetContextAsync();
+            IAgentContext context = await _agentContextProvider.GetContextAsync();
 
-            var proofRecords = await _proofService.ListAsync(context);
+            IList<ProofRecord> proofRecords = await _proofService.ListAsync(context);
 
-            // TODO: Tranférer le code de mappage suivant dans un mapper.
-            var proofsVms = new List<ProofRequestViewModel>();
+            IList<ProofRequestViewModel> proofs = await _proofAssembler.AssembleMany(proofRecords);
 
-            foreach (var proofRecord in proofRecords)
-            {
-                var proof = _scope.Resolve<ProofRequestViewModel>(new NamedParameter("proof", proofRecord));
+            IEnumerable<ProofRequestViewModel> filteredProofVms = FilterProofRequests(SearchTerm, proofs);
 
-                proof.Id = proofRecord.Id;
-                
-                proof.IsNew = proofRecord.State == ProofState.Requested && string.IsNullOrEmpty(proofRecord.GetTag("IsNew"));
-                
-                if (proofRecord.CreatedAtUtc.HasValue)
-                {
-                    proof.Alias = proofRecord.CreatedAtUtc.Value.ToLocalTime().ToString();
-                }
-                
-                if (proofRecord.ProofJson != null)
-                {
-                    var partialProof = JsonConvert.DeserializeObject<PartialProof>(proofRecord.ProofJson);
-                    var proofRequest = JsonConvert.DeserializeObject<ProofRequest>(proofRecord.RequestJson);
-                    proof.Attributes.Clear();
-                    foreach (var revealedAttributeKey in partialProof.RequestedProof.RevealedAttributes.Keys)
-                    {
-                        var proofAttribute = new ProofAttribute();
-                        proofAttribute.Name = proofRequest.RequestedAttributes[revealedAttributeKey].Name; // TODO: Que faire pour gérer l'attribut Names?
-                        proofAttribute.IsNotPredicate = true;
-                        proofAttribute.IsRevealed = true;
-                        proofAttribute.Type = "Text";
-                        proofAttribute.Value = partialProof.RequestedProof.RevealedAttributes[revealedAttributeKey].Raw;
-                        proof.Attributes.Add(proofAttribute);
-                    }
-                }
-
-                proof.ProofState = ProofStateTranslator.Translate(proofRecord.State);
-
-                proofsVms.Add(proof);
-            }
-
-            //var proofsVms = proofRecords
-            //    .Select(p => _scope.Resolve<ProofRequestViewModel>(new NamedParameter("proof", p)))
-            //    .ToList();
-
-            var filteredProofVms = FilterProofRequests(SearchTerm, proofsVms);
-            var groupedVms = GroupProofRequests(filteredProofVms);
+            IEnumerable<Grouping<string, ProofRequestViewModel>> groupedVms = GroupProofRequests(filteredProofVms);
 
             ProofRequestsGrouped = groupedVms;
-            //ProofRequestsCount = "we have number of records:{0}" + proofRecords.Count;
-            ProofRequestsCount = String.Format("Nombre de preuve", proofRecords.Count); //AppResources.ProofRequestCount
-            HasProofRequests = ProofRequests.Any();
 
+            ProofRequestsCount = String.Format("Nombre de preuve", proofRecords.Count); //AppResources.ProofRequestCount
+
+            HasProofRequests = ProofRequests.Any();
+            
             ProofRequests.Clear();
+
             ProofRequests.InsertRange(filteredProofVms);
 
             RefreshingProofRequests = false;
         }
 
-        public async Task SelectProofRequest(ProofRequestViewModel proof)
+        public async Task SelectProofRequest(ProofRequestViewModel proofRequest)
         {
-            await PreFillProofRequestValues(proof);
-            await NavigationService.NavigateToAsync(proof, null, NavigationType.Modal);
+            await PreFillProofRequestValues(proofRequest);
+            await NavigationService.NavigateToAsync(proofRequest, null, NavigationType.Modal);
         }
 
         private async Task PreFillProofRequestValues(ProofRequestViewModel proof)
@@ -229,6 +189,12 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
                 });
         }
 
+        private async Task ConfigureSettings()
+        {
+            await NavigationService.NavigateToAsync<AccountViewModel>();
+        }
+
+
         #region Bindable Command
 
         public ICommand CheckAccountCommand => new Command(async () => await NavigationService.NavigateToAsync<AccountViewModel>());
@@ -241,7 +207,8 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
                                 {
             if (proofs != null) await SelectProofRequest(proofs);
         });
-        //public ICommand CloudAgentsCommand => new Command(async () => await NavigationService.NavigateToAsync<CloudAgentsViewModel>());
+        public ICommand ConfigureSettingsCommand => new Command(async () => await ConfigureSettings());
+
         #endregion Bindable Command
 
         #region Bindable Properties

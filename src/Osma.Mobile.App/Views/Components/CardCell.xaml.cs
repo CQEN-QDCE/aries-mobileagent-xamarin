@@ -33,8 +33,35 @@ namespace Osma.Mobile.App.Views.Components
             });
         }
 
+        public static readonly BindableProperty AttributeCountProperty =
+BindableProperty.Create("AttributeCount", typeof(string), typeof(CardCell), "",
+propertyChanged: AttributeCountPropertyChanged);
+
+        public string AttributeCount
+        {
+            get { return (string)GetValue(AttributeCountProperty); }
+            set { SetValue(AttributeCountProperty, value); }
+        }
+
+        private static void AttributeCountPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            CardCell cell = (CardCell)bindable;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                cell.AttributeCountLabel.Text = newValue.ToString();
+                if (string.IsNullOrWhiteSpace(newValue.ToString()))
+                {
+                    Grid.SetRowSpan(cell.AttributeCountLabel, 2);
+                }
+                else
+                {
+                    Grid.SetRowSpan(cell.AttributeCountLabel, 1);
+                }
+            });
+        }
+
         public static readonly BindableProperty SubtitleProperty =
-            BindableProperty.Create("Subtitle", typeof(string), typeof(DetailedCell), "",
+            BindableProperty.Create("Subtitle", typeof(string), typeof(CardCell), "",
             propertyChanged: SubtitlePropertyChanged);
 
         public string Subtitle
@@ -61,7 +88,7 @@ namespace Osma.Mobile.App.Views.Components
         }
 
         public static readonly BindableProperty DateTimeProperty =
-            BindableProperty.Create("DateTime", typeof(string), typeof(DetailedCell), "",
+            BindableProperty.Create("DateTime", typeof(string), typeof(CardCell), "",
             propertyChanged: DateTimePropertyChanged);
 
         public string DateTime
@@ -75,7 +102,8 @@ namespace Osma.Mobile.App.Views.Components
             CardCell cell = (CardCell)bindable;
             Device.BeginInvokeOnMainThread(() =>
             {
-                cell.DateTimeLabel.Text = string.IsNullOrWhiteSpace(newValue.ToString()) ? string.Empty : AppResources.CrendentialIssuedLabel + " " + newValue.ToString().Split(' ')[0];
+                //cell.DateTimeLabel.Text = string.IsNullOrWhiteSpace(newValue.ToString()) ? string.Empty : AppResources.CrendentialIssuedLabel + " " + newValue.ToString().Split(' ')[0];
+                cell.DateTimeLabel.Text = string.IsNullOrWhiteSpace(newValue.ToString()) ? string.Empty : newValue.ToString().Split(' ')[0];
                 if (string.IsNullOrWhiteSpace(newValue.ToString()))
                 {
                     Grid.SetRowSpan(cell.TitleLabel, 2);

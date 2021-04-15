@@ -4,7 +4,7 @@ namespace Osma.Mobile.App.Events
 {
     public enum ApplicationEventType
     {
-        ConnectionsUpdated,
+        ConnectionUpdated,
         CloudAgentsUpdated,
         CredentialUpdated,
         ProofRequestUpdated,

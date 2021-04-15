@@ -3,9 +3,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
-    xmlns:behaviours="clr-namespace:Osma.Mobile.App.Behaviors;assembly=Osma.Mobile.App"
-    xmlns:components="clr-namespace:Osma.Mobile.App.Views.Components;assembly=Osma.Mobile.App"
-    xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms" xmlns:zxingcm="clr-namespace:ZXing.Common;assembly=zxing.portable"
     x:Class="Osma.Mobile.App.Views.CreateInvitation.CreateInvitationPage"
     Title="Create Invitation">
     <ContentPage.Resources>
@@ -24,6 +22,9 @@
                             BarcodeFormat="QR_CODE"
                             HorizontalOptions="FillAndExpand"
                             VerticalOptions="FillAndExpand">
+                <zxing:ZXingBarcodeImageView.BarcodeOptions>
+                    <zxingcm:EncodingOptions Width="300" Height="300" />
+                </zxing:ZXingBarcodeImageView.BarcodeOptions>
             </zxing:ZXingBarcodeImageView>
         </StackLayout>
     </ScrollView>

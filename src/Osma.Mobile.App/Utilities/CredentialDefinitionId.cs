@@ -1,5 +1,5 @@
 ﻿using System;
-
+// https://github.com/hyperledger/indy-sdk/blob/master/libindy/src/domain/anoncreds/credential_definition.rs
 namespace Osma.Mobile.App.Utilities
 {
     public class CredentialDefinitionId
@@ -8,18 +8,18 @@ namespace Osma.Mobile.App.Utilities
         {
         }
 
-        public CredentialDefinitionId(string fromNym, int number, int reference, string tag, SignatureType signatureType = SignatureType.CamenischLysyanskaya)
+        public CredentialDefinitionId(string did, int reference, string tag, SignatureType signatureType = SignatureType.CamenischLysyanskaya)
         {
-            FromNym = fromNym;
-            Number = number;
+            Did = did;
+            Marker = 3;
             SignatureType = signatureType;
             Reference = reference;
             Tag = tag;
         }
 
-        public string FromNym { get; private set; }
+        public string Did { get; private set; }
 
-        public int Number { get; private set; }
+        public int Marker { get; private set; }
 
         public SignatureType SignatureType { get; private set; }
 
@@ -37,8 +37,8 @@ namespace Osma.Mobile.App.Utilities
 
             var credentialDefinitionId = new CredentialDefinitionId();
 
-            credentialDefinitionId.FromNym = tokens[0];
-            credentialDefinitionId.Number = int.Parse(tokens[1]);
+            credentialDefinitionId.Did = tokens[0];
+            credentialDefinitionId.Marker = int.Parse(tokens[1]);
             credentialDefinitionId.SignatureType = tokens[2] == "CL" ? SignatureType.CamenischLysyanskaya : throw new FormatException();
             credentialDefinitionId.Reference = int.Parse(tokens[3]);
             credentialDefinitionId.Tag = tokens[4];
@@ -48,7 +48,7 @@ namespace Osma.Mobile.App.Utilities
 
         public override string ToString()
         {
-            return FromNym + ":" + Number + ":" + "CL" + ":" + Reference + ":" + Tag;
+            return Did + ":" + Marker + ":" + "CL" + ":" + Reference + ":" + Tag;
         }
     }
 

@@ -24,6 +24,9 @@ namespace Osma.Mobile.App.Droid
 
             Forms.Init(this, bundle);
 
+            App.ScreenHeight = (int)(Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density);
+            App.ScreenWidth = (int)(Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density);
+
             Acr.UserDialogs.UserDialogs.Init(this);
             // Initializing FFImageLoading
             CachedImageRenderer.Init(false);

@@ -9,6 +9,7 @@ using Osma.Mobile.App.Services.Interfaces;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -37,7 +38,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             IConnectionService connectionService,
         CredentialRecord credential
         ) : base(
-            nameof(CredentialViewModel),
+            "Credential Details",
             userDialogs,
             navigationService
         )
@@ -54,6 +55,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             if (credential.State == CredentialState.Offered)
             {
                 IsPending = true;
+                AreButtonsVisible = true;
             }
 
             if (credential.State == CredentialState.Issued)
@@ -68,29 +70,19 @@ namespace Osma.Mobile.App.ViewModels.Credentials
                             {
                                 Name = p.Name,
                                 Value = p.Value?.ToString(),
-                                Type = "Text"
+                                Type = p.Value != null && p.Value.ToString().StartsWith("data:image/jpeg;base64") ? "Image" : "Text",
+                                Image = p.Value != null && p.Value.ToString().StartsWith("data:image/jpeg;base64") ? ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(p.Value.ToString().Replace("data:image/jpeg;base64,","")))) : null
                             })
                         .ToList();
                 }
-            }
-            else if (credential.State == CredentialState.Offered)
-            {
-                AreButtonsVisible = true;
-            }
-            else
-            {
-                AreButtonsVisible = false;
             }
         }
 
         private async Task AcceptCredentialOffer(CredentialRecord credentialRecord)
         {
-            //            MessagingCenter.Unsubscribe<PassCodeViewModel, CredentialRecord>(this, ApplicationEventType.PassCodeAuthorisedCredentialAccept.ToString());
-            //          MessagingCenter.Unsubscribe<PassCodeViewModel>(this, ApplicationEventType.PassCodeAuthorisedCredentialAccept.ToString());
             if (credentialRecord.State != CredentialState.Offered)
             {
                 await DialogService.AlertAsync(string.Format("res-CredentialStateShouldBe", CredentialState.Offered));
-                //                await DialogService.AlertAsync(string.Format(AppResources.CredentialStateShouldBe, CredentialState.Offered.ToString()));
                 await NavigationService.PopModalAsync();
                 return;
             }
@@ -124,13 +116,13 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         {
             if (_credential.State != CredentialState.Offered)
             {
-                //await DialogService.AlertAsync(string.Format(AppResources.CredentialStateShouldBe, CredentialState.Offered));
                 await DialogService.AlertAsync(string.Format("res-CredentialStateShouldBe", CredentialState.Offered));
                 await NavigationService.PopModalAsync();
                 return;
             }
 
             var context = await _agentContextProvider.GetContextAsync();
+
             await _credentialService.RejectOfferAsync(context, _credential.Id);
 
             _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.CredentialUpdated });
@@ -164,6 +156,22 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             //{
             await RejectCredentialOffer();
             //}
+        });
+
+        public ICommand DeleteCommand => new Command(async () =>
+        {
+            PromptResult result = await DialogService.PromptAsync(AppResources.DeleteCredentialQuestion, AppResources.DeleteCredentialTitle, AppResources.OkLabel, AppResources.CancelLabel);
+
+            if (result.Ok)
+            {
+                var context = await _agentContextProvider.GetContextAsync();
+
+                await _connectionService.DeleteAsync(context, _credential.Id);
+
+                _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.CredentialUpdated });
+
+                await NavigationService.NavigateBackAsync();
+            }
         });
 
         #endregion Bindable Command
@@ -256,6 +264,19 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         {
             get => _attributes;
             set => this.RaiseAndSetIfChanged(ref _attributes, value);
+        }
+
+        private string _attributeCount;
+
+        public string AttributeCount
+        {
+            get => _attributes == null ? "" : _attributes.ToList().Count.ToString();
+            set => this.RaiseAndSetIfChanged(ref _attributeCount, value);
+        }
+
+        public IEnumerable<CredentialViewModel> Me
+        {
+            get => new List<CredentialViewModel> { this }.AsEnumerable();
         }
 
         #endregion Bindable Properties

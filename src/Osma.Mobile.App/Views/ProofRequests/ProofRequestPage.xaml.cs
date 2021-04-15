@@ -8,7 +8,6 @@ namespace Osma.Mobile.App.Views.ProofRequests
     {
         public ProofRequestPage()
         {
-            NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
         }
     }

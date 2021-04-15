@@ -4,11 +4,14 @@ using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Contracts;
 using Hyperledger.Aries.Features.DidExchange;
 using Hyperledger.Aries.Features.IssueCredential;
+using Hyperledger.Aries.Models.Events;
+using Osma.Mobile.App.Assemblers;
 using Osma.Mobile.App.Events;
 using Osma.Mobile.App.Extensions;
 using Osma.Mobile.App.Services;
 using Osma.Mobile.App.Services.Interfaces;
 using Osma.Mobile.App.Utilities;
+using Osma.Mobile.App.ViewModels.Account;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -23,26 +26,20 @@ namespace Osma.Mobile.App.ViewModels.Credentials
     public class CredentialsViewModel : ABaseViewModel
     {
         private readonly ICredentialService _credentialService;
+        private readonly ICredentialAssembler _credentialAssembler;
         private readonly IConnectionService _connectionService;
         private readonly IAgentProvider _agentContextProvider;
         private readonly ILifetimeScope _scope;
         private readonly IEventAggregator _eventAggregator;
+        private IDisposable _subscription;
 
-        public CredentialsViewModel(
-            IUserDialogs userDialogs,
-            INavigationService navigationService,
-            ICredentialService credentialService,
-            IConnectionService connectionService,
-            IAgentProvider agentContextProvider,
-            IEventAggregator eventAggregator,
-            ILifetimeScope scope
-            ) : base(
+        public CredentialsViewModel(IUserDialogs userDialogs, INavigationService navigationService, ICredentialService credentialService, ICredentialAssembler credentialAssembler, IConnectionService connectionService, IAgentProvider agentContextProvider, IEventAggregator eventAggregator, ILifetimeScope scope) : base (
                 AppResources.CredentialsPageTitle,
                 userDialogs,
-                navigationService
-           )
+                navigationService)
         {
             _credentialService = credentialService;
+            _credentialAssembler = credentialAssembler;
             _connectionService = connectionService;
             _agentContextProvider = agentContextProvider;
             _eventAggregator = eventAggregator;
@@ -61,6 +58,11 @@ namespace Osma.Mobile.App.ViewModels.Credentials
                .Where(_ => _.Type == ApplicationEventType.CredentialUpdated)
                .Subscribe(async _ => await RefreshCredentials());
 
+            _subscription = _eventAggregator.GetEventByType<ServiceMessageProcessingEvent>()
+            .Where(x => x.MessageType == MessageTypes.IssueCredentialNames.OfferCredential)
+            .Subscribe(async x => {
+                await DisplayCredentialOffer(x.RecordId);
+            });
             await base.InitializeAsync(navigationData);
         }
 
@@ -68,40 +70,36 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         {
             RefreshingCredentials = true;
 
-            var context = await _agentContextProvider.GetContextAsync();
-            var credentialsRecords = await _credentialService.ListAsync(context);
+            IAgentContext context = await _agentContextProvider.GetContextAsync();
+            
+            IList<CredentialRecord> credentialRecords = await _credentialService.ListAsync(context);
 
-            IList<CredentialViewModel> credentialsVms = new List<CredentialViewModel>();
-            foreach (var credentialRecord in credentialsRecords)
-            {
-                CredentialViewModel credential = _scope.Resolve<CredentialViewModel>(new NamedParameter("credential", credentialRecord));
+            IList<CredentialViewModel> credentials = await _credentialAssembler.AssembleMany(credentialRecords);
 
-                var credentialDefinitionId = CredentialDefinitionId.Parse(credentialRecord.CredentialDefinitionId);
-                credential.CredentialName = credentialDefinitionId.Tag;
-                var connectionRecord = await _connectionService.GetAsync(context, credentialRecord.ConnectionId);
-                credential.CredentialSubtitle = connectionRecord.Alias.Name;
-                credential.IssuedAt = connectionRecord.CreatedAtUtc.HasValue ? connectionRecord.CreatedAtUtc.Value.ToLocalTime() : (DateTime?)null;
-                if (credentialRecord.State == CredentialState.Offered)
-                {
-                    var attributes = new List<CredentialAttribute>();
-                    credential.Attributes = attributes;
-                    foreach (var credentialPreviewAttribute in credentialRecord.CredentialAttributesValues)
-                    {
-                        attributes.Add(new CredentialAttribute { Name = credentialPreviewAttribute.Name, Value = credentialPreviewAttribute.Value.ToString(), Type = "Text" });
-                    }
-                }
-                credentialsVms.Add(credential);
-            }
+            IEnumerable<CredentialViewModel> filteredCredentialVms = FilterCredentials(SearchTerm, credentials);
 
-            var filteredCredentialVms = FilterCredentials(SearchTerm, credentialsVms);
-            var groupedVms = GroupCredentials(filteredCredentialVms);
+            IEnumerable<Grouping<string, CredentialViewModel>> groupedVms = GroupCredentials(filteredCredentialVms);
+
             CredentialsGrouped = groupedVms;
 
             Credentials.Clear();
+
             Credentials.InsertRange(filteredCredentialVms);
 
             HasCredentials = Credentials.Any();
+
             RefreshingCredentials = false;
+        }
+
+        private async Task DisplayCredentialOffer(string recordId)
+        {
+            IAgentContext context = await _agentContextProvider.GetContextAsync();
+
+            CredentialRecord credentialRecord = await _credentialService.GetAsync(context, recordId);
+
+            CredentialViewModel credential = await _credentialAssembler.Assemble(credentialRecord);
+
+            await NavigationService.NavigateToAsync(credential, null, NavigationType.Modal);
         }
 
         public async Task SelectCredential(CredentialViewModel credential) => await NavigationService.NavigateToAsync(credential, null, NavigationType.Modal);
@@ -138,15 +136,21 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             return grouped;
         }
 
+        private async Task ConfigureSettings()
+        {
+            await NavigationService.NavigateToAsync<AccountViewModel>();
+        }
+
         #region Bindable Command
 
         public ICommand SelectCredentialCommand => new Command<CredentialViewModel>(async (credentials) =>
         {
-            if (credentials != null)
-                await SelectCredential(credentials);
+            if (credentials != null) await SelectCredential(credentials);
         });
 
         public ICommand RefreshCommand => new Command(async () => await RefreshCredentials());
+
+        public ICommand ConfigureSettingsCommand => new Command(async () => await ConfigureSettings());
 
         #endregion Bindable Command
 

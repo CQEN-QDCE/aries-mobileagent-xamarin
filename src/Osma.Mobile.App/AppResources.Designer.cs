@@ -61,11 +61,92 @@ namespace Osma.Mobile.App {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Accept.
+        /// </summary>
+        public static string AcceptButtonLabel {
+            get {
+                return ResourceManager.GetString("AcceptButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Accept.
+        /// </summary>
+        public static string AcceptProofRequestButtonLabel {
+            get {
+                return ResourceManager.GetString("AcceptProofRequestButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Account.
         /// </summary>
         public static string AccountTabTitle {
             get {
                 return ResourceManager.GetString("AccountTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Attributes.
+        /// </summary>
+        public static string AttributesLabel {
+            get {
+                return ResourceManager.GetString("AttributesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cancel.
+        /// </summary>
+        public static string CancelButtonLabel {
+            get {
+                return ResourceManager.GetString("CancelButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cancel.
+        /// </summary>
+        public static string CancelLabel {
+            get {
+                return ResourceManager.GetString("CancelLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à You connected.
+        /// </summary>
+        public static string ConnectedWithNotificationMessage {
+            get {
+                return ResourceManager.GetString("ConnectedWithNotificationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Echanges.
+        /// </summary>
+        public static string ConnectionExchangesLabel {
+            get {
+                return ResourceManager.GetString("ConnectionExchangesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à would like to establish connection with you. This will allow secure communication between you..
+        /// </summary>
+        public static string ConnectionInviteMessage {
+            get {
+                return ResourceManager.GetString("ConnectionInviteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Connection Details.
+        /// </summary>
+        public static string ConnectionPageTitle {
+            get {
+                return ResourceManager.GetString("ConnectionPageTitle", resourceCulture);
             }
         }
         
@@ -160,6 +241,294 @@ namespace Osma.Mobile.App {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Are you sure you want to delete this connection?.
+        /// </summary>
+        public static string DeleteConnectionQuestion {
+            get {
+                return ResourceManager.GetString("DeleteConnectionQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Delete Connection.
+        /// </summary>
+        public static string DeleteConnectionTitle {
+            get {
+                return ResourceManager.GetString("DeleteConnectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Are you sure you want to delete this credential?.
+        /// </summary>
+        public static string DeleteCredentialQuestion {
+            get {
+                return ResourceManager.GetString("DeleteCredentialQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Delete credential.
+        /// </summary>
+        public static string DeleteCredentialTitle {
+            get {
+                return ResourceManager.GetString("DeleteCredentialTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Digital proof request.
+        /// </summary>
+        public static string DigitalProofRequestLabel {
+            get {
+                return ResourceManager.GetString("DigitalProofRequestLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaAddressBook {
+            get {
+                return ResourceManager.GetString("FaAddressBook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaAngleDown {
+            get {
+                return ResourceManager.GetString("FaAngleDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaAngleLeft {
+            get {
+                return ResourceManager.GetString("FaAngleLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaAngleRight {
+            get {
+                return ResourceManager.GetString("FaAngleRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaCheckCircle {
+            get {
+                return ResourceManager.GetString("FaCheckCircle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaCog {
+            get {
+                return ResourceManager.GetString("FaCog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaEnvelopeOpenText {
+            get {
+                return ResourceManager.GetString("FaEnvelopeOpenText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaHome {
+            get {
+                return ResourceManager.GetString("FaHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaIdCard {
+            get {
+                return ResourceManager.GetString("FaIdCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaNetworkWired {
+            get {
+                return ResourceManager.GetString("FaNetworkWired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaQrCode {
+            get {
+                return ResourceManager.GetString("FaQrCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaQuestion {
+            get {
+                return ResourceManager.GetString("FaQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaTrash {
+            get {
+                return ResourceManager.GetString("FaTrash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string FaUser {
+            get {
+                return ResourceManager.GetString("FaUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Home.
+        /// </summary>
+        public static string HomeTabTitle {
+            get {
+                return ResourceManager.GetString("HomeTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &amp;#xf0f4;.
+        /// </summary>
+        public static string IconCoffee {
+            get {
+                return ResourceManager.GetString("IconCoffee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à You have been invited to connect.
+        /// </summary>
+        public static string InvitedToConnectNotificationMessage {
+            get {
+                return ResourceManager.GetString("InvitedToConnectNotificationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à You have been issued.
+        /// </summary>
+        public static string IssuedCredentialNotificationMessage {
+            get {
+                return ResourceManager.GetString("IssuedCredentialNotificationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Messages.
+        /// </summary>
+        public static string MessagesPageTitle {
+            get {
+                return ResourceManager.GetString("MessagesPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Messages.
+        /// </summary>
+        public static string MessagesTabTitle {
+            get {
+                return ResourceManager.GetString("MessagesTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à My Did.
+        /// </summary>
+        public static string MyDidLabel {
+            get {
+                return ResourceManager.GetString("MyDidLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Making a secure connection.
+        /// </summary>
+        public static string NegotiatingNotificationMessage {
+            get {
+                return ResourceManager.GetString("NegotiatingNotificationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à You have been offered.
+        /// </summary>
+        public static string OfferedCredentialNotificationMessage {
+            get {
+                return ResourceManager.GetString("OfferedCredentialNotificationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ok.
+        /// </summary>
+        public static string OkButtonLabel {
+            get {
+                return ResourceManager.GetString("OkButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à OK.
+        /// </summary>
+        public static string OkLabel {
+            get {
+                return ResourceManager.GetString("OkLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Some attributes of the proof request are missing..
+        /// </summary>
+        public static string ProofAttributesMissingMessage {
+            get {
+                return ResourceManager.GetString("ProofAttributesMissingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Proof Request.
+        /// </summary>
+        public static string ProofRequestPageTitle {
+            get {
+                return ResourceManager.GetString("ProofRequestPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Test.
         /// </summary>
         public static string ProofRequestTitle {
@@ -223,6 +592,69 @@ namespace Osma.Mobile.App {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Proof request state should be &apos;{0}&apos;..
+        /// </summary>
+        public static string ProofStateShouldBeMessage {
+            get {
+                return ResourceManager.GetString("ProofStateShouldBeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Refuse.
+        /// </summary>
+        public static string RefuseButtonLabel {
+            get {
+                return ResourceManager.GetString("RefuseButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Refuse.
+        /// </summary>
+        public static string RefuseProofRequestButtonLabel {
+            get {
+                return ResourceManager.GetString("RefuseProofRequestButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à You rejected.
+        /// </summary>
+        public static string RejectedNotificationMessage {
+            get {
+                return ResourceManager.GetString("RejectedNotificationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Requested by.
+        /// </summary>
+        public static string RequestedByLabel {
+            get {
+                return ResourceManager.GetString("RequestedByLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à You requested.
+        /// </summary>
+        public static string RequestedNotificationMessage {
+            get {
+                return ResourceManager.GetString("RequestedNotificationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à You have been requested.
+        /// </summary>
+        public static string RequestedProofNotificationMessage {
+            get {
+                return ResourceManager.GetString("RequestedProofNotificationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Scan.
         /// </summary>
         public static string ScanToolbarItemLabel {
@@ -232,11 +664,11 @@ namespace Osma.Mobile.App {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Search credentials.
+        ///   Recherche une chaîne localisée semblable à Search.
         /// </summary>
-        public static string SearchCredentialsPlaceholder {
+        public static string Search {
             get {
-                return ResourceManager.GetString("SearchCredentialsPlaceholder", resourceCulture);
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         
@@ -246,6 +678,42 @@ namespace Osma.Mobile.App {
         public static string SearchProofRequestsPlaceholder {
             get {
                 return ResourceManager.GetString("SearchProofRequestsPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Select Attribute Value.
+        /// </summary>
+        public static string SelectAttributeValueTitle {
+            get {
+                return ResourceManager.GetString("SelectAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Settings.
+        /// </summary>
+        public static string SettingsPageTitle {
+            get {
+                return ResourceManager.GetString("SettingsPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Vous avez partagé.
+        /// </summary>
+        public static string SharedNotificationMessage {
+            get {
+                return ResourceManager.GetString("SharedNotificationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Their Did.
+        /// </summary>
+        public static string TheirDidLabel {
+            get {
+                return ResourceManager.GetString("TheirDidLabel", resourceCulture);
             }
         }
     }

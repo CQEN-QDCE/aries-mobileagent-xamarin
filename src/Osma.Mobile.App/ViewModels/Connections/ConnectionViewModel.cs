@@ -161,22 +161,20 @@ namespace Osma.Mobile.App.ViewModels.Connections
             await NavigationService.NavigateBackAsync();
         });
 
-        public ICommand DeleteConnectionCommand => new Command(async () =>
+        public ICommand DeleteCommand => new Command(async () =>
         {
-            var dialog = DialogService.Loading("Deleting");
+            PromptResult result = await DialogService.PromptAsync(AppResources.DeleteConnectionQuestion, AppResources.DeleteConnectionTitle, AppResources.OkLabel, AppResources.CancelLabel);
 
-            var context = await _agentContextProvider.GetContextAsync();
-            await _connectionService.DeleteAsync(context, _record.Id);
-
-            _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.ConnectionsUpdated });
-
-            if (dialog.IsShowing)
+            if (result.Ok)
             {
-                dialog.Hide();
-                dialog.Dispose();
-            }
+                var context = await _agentContextProvider.GetContextAsync();
 
-            await NavigationService.NavigateBackAsync();
+                await _connectionService.DeleteAsync(context, _record.Id);
+
+                _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.ConnectionUpdated });
+
+                await NavigationService.NavigateBackAsync();
+            }
         });
 
         public ICommand RefreshTransactionsCommand => new Command(async () => await RefreshTransactions());

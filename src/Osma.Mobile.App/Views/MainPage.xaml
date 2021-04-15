@@ -1,39 +1,50 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:connections="clr-namespace:Osma.Mobile.App.Views.Connections;assembly=Osma.Mobile.App"
-    xmlns:credentials="clr-namespace:Osma.Mobile.App.Views.Credentials;assembly=Osma.Mobile.App"
-    xmlns:proofRequests="clr-namespace:Osma.Mobile.App.Views.ProofRequests;assembly=Osma.Mobile.App"
-    xmlns:account="clr-namespace:Osma.Mobile.App.Views.Account;assembly=Osma.Mobile.App"
-    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
-    xmlns:resources="clr-namespace:Osma.Mobile.App"
-    x:Class="Osma.Mobile.App.Views.MainPage"
-    CurrentPageChanged="CurrentPageChanged"
-    Appearing="Appearing"
->
-    <connections:ConnectionsPage
-        Icon="connection_icon.png"
-        Title="{x:Static resources:AppResources.ConnectionsTabTitle}"
+<controls:ExtendedTabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:home="clr-namespace:Osma.Mobile.App.Views.Home;assembly=Osma.Mobile.App"
+            xmlns:connections="clr-namespace:Osma.Mobile.App.Views.Connections;assembly=Osma.Mobile.App"
+            xmlns:credentials="clr-namespace:Osma.Mobile.App.Views.Credentials;assembly=Osma.Mobile.App"
+            xmlns:messages="clr-namespace:Osma.Mobile.App.Views.Messages;assembly=Osma.Mobile.App"
+            xmlns:proofRequests="clr-namespace:Osma.Mobile.App.Views.ProofRequests;assembly=Osma.Mobile.App"
+            xmlns:account="clr-namespace:Osma.Mobile.App.Views.Account;assembly=Osma.Mobile.App"
+            xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+            xmlns:resources="clr-namespace:Osma.Mobile.App"
+            xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+            android:TabbedPage.ToolbarPlacement="Bottom"
+            x:Class="Osma.Mobile.App.Views.MainPage"
+            CurrentPageChanged="CurrentPageChanged"
+            Appearing="Appearing"
+            xmlns:controls="clr-namespace:Osma.Mobile.App">
+ 
+    <home:HomePage
+        Title="{x:Static resources:AppResources.HomeTabTitle}"
         ios:NavigationPage.PrefersLargeTitles="true"
-        BindingContext="{Binding Connections}">
-    </connections:ConnectionsPage>
+        BindingContext="{Binding Home}">
+    </home:HomePage>
     <credentials:CredentialsPage
-        Icon="credentials_icon.png"
         Title="{x:Static resources:AppResources.CredentialsTabTitle}"
         ios:NavigationPage.PrefersLargeTitles="true"
         BindingContext="{Binding Credentials}">
     </credentials:CredentialsPage>
-    <proofRequests:ProofRequestsPage
-        Icon="credentials_icon.png"
+    <ContentPage/>
+    <connections:ConnectionsPage
+        Title="{x:Static resources:AppResources.ConnectionsTabTitle}"
+        ios:NavigationPage.PrefersLargeTitles="true"
+        BindingContext="{Binding Connections}">
+    </connections:ConnectionsPage>
+    <!--<proofRequests:ProofRequestsPage
         Title="{x:Static resources:AppResources.ProofsTabTitle}"
         ios:NavigationPage.PrefersLargeTitles="true"
         BindingContext="{Binding ProofRequests}">
-    </proofRequests:ProofRequestsPage>
-    <account:AccountPage
-        Icon="account_icon.png"
+    </proofRequests:ProofRequestsPage>-->
+    <!--<account:AccountPage
         Title="{x:Static resources:AppResources.AccountTabTitle}"
         ios:NavigationPage.PrefersLargeTitles="true"
         BindingContext="{Binding Account}">
-    </account:AccountPage>
-</TabbedPage>
+    </account:AccountPage>-->
+    <messages:MessagesPage
+        Title="{x:Static resources:AppResources.MessagesTabTitle}"
+        ios:NavigationPage.PrefersLargeTitles="true"
+        BindingContext="{Binding Messages}">
+    </messages:MessagesPage>
+</controls:ExtendedTabbedPage>

@@ -47,6 +47,8 @@ namespace Osma.Mobile.App.iOS
             _application = host.Services.GetRequiredService<App>();
             LoadApplication(_application);
 #endif
+            App.ScreenHeight = (int)UIScreen.MainScreen.Bounds.Height;
+            App.ScreenWidth = (int)UIScreen.MainScreen.Bounds.Width;
             return base.FinishedLaunching(app, options);
         }
     }

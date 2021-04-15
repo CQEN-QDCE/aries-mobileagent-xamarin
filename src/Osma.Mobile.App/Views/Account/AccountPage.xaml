@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
-    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-    xmlns:account="clr-namespace:Osma.Mobile.App.Views.Account;assembly=Osma.Mobile.App"
-    xmlns:components="clr-namespace:Osma.Mobile.App.Views.Components;assembly=Osma.Mobile.App"
-    x:Class="Osma.Mobile.App.Views.Account.AccountPage"
-    ios:Page.UseSafeArea="true"
-    Title="Account"
->
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Osma.Mobile.App.Views.Account.AccountPage"
+             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
+             xmlns:resources="clr-namespace:Osma.Mobile.App"
+             xmlns:account="clr-namespace:Osma.Mobile.App.Views.Account;assembly=Osma.Mobile.App"
+             xmlns:components="clr-namespace:Osma.Mobile.App.Views.Components;assembly=Osma.Mobile.App"
+             Title="{x:Static resources:AppResources.SettingsPageTitle}"
+             BackgroundColor="White">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBooleanConverter x:Key="BooleanInverse" />
+            <converters:DateTimeConverter x:Key="DateTimeFormatter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <!--<NavigationPage.TitleView>
+        <Button HorizontalOptions="End" Text="Delete" />
+    </NavigationPage.TitleView>-->
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="Test"></Label>
             <TableView HasUnevenRows="true" Intent="Menu">
                 <TableSection>
                         <components:DetailedCell

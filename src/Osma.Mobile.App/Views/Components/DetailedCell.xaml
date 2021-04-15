@@ -1,55 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewCell
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-    x:Class="Osma.Mobile.App.Views.Components.DetailedCell">
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          x:Class="Osma.Mobile.App.Views.Components.DetailedCell">
     <ViewCell.View>
-        <Grid Padding="24">
+        <Grid Padding="8,4,8,4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"></ColumnDefinition>
+                <ColumnDefinition Width="32"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="20"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="24"></RowDefinition>
+                <RowDefinition Height="24"></RowDefinition>
             </Grid.RowDefinitions>
-            <ffimageloading:CachedImage x:Name="Image"
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Grid.RowSpan="2"
-                                        VerticalOptions="Center"
-                                        HeightRequest="50"
-                                        WidthRequest="50"
-                                        FadeAnimationEnabled="true"
-                                        DownsampleUseDipUnits="true"
-                                        Aspect="Fill">
-                <ffimageloading:CachedImage.Transformations>
-                    <fftransformations:CircleTransformation/>
-                </ffimageloading:CachedImage.Transformations>
-            </ffimageloading:CachedImage>
-            <BoxView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Color="AliceBlue" />
+            <Label FontFamily="{StaticResource FontAwesomeBrands}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" VerticalOptions="Center" FontSize="32" Text="&#xf26e;"/>
             <Label x:Name="TitleLabel"
                    Grid.Row="0"
                    Grid.Column="1"
-                   Grid.RowSpan="2"
-                   VerticalOptions="Center"
-                   LineHeight="60"
-                   FontSize="Medium"/>
-            <BoxView Grid.Row="1" Grid.Column="1" Color="LightBlue" />
+                   FontSize="Medium"
+                   FontAttributes="Bold"
+                   TextColor="Black"/>
             <Label x:Name="SubtitleLabel"
+                   Grid.Row="1"
+                   Grid.Column="2"
+                   HorizontalTextAlignment="End"
+                   FontSize="Small"/>
+            <Label x:Name="DateTimeLabel"
                    Grid.Row="1"
                    Grid.Column="1"
                    VerticalOptions="Center"
                    FontSize="Small"/>
-            <BoxView Grid.Row="2" Grid.Column="1" Color="Yellow" />
-            <Label x:Name="DateTimeLabel"
-                   Grid.Row="2"
-                   Grid.Column="1"
-                   VerticalOptions="Center"
-                   FontSize="Small"/>
+            <Label FontFamily="{StaticResource FontAwesomeSolid}" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" VerticalOptions="Center" HorizontalTextAlignment="End" FontSize="16" Text="&#xf105;"/>
             <Frame x:Name="NewLabelContainer"
                    IsVisible="false"
                    Grid.Row="0"

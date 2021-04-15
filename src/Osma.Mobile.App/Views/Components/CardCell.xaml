@@ -1,59 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewCell
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-    x:Class="Osma.Mobile.App.Views.Components.CardCell">
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          x:Class="Osma.Mobile.App.Views.Components.CardCell">
     <ViewCell.View>
-        <Frame Margin="10" 
-               CornerRadius="20"
+        <Frame Margin="40,10,40,10" 
+               CornerRadius="10"
                Padding="0"
                IsClippedToBounds="True" 
-               HasShadow="False"  
-               BackgroundColor="#32A0FF"
+               HasShadow="True"  
+               BackgroundColor="#f2f2f2"
                AbsoluteLayout.LayoutFlags="XProportional">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"></ColumnDefinition>
+                    <ColumnDefinition Width="70"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
+                    <RowDefinition Height="25"></RowDefinition>
                     <RowDefinition Height="20"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="100"></RowDefinition>
-                    <RowDefinition Height="100"></RowDefinition>
                 </Grid.RowDefinitions>
-                <BoxView Grid.Row="1" Grid.Column="0" Color="#5AB9FF" />
-                <Label x:Name="DateTimeLabel"
-                       Grid.Row="1"
+                <BoxView Grid.Row="0" 
+                         Grid.Column="0" 
+                         Grid.ColumnSpan="3" 
+                         Color="#1e73be" />
+                <Frame CornerRadius="5"
+                       Padding="2,5,0,0"
+                       BackgroundColor="#cde1f5"
+                       Margin="8,0,0,0" 
+                       Grid.Row="1" 
+                       Grid.Column="0" 
+                       Grid.RowSpan="3" 
+                       VerticalOptions="Center" 
+                       HasShadow="False">
+                    <Label FontFamily="{StaticResource FontAwesomeSolid}" 
+                           TextColor="DarkGray"
+                           Padding="8,0,8,0"
+                           FontSize="64" 
+                           Text="&#xf007;"/>
+                </Frame>
+                <Label x:Name="TitleLabel"
+                       Padding="5,0,5,0"
+                       Grid.Row="0"
                        Grid.Column="0"
+                       Grid.ColumnSpan="3"
                        VerticalOptions="Center"
+                       HorizontalTextAlignment="Center"
                        TextColor="White"
-                       HorizontalTextAlignment="End"
+                       TextTransform="Uppercase"
+                       LineBreakMode="TailTruncation"
+                       MaxLines="1"
+                       FontAttributes="Bold"
+                       FontSize="Medium"/>
+                <Label x:Name="SubtitleLabel"
+                       Padding="8,0,8,0"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       Grid.ColumnSpan="2"
+                       LineBreakMode="TailTruncation"
+                       MaxLines="2"
+                       VerticalOptions="Center"
+                       TextColor="Black"
+                       FontAttributes="Bold"
+                       FontSize="Medium"/>
+                <Label Grid.Row="2"
+                       Grid.Column="1"
+                       VerticalOptions="Center"
+                       TextColor="#739bbe"
+                       Padding="5,0,0,0"
+                       Text="Émis"
+                       FontSize="Small"/>
+                <Label x:Name="DateTimeLabel"
+                       Grid.Row="2"
+                       Grid.Column="2"
+                       VerticalOptions="Center"
+                       TextColor="Black"
                        Margin="0,0,20,0"
                        FontSize="Small"/>
-                <Grid Grid.Row="3" Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"></ColumnDefinition>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"></RowDefinition>
-                        <RowDefinition Height="30"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Label x:Name="TitleLabel"
-                           Grid.Row="0"
-                           Grid.Column="1"
-                           VerticalOptions="Center"
-                           TextColor="White"
-                           FontSize="Medium"/>
-                    <Label x:Name="SubtitleLabel"
-                           Grid.Row="1"
-                           Grid.Column="1"
-                           VerticalOptions="Center"
-                           TextColor="White"
-                           FontSize="Small"/>
-                </Grid>
+                <Label Grid.Row="3"
+                       Grid.Column="1"
+                       VerticalOptions="Center"
+                       TextColor="#739bbe"
+                       Padding="5,0,0,0"
+                       Text="Attributs"
+                       FontSize="Small"/>
+                <Label x:Name="AttributeCountLabel"
+                       Grid.Row="3"
+                       Grid.Column="2"
+                       VerticalOptions="Center"
+                       TextColor="Black"
+                       FontSize="Small"/>
             </Grid>
         </Frame>
     </ViewCell.View>

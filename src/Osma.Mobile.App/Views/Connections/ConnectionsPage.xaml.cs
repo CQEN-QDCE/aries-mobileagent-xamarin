@@ -12,7 +12,7 @@ namespace Osma.Mobile.App.Views.Connections
         public ConnectionsPage()
         {
             InitializeComponent();
-            var source = MyListView.ItemsSource;
+            var source = ConnectionListView.ItemsSource;
             if (source != null)
             {
                 ((ObservableCollection<object>)source).CollectionChanged += ListViewBehaviors_CollectionChanged;
@@ -21,10 +21,10 @@ namespace Osma.Mobile.App.Views.Connections
 
         private void ListViewBehaviors_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var source = (ObservableCollection<object>)MyListView.ItemsSource;
+            var source = (ObservableCollection<object>)ConnectionListView.ItemsSource;
             if (source != null)
             {
-                MyListView.ScrollTo(source.First(), ScrollToPosition.Start, true);
+                ConnectionListView.ScrollTo(source.First(), ScrollToPosition.Start, true);
             }
         }
     }

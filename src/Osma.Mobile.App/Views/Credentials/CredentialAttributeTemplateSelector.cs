@@ -8,23 +8,26 @@ namespace Osma.Mobile.App.Views.Credentials
     {
         None,
         Text = 1,
-        File = 2,
+        Image = 2,
+        File = 3,
     }
 
     public class CredentialAttributeTemplateSelector : DataTemplateSelector
     {
         public DataTemplate TextTemplate { get; set; }
+
+        public DataTemplate ImageTemplate { get; set; }
+
         public DataTemplate FileTemplate { get; set; }
+
         public DataTemplate ErrorTemplate { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if (item is null)
-            {
-                return ErrorTemplate;
-            }
+            if (item is null) return ErrorTemplate;
 
             CredentialAttributeType credentialAttributeType;
+
             var credentialAttribute = item as CredentialAttribute;
 
             if (credentialAttribute is null)
@@ -44,6 +47,9 @@ namespace Osma.Mobile.App.Views.Credentials
             {
                 case CredentialAttributeType.Text:
                     return TextTemplate;
+
+                case CredentialAttributeType.Image:
+                    return ImageTemplate;
 
                 case CredentialAttributeType.File:
                     return FileTemplate;

@@ -1,4 +1,7 @@
-﻿using Xamarin.Forms;
+﻿using Osma.Mobile.App.Converters;
+using System;
+using System.Globalization;
+using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Views.Components
 {
@@ -72,7 +75,83 @@ namespace Osma.Mobile.App.Views.Components
             DetailedCell cell = (DetailedCell)bindable;
             Device.BeginInvokeOnMainThread(() =>
             {
-                cell.DateTimeLabel.Text = newValue.ToString();
+                if (newValue != null && !string.IsNullOrWhiteSpace(newValue.ToString()))
+                {
+                    DateTimeConverter converter = new DateTimeConverter();
+                    string date = newValue.ToString().Split(' ')[0];
+                    string time = newValue.ToString().Split(' ')[1];
+                    int day = int.Parse(date.Split('/')[0]);
+                    int month = int.Parse(date.Split('/')[1]);
+                    int year = int.Parse(date.Split('/')[2]);
+                    int hour = int.Parse(time.Split(':')[0]);
+                    int minute = int.Parse(time.Split(':')[1]);
+                    int second = int.Parse(time.Split(':')[2]);
+                    object fdt = converter.Convert(new DateTime(year, month, day, hour, minute, second), typeof(string), null, CultureInfo.CurrentCulture);
+                    cell.DateTimeLabel.Text = fdt.ToString();
+                } else
+                {
+                    cell.DateTimeLabel.Text = "";
+                }
+                if (string.IsNullOrWhiteSpace(newValue.ToString()))
+                {
+                    Grid.SetRowSpan(cell.TitleLabel, 2);
+                }
+                else
+                {
+                    Grid.SetRowSpan(cell.TitleLabel, 1);
+                }
+            });
+        }
+
+
+
+        public static readonly BindableProperty DateProperty =
+    BindableProperty.Create("Date", typeof(string), typeof(DetailedCell), "",
+    propertyChanged: DatePropertyChanged);
+
+        public string Date
+        {
+            get { return (string)GetValue(DateTimeProperty); }
+            set { SetValue(DateTimeProperty, value); }
+        }
+
+        private static void DatePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            DetailedCell cell = (DetailedCell)bindable;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                //cell.DateLabel.Text = newValue.ToString() == string.Empty ? string.Empty : newValue.ToString().Split(' ')[0];
+                if (string.IsNullOrWhiteSpace(newValue.ToString()))
+                {
+                    Grid.SetRowSpan(cell.TitleLabel, 2);
+                }
+                else
+                {
+                    Grid.SetRowSpan(cell.TitleLabel, 1);
+                }
+            });
+        }
+
+        public static readonly BindableProperty TimeProperty =
+    BindableProperty.Create("Time", typeof(string), typeof(DetailedCell), "",
+    propertyChanged: TimePropertyChanged);
+
+        public string Time
+        {
+            get { return (string)GetValue(DateTimeProperty); }
+            set { SetValue(DateTimeProperty, value); }
+        }
+
+        private static void TimePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            DetailedCell cell = (DetailedCell)bindable;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                cell.DateTimeLabel.Text = newValue.ToString() == string.Empty ? string.Empty : newValue.ToString().Split(' ')[1];
+                if (!string.IsNullOrEmpty(cell.DateTimeLabel.Text) && cell.DateTimeLabel.Text.Contains(":"))
+                {
+                    cell.DateTimeLabel.Text = cell.DateTimeLabel.Text.Split(':')[0] + ':' + cell.DateTimeLabel.Text.Split(':')[1];
+                }
                 if (string.IsNullOrWhiteSpace(newValue.ToString()))
                 {
                     Grid.SetRowSpan(cell.TitleLabel, 2);
@@ -125,7 +204,7 @@ propertyChanged: TextAnnotationPropertyChanged);
             DetailedCell cell = (DetailedCell)bindable;
             Device.BeginInvokeOnMainThread(() =>
             {
-                cell.Image.Source = newValue?.ToString();
+                // cell.Image.Source = newValue?.ToString();
             });
         }
 

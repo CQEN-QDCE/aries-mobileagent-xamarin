@@ -6,9 +6,11 @@ using Hyperledger.Aries.Routing;
 using Hyperledger.Aries.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Osma.Mobile.App.Assemblers;
 using Osma.Mobile.App.Events;
 using Osma.Mobile.App.Services;
 using Osma.Mobile.App.Services.Interfaces;
+using Osma.Mobile.App.Utilities;
 using Osma.Mobile.App.ViewModels;
 using Osma.Mobile.App.ViewModels.Account;
 using Osma.Mobile.App.ViewModels.Connections;
@@ -32,6 +34,9 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+[assembly: ExportFont("fa-regular-400.ttf", Alias = "FA-R")]
+[assembly: ExportFont("fa-brands-400.ttf", Alias = "FA-B")]
+[assembly: ExportFont("fa-solid-900.ttf", Alias = "FA-S")]
 
 namespace Osma.Mobile.App
 {
@@ -39,6 +44,11 @@ namespace Osma.Mobile.App
     {
         public new static App Current => Application.Current as App;
         public static IContainer Container { get; set; }
+
+        private static Assembly _platformSpecific;
+
+        public static int ScreenHeight { get; set; }
+        public static int ScreenWidth { get; set; }
 
         // Timer to check new messages in the configured mediator agent every 10sec
         private readonly Timer timer;
@@ -48,7 +58,7 @@ namespace Osma.Mobile.App
         public App()
         {
             InitializeComponent();
-
+            
             timer = new Timer
             {
                 Enabled = false,
@@ -61,29 +71,32 @@ namespace Osma.Mobile.App
 
         public App(IHost host) : this() => Host = host;
 
-        public static IHostBuilder BuildHost(Assembly platformSpecific = null) =>
-            XamarinHost.CreateDefaultBuilder<App>()
+        public static IHostBuilder BuildHost(Assembly platformSpecific = null) {
+            _platformSpecific = platformSpecific;
+            return XamarinHost.CreateDefaultBuilder<App>()
                 .ConfigureServices((_, services) =>
                 {
                     services.AddAriesFramework(builder => builder.RegisterEdgeAgent(
                         options: options =>
                         {
+                            string basePath = string.Empty;
+
+                            basePath = FileSystem.AppDataDirectory;
+
                             options.EndpointUri = "http://ma-sqin-mediator-agent.apps.exp.lab.pocquebec.org";
-                            //options.EndpointUri = "http://9834838da88f.ngrok.io";
 
                             options.WalletConfiguration.StorageConfiguration =
                                 new WalletConfiguration.WalletStorageConfiguration
                                 {
                                     Path = Path.Combine(
-                                        path1: FileSystem.AppDataDirectory,
+                                        path1: basePath,
                                         path2: ".indy_client",
                                         path3: "wallets")
                                 };
-                            
                             options.WalletConfiguration.Id = "MobileWallet";
                             options.WalletCredentials.Key = "SecretWalletKey";
                             options.RevocationRegistryDirectory = Path.Combine(
-                                path1: FileSystem.AppDataDirectory,
+                                path1: basePath,
                                 path2: ".indy_client",
                                 path3: "tails");
 
@@ -94,15 +107,23 @@ namespace Osma.Mobile.App
                             //   bcovrin-test
                             options.PoolName = "vonx-pocquebec";
                             options.ProtocolVersion = 2;
-                            //options.GenesisFilename = Path.Combine(
-                            //            path1: FileSystem.AppDataDirectory,
-                            //            path2: ".indy_client",
-                            //            path3: "pool\\pocquebec\\pocquebec.txn");
+            //                string test = Path.Combine(
+            //path1: basePath,
+            //path2: ".indy_client",
+            //path3: "pool\\vonx-pocquebec\\vonx-pocquebec.txn");
+            //                test = test.Replace("\\", "/");
+            //                options.GenesisFilename = test;
+
+                            int bla = 1;
                         },
                         delayProvisioning: true));
 
                     services.AddSingleton<IPoolConfigurator, PoolConfigurator>();
                     services.AddSingleton<IWalletRecordService, SqinWalletRecordService>();
+                    services.AddSingleton<IConnectionAssembler, ConnectionAssembler>();
+                    services.AddSingleton<ICredentialAssembler, CredentialAssembler>();
+                    services.AddSingleton<IProofAssembler, ProofAssembler>();
+                    services.AddSingleton<IRequestPresentationFiller, RequestPresentationFiller>();
 
                     var containerBuilder = new ContainerBuilder();
                     containerBuilder.RegisterAssemblyModules(typeof(CoreModule).Assembly);
@@ -114,11 +135,11 @@ namespace Osma.Mobile.App
                     containerBuilder.Populate(services);
                     Container = containerBuilder.Build();
                 });
+        }
 
         protected override async void OnStart()
         {
             //Preferences.Clear();
-
             await Host.StartAsync();
 
             // View models and pages mappings
@@ -134,6 +155,8 @@ namespace Osma.Mobile.App
             _navigationService.AddPageViewModelBinding<CreateInvitationViewModel, CreateInvitationPage>();
             _navigationService.AddPageViewModelBinding<ProofRequestsViewModel, ProofRequestsPage>();
             _navigationService.AddPageViewModelBinding<ProofRequestViewModel, ProofRequestPage>();
+            _navigationService.AddPageViewModelBinding<SelectAttributeValueViewModel, SelectAttributeValuePage>();
+            //_navigationService.AddPopupViewModelBinding<SelectAttributeValueViewModel, SelectAttributeValuePage>();
 
             if (Preferences.Get(AppConstant.LocalWalletProvisioned, false))
             {
@@ -143,7 +166,6 @@ namespace Osma.Mobile.App
             {
                 await _navigationService.NavigateToAsync<RegisterViewModel>();
             }
-
             timer.Enabled = true;
         }
 
@@ -160,8 +182,8 @@ namespace Osma.Mobile.App
                         var result = await Container.Resolve<IEdgeClientService>().FetchInboxAsync(context);
                         if (result.processedCount > 0)
                         {
-                            Container.Resolve<IEventAggregator>().Publish(new ApplicationEvent() { Type = ApplicationEventType.ConnectionsUpdated });
-                            Container.Resolve<IEventAggregator>().Publish(new ApplicationEvent() { Type = ApplicationEventType.CredentialUpdated });
+                            Container.Resolve<IEventAggregator>().Publish(new ApplicationEvent() { Type = ApplicationEventType.ConnectionUpdated });
+                            //Container.Resolve<IEventAggregator>().Publish(new ApplicationEvent() { Type = ApplicationEventType.CredentialUpdated });
                             Container.Resolve<IEventAggregator>().Publish(new ApplicationEvent() { Type = ApplicationEventType.ProofRequestUpdated });
                         }
                     }

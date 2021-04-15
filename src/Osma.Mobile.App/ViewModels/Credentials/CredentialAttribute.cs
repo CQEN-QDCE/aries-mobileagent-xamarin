@@ -1,4 +1,6 @@
-﻿namespace Osma.Mobile.App.ViewModels.Credentials
+﻿using Xamarin.Forms;
+
+namespace Osma.Mobile.App.ViewModels.Credentials
 {
     public class CredentialAttribute
     {
@@ -7,6 +9,8 @@
         public string Name { get; set; }
 
         public string Value { get; set; }
+
+        public ImageSource Image { get; set; }
 
         public string FileExt { get; set; }
 

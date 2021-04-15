@@ -45,7 +45,8 @@ namespace Osma.Mobile.App.ViewModels.CreateInvitation
                 var context = await _agentContextProvider.GetContextAsync();
                 var (invitation, _) = await _connectionService.CreateInvitationAsync(context, new InviteConfiguration
                 {
-                    TheirAlias = new ConnectionAlias { Name = "Invitation" }
+                    MyAlias = new ConnectionAlias { Name = "InvitationBla" },
+                    AutoAcceptConnection = true
                 });
 
                 string barcodeValue = invitation.ServiceEndpoint + "?d_m=" + Uri.EscapeDataString(invitation.ToByteArray().ToBase64String());
@@ -57,6 +58,8 @@ namespace Osma.Mobile.App.ViewModels.CreateInvitation
             }
         }
 
+
+
         private ZXingBarcodeImageView QRCodeGenerator(string barcodeValue)
         {
             var barcode = new ZXingBarcodeImageView
@@ -66,9 +69,11 @@ namespace Osma.Mobile.App.ViewModels.CreateInvitation
                 AutomationId = "zxingBarcodeImageView",
             };
 
+            int value = App.ScreenWidth <= App.ScreenHeight ? App.ScreenWidth : App.ScreenHeight;
+
             barcode.BarcodeFormat = ZXing.BarcodeFormat.QR_CODE;
-            barcode.BarcodeOptions.Width = 300;
-            barcode.BarcodeOptions.Height = 300;
+            barcode.BarcodeOptions.Width = value;
+            barcode.BarcodeOptions.Height = value;
             barcode.BarcodeOptions.Margin = 10;
             barcode.BarcodeValue = barcodeValue;
 

@@ -47,9 +47,9 @@ namespace Osma.Mobile.App.ViewModels.Connections
         {
             if (navigationData is ConnectionInvitationMessage invite)
             {
-                InviteTitle = $"Trust {invite.Label}?";
+                InviteTitle = $"{invite.Label}";
                 InviterUrl = invite.ImageUrl;
-                InviteContents = $"{invite.Label} would like to establish a pairwise DID connection with you. This will allow secure communication between you and {invite.Label}.";
+                InviteContents = AppResources.ConnectionInviteMessage;
                 _invite = invite;
             }
             return base.InitializeAsync(navigationData);
@@ -70,7 +70,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
                 msg.Label = "Oui";
                 await _messageService.SendAsync(context.Wallet, msg, rec);
 
-                _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.ConnectionsUpdated });
+                _eventAggregator.Publish(new ApplicationEvent() { Type = ApplicationEventType.ConnectionUpdated });
             }
             finally
             {

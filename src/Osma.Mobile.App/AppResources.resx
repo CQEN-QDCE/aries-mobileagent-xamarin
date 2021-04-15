@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AcceptProofRequestButtonLabel" xml:space="preserve">
+    <value>Accept</value>
+  </data>
   <data name="AccountTabTitle" xml:space="preserve">
     <value>Account</value>
   </data>
@@ -125,6 +128,9 @@
   </data>
   <data name="ConnectionsTabTitle" xml:space="preserve">
     <value>Connections</value>
+  </data>
+  <data name="MessagesTabTitle" xml:space="preserve">
+    <value>Messages</value>
   </data>
   <data name="ConnectionStateConnected" xml:space="preserve">
     <value>Connected</value>
@@ -150,6 +156,15 @@
   <data name="DeleteConnectionButton" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="DigitalProofRequestLabel" xml:space="preserve">
+    <value>Digital proof request</value>
+  </data>
+  <data name="IconCoffee" xml:space="preserve">
+    <value>&amp;#xf0f4;</value>
+  </data>
+  <data name="ProofAttributesMissingMessage" xml:space="preserve">
+    <value>Some attributes of the proof request are missing.</value>
+  </data>
   <data name="ProofRequestTitle" xml:space="preserve">
     <value>Test</value>
   </data>
@@ -171,13 +186,154 @@
   <data name="ProofStateRequested" xml:space="preserve">
     <value>Requested</value>
   </data>
+  <data name="ProofStateShouldBeMessage" xml:space="preserve">
+    <value>Proof request state should be '{0}'.</value>
+  </data>
+  <data name="RefuseProofRequestButtonLabel" xml:space="preserve">
+    <value>Refuse</value>
+  </data>
   <data name="ScanToolbarItemLabel" xml:space="preserve">
     <value>Scan</value>
   </data>
-  <data name="SearchCredentialsPlaceholder" xml:space="preserve">
-    <value>Search credentials</value>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="SearchProofRequestsPlaceholder" xml:space="preserve">
     <value>Search proof requests</value>
+  </data>
+  <data name="SelectAttributeValueTitle" xml:space="preserve">
+    <value>Select Attribute Value</value>
+  </data>
+  <data name="FaAngleDown" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AttributesLabel" xml:space="preserve">
+    <value>Attributes</value>
+  </data>
+  <data name="FaAngleLeft" xml:space="preserve">
+    <value>&#xf104;</value>
+  </data>
+  <data name="FaAngleRight" xml:space="preserve">
+    <value>&#xf105;</value>
+  </data>
+  <data name="FaHome" xml:space="preserve">
+    <value>&#xf015;</value>
+  </data>
+  <data name="FaIdCard" xml:space="preserve">
+    <value>&#xf2c2;</value>
+  </data>
+  <data name="FaQrCode" xml:space="preserve">
+    <value>&#xf029;</value>
+  </data>
+  <data name="FaNetworkWired" xml:space="preserve">
+    <value>&#xf6ff;</value>
+  </data>
+  <data name="FaUser" xml:space="preserve">
+    <value>&#xf007;</value>
+  </data>
+  <data name="InvitedToConnectNotificationMessage" xml:space="preserve">
+    <value>You have been invited to connect</value>
+  </data>
+  <data name="SharedNotificationMessage" xml:space="preserve">
+    <value>Vous avez partagé</value>
+  </data>
+  <data name="NegotiatingNotificationMessage" xml:space="preserve">
+    <value>Making a secure connection</value>
+  </data>
+  <data name="ConnectedWithNotificationMessage" xml:space="preserve">
+    <value>You connected</value>
+  </data>
+  <data name="OfferedCredentialNotificationMessage" xml:space="preserve">
+    <value>You have been offered</value>
+  </data>
+  <data name="IssuedCredentialNotificationMessage" xml:space="preserve">
+    <value>You have been issued</value>
+  </data>
+  <data name="RejectedNotificationMessage" xml:space="preserve">
+    <value>You rejected</value>
+  </data>
+  <data name="RequestedNotificationMessage" xml:space="preserve">
+    <value>You requested</value>
+  </data>
+  <data name="RequestedProofNotificationMessage" xml:space="preserve">
+    <value>You have been requested</value>
+  </data>
+  <data name="HomeTabTitle" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="ConnectionInviteMessage" xml:space="preserve">
+    <value>would like to establish connection with you. This will allow secure communication between you.</value>
+  </data>
+  <data name="RefuseButtonLabel" xml:space="preserve">
+    <value>Refuse</value>
+  </data>
+  <data name="AcceptButtonLabel" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="ConnectionPageTitle" xml:space="preserve">
+    <value>Connection Details</value>
+  </data>
+  <data name="ConnectionExchangesLabel" xml:space="preserve">
+    <value>Echanges</value>
+  </data>
+  <data name="MyDidLabel" xml:space="preserve">
+    <value>My Did</value>
+  </data>
+  <data name="TheirDidLabel" xml:space="preserve">
+    <value>Their Did</value>
+  </data>
+  <data name="FaCog" xml:space="preserve">
+    <value>&#xf013;</value>
+  </data>
+  <data name="FaQuestion" xml:space="preserve">
+    <value>&#xf059;</value>
+  </data>
+  <data name="SettingsPageTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MessagesPageTitle" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="FaEnvelopeOpenText" xml:space="preserve">
+    <value>&#xf658;</value>
+  </data>
+  <data name="FaAddressBook" xml:space="preserve">
+    <value>&#xf2b9;</value>
+  </data>
+  <data name="FaTrash" xml:space="preserve">
+    <value>&#xf1f8;</value>
+  </data>
+  <data name="DeleteConnectionTitle" xml:space="preserve">
+    <value>Delete Connection</value>
+  </data>
+  <data name="DeleteConnectionQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete this connection?</value>
+  </data>
+  <data name="OkLabel" xml:space="preserve">
+    <value>OK</value>
+  </data>
+	<data name="CancelLabel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DeleteCredentialTitle" xml:space="preserve">
+    <value>Delete credential</value>
+  </data>
+	<data name="DeleteCredentialQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete this credential?</value>
+  </data>
+  <data name="ProofRequestPageTitle" xml:space="preserve">
+    <value>Proof Request</value>
+  </data>
+  <data name="RequestedByLabel" xml:space="preserve">
+    <value>Requested by</value>
+  </data>
+  <data name="FaCheckCircle" xml:space="preserve">
+    <value>&#xf058;</value>
+  </data>
+  <data name="OkButtonLabel" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+	<data name="CancelButtonLabel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>
