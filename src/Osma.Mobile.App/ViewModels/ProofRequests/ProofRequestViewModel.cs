@@ -222,7 +222,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             await NavigationService.PopModalAsync();
         }
 
-        private void BuildRequestedAttributesPredicatesMap(CredentialRecord proofCredential)
+        public void BuildRequestedAttributesPredicatesMap(CredentialRecord proofCredential)
         {
             IsFrameVisible = false;
             _proofAttributes[_previousProofAttribute.Keys.Single()] = false;

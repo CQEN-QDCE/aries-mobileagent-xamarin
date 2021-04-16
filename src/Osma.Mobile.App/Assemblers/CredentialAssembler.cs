@@ -6,7 +6,9 @@ using Osma.Mobile.App.Utilities;
 using Osma.Mobile.App.ViewModels.Credentials;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Assemblers
 {
@@ -44,7 +46,10 @@ namespace Osma.Mobile.App.Assemblers
                 credential.Attributes = attributes;
                 foreach (var credentialPreviewAttribute in credentialRecord.CredentialAttributesValues)
                 {
-                    attributes.Add(new CredentialAttribute { Name = credentialPreviewAttribute.Name, Value = credentialPreviewAttribute.Value.ToString(), Type = "Text" });
+                    var attribute = new CredentialAttribute { Name = credentialPreviewAttribute.Name, Value = credentialPreviewAttribute.Value.ToString(), Type = "Text" };
+                    attribute.Type = attribute.Value != null && (attribute.Value.ToString().StartsWith("data:image/jpeg;base64") || attribute.Value.ToString().StartsWith("data:image/png;base64")) ? "Image" : "Text";
+                    attribute.Image = attribute.Value != null && (attribute.Value.ToString().StartsWith("data:image/jpeg;base64") || attribute.Value.ToString().StartsWith("data:image/png;base64")) ? ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(attribute.Value.ToString().Replace("data:image/jpeg;base64,", "").Replace("data:image/png;base64,", "")))) : null;
+                    attributes.Add(attribute);
                 }
             }
 

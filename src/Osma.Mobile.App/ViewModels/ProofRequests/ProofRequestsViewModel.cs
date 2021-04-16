@@ -34,7 +34,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         private readonly IProofAssembler _proofAssembler;
         private readonly ICredentialService _credentialService;
         private readonly ILifetimeScope _scope;
-
+        private readonly IRequestPresentationFiller _requestPresentationFiller;
         public ProofRequestsViewModel(
             IUserDialogs userDialogs,
             INavigationService navigationService,
@@ -44,6 +44,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             IWalletRecordService recordService,
             IEventAggregator eventAggregator,
             IProofAssembler proofAssembler,
+            IRequestPresentationFiller requestPresentationFiller,
             ILifetimeScope scope
             ) : base(
                 AppResources.ProofsPageTitle,
@@ -58,6 +59,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             _recordService = recordService;
             _credentialService = credentialService;
             _proofAssembler = proofAssembler;
+            _requestPresentationFiller = requestPresentationFiller;
 
             this.WhenAnyValue(x => x.SearchTerm)
                 .Throttle(TimeSpan.FromMilliseconds(200))
@@ -121,7 +123,8 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
 
         public async Task SelectProofRequest(ProofRequestViewModel proofRequest)
         {
-            await PreFillProofRequestValues(proofRequest);
+            await _requestPresentationFiller.Fill(proofRequest);
+            //await PreFillProofRequestValues(proofRequest);
             await NavigationService.NavigateToAsync(proofRequest, null, NavigationType.Modal);
         }
 

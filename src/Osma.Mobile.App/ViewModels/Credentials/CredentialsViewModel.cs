@@ -73,7 +73,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             IAgentContext context = await _agentContextProvider.GetContextAsync();
             
             IList<CredentialRecord> credentialRecords = await _credentialService.ListAsync(context);
-
+            credentialRecords = credentialRecords.OrderByDescending(pr => pr.CreatedAtUtc).ToList();
             IList<CredentialViewModel> credentials = await _credentialAssembler.AssembleMany(credentialRecords);
 
             IEnumerable<CredentialViewModel> filteredCredentialVms = FilterCredentials(SearchTerm, credentials);

@@ -70,8 +70,8 @@ namespace Osma.Mobile.App.ViewModels.Credentials
                             {
                                 Name = p.Name,
                                 Value = p.Value?.ToString(),
-                                Type = p.Value != null && p.Value.ToString().StartsWith("data:image/jpeg;base64") ? "Image" : "Text",
-                                Image = p.Value != null && p.Value.ToString().StartsWith("data:image/jpeg;base64") ? ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(p.Value.ToString().Replace("data:image/jpeg;base64,","")))) : null
+                                Type = p.Value != null && (p.Value.ToString().StartsWith("data:image/jpeg;base64") || p.Value.ToString().StartsWith("data:image/png;base64")) ? "Image" : "Text",
+                                Image = p.Value != null && (p.Value.ToString().StartsWith("data:image/jpeg;base64") || p.Value.ToString().StartsWith("data:image/png;base64")) ? ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(p.Value.ToString().Replace("data:image/jpeg;base64,","").Replace("data:image/png;base64,", "")))) : null
                             })
                         .ToList();
                 }

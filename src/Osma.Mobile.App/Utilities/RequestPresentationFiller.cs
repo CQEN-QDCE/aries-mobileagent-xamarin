@@ -55,6 +55,8 @@ namespace Osma.Mobile.App.Utilities
                                         CredentialId = credentialRecord.CredentialId,
                                         Timestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds()
                                     };
+
+                                    //proof.BuildRequestedAttributesPredicatesMap(credentialRecord);
                                     foreach (var pa in proof.Attributes)
                                     {
                                         if (pa.Name == requestedAttribute.Name)
