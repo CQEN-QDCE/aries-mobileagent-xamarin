@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Osma.Mobile.App.Views.Connections.ConnectionPage"
-             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
              xmlns:resources="clr-namespace:Osma.Mobile.App"
+             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
+             x:Class="Osma.Mobile.App.Views.Connections.ConnectionPage"
              Title="{x:Static resources:AppResources.ConnectionPageTitle}"
              BackgroundColor="White">
     <ContentPage.Resources>
@@ -35,40 +35,40 @@
                         WidthRequest="70"
                         HeightRequest="70"
                         BorderRadius="10"
-                        VerticalOptions="Center" 
+                        VerticalOptions="Center"
                         TextColor="White"
-                        FontSize="36" FontFamily="{StaticResource FontAwesomeSolid}" Text="{x:Static resources:AppResources.FaNetworkWired}"/>
+                        FontSize="36" FontFamily="{StaticResource FontAwesomeSolid}" Text="{x:Static resources:AppResources.FaNetworkWired}" />
                 <Label Text="{Binding ConnectionName}"
-                       Grid.Row="0" 
-                       Grid.Column="1" 
+                       Grid.Row="0"
+                       Grid.Column="1"
                        Margin="10,0,0,0"
                        TextColor="#505050"
                        LineBreakMode="TailTruncation"
                        MaxLines="1"
                        HorizontalOptions="Start"
-                       VerticalOptions="Center" 
-                       FontSize="Large"/>
+                       VerticalOptions="Center"
+                       FontSize="Large" />
             </Grid>
             <Label Text="{Binding DateTime, Converter={StaticResource DateTimeFormatter}}"
                    Margin="20,0,0,0"
                    TextColor="#505050"
-                   FontSize="Small"/>
+                   FontSize="Small" />
             <Label Text="{x:Static resources:AppResources.MyDidLabel}"
                    Margin="20,10,0,0"
                    TextColor="#787878"
-                   FontSize="Medium"/>
+                   FontSize="Medium" />
             <Label Text="{Binding MyDid}"
                    Margin="20,0,0,0"
                    TextColor="#505050"
-                   FontSize="Medium"/>
+                   FontSize="Medium" />
             <Label Text="{x:Static resources:AppResources.TheirDidLabel}"
                    Margin="20,10,0,0"
                    TextColor="#787878"
-                   FontSize="Medium"/>
+                   FontSize="Medium" />
             <Label Text="{Binding TheirDid}"
                    Margin="20,0,0,0"
                    TextColor="#505050"
-                   FontSize="Medium"/>
+                   FontSize="Medium" />
             <Grid Margin="20,10,20,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -78,15 +78,15 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="24"></RowDefinition>
                 </Grid.RowDefinitions>
-                <BoxView Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HeightRequest="1" Color="#787878"/>
-                <Label Grid.Row="0" 
+                <BoxView Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HeightRequest="1" Color="#787878" />
+                <Label Grid.Row="0"
                        Grid.Column="1"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        FontSize="Medium"
                        TextColor="#787878"
-                       Text="{x:Static resources:AppResources.ConnectionExchangesLabel}"/>
-                <BoxView Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HeightRequest="1" Color="#787878"/>
+                       Text="{x:Static resources:AppResources.ConnectionExchangesLabel}" />
+                <BoxView Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HeightRequest="1" Color="#787878" />
             </Grid>
         </StackLayout>
     </ContentPage.Content>

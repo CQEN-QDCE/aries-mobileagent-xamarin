@@ -6,7 +6,7 @@
     Les directives runtime sont documentées sur https://go.microsoft.com/fwlink/?LinkID=391919
 
     Pour activer complètement la réflexion de App1.MyClass et de tous ses membres publics/privés
-    <Type Name="App1.MyClass" Dynamic="Required All"/>
+    <Type Name="App1.MyClass" Dynamic="Required All" />
 
     Pour activer la création dynamique de l'instanciation spécifique de AppClass<T> sur System.Int32
     <TypeInstantiation Name="App1.AppClass" Arguments="System.Int32" Activate="Required Public" />
@@ -22,10 +22,7 @@
       package d'application. Les astérisques ne sont pas des caractères génériques.
     -->
     <Assembly Name="*Application*" Dynamic="Required All" />
-    
-    
+
     <!-- Ajoutez ici les directives runtime spécifiques à votre application. -->
-
-
   </Application>
 </Directives>

@@ -1,20 +1,21 @@
-﻿using System;
-using Xamarin.Forms.Platform.Android;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.Android.AppCompat;
-using Android.Content;
+﻿using Android.Content;
 using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
 using Osma.Mobile.App;
 using Osma.Mobile.App.Droid;
+using System;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
+using Xamarin.Forms.Platform.Android.AppCompat;
 
 [assembly: ExportRenderer(typeof(ExtendedTabbedPage), typeof(ExtendedTabbedPageRenderer))]
+
 namespace Osma.Mobile.App.Droid
 {
     public class ExtendedTabbedPageRenderer : TabbedPageRenderer, BottomNavigationView.IOnNavigationItemSelectedListener
     {
-        Context context;
+        private Context context;
 
         public ExtendedTabbedPageRenderer(Context context) : base(context)
         {

@@ -1,7 +1,5 @@
 ﻿using Android.Content;
 using Android.Graphics;
-using Osma.Mobile.App.Droid;
-using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android.AppCompat;
 
 //[assembly: ExportRenderer(typeof(NavigationPage), typeof(ExtendedNavigationPageRenderer))]

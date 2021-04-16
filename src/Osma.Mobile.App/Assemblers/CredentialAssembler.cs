@@ -29,7 +29,7 @@ namespace Osma.Mobile.App.Assemblers
 
         public async Task<CredentialViewModel> Assemble(CredentialRecord credentialRecord)
         {
-            if (credentialRecord ==  null) return null;
+            if (credentialRecord == null) return null;
 
             var context = await _agentContextProvider.GetContextAsync();
 

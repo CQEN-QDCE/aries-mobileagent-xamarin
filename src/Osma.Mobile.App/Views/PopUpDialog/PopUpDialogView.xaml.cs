@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
@@ -12,9 +8,13 @@ namespace Osma.Mobile.App.Views.PopUpDialog
     public partial class PopUpDialogView : ContentView
     {
         public event EventHandler DialogClosed;
+
         public event EventHandler DialogShow;
+
         public event EventHandler DialogClosing;
+
         public event EventHandler DialogShowing;
+
         public static readonly BindableProperty HeaderTitleProperty = BindableProperty.Create("HeaderTitle", typeof(string), typeof(PopUpDialogView), string.Empty, BindingMode.TwoWay);
 
         public string HeaderTitle
@@ -80,7 +80,7 @@ namespace Osma.Mobile.App.Views.PopUpDialog
             bg.IsVisible = true;
             dialog.IsVisible = true;
 
-            ////ANIMATIONS 
+            ////ANIMATIONS
             var showBgAnimation = OpacityAnimation(bg, 0, 0.5);
             var showDialogAnimation = TransLateYAnimation(dialog, bg.Height, 0);
 
@@ -96,7 +96,7 @@ namespace Osma.Mobile.App.Views.PopUpDialog
 
         private void HideDialogAnimation(VisualElement dialog, VisualElement bg)
         {
-            ////ANIMATIONS     
+            ////ANIMATIONS
             var hideBgAnimation = OpacityAnimation(bg, 0.5, 0);
             var showDialogAnimation = TransLateYAnimation(dialog, 0, bg.Height);
 

@@ -9,7 +9,6 @@ namespace Osma.Mobile.App.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
             ImageSource objImageSource;
             //
             if (value != null)
@@ -24,7 +23,6 @@ namespace Osma.Mobile.App.Converters
             }
             //
             return objImageSource;
-
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

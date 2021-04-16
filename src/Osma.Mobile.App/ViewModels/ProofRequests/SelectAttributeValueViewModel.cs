@@ -65,31 +65,30 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             _credentialService = proofRequest._credentialService;
             _eventAggregator = proofRequest._eventAggregator;
             _messageService = proofRequest._messageService;
-        _navigationService = proofRequest._navigationService;
-        _proof = proofRequest._proof;
-        _proofRequest = proofRequest._proofRequest;
-        _recordService = proofRequest._recordService;
+            _navigationService = proofRequest._navigationService;
+            _proof = proofRequest._proof;
+            _proofRequest = proofRequest._proofRequest;
+            _recordService = proofRequest._recordService;
             _proofRequestModel = proofRequest;
 
-
-        _proofAttributes = proofRequest._proofAttributes;
-        _proofAttributesRevealed = proofRequest._proofAttributesRevealed;
-        _proofService = proofRequest._proofService;
-        _provisioningService = proofRequest._provisioningService;
-        _requestedAttributes = proofRequest._requestedAttributes;
-        _requestedAttributesKeys = proofRequest._requestedAttributesKeys;
-        _requestedAttributesMap = proofRequest._requestedAttributesMap;
-        _requestedAttributesRevealedMap = proofRequest._requestedAttributesRevealedMap;
-        _requestedPredicates = proofRequest._requestedPredicates;
-        _requestedPredicatesKeys = proofRequest._requestedPredicatesKeys;
-        _requestedPredicatesMap = proofRequest._requestedPredicatesMap;
-        _userDialogs = proofRequest._userDialogs;
+            _proofAttributes = proofRequest._proofAttributes;
+            _proofAttributesRevealed = proofRequest._proofAttributesRevealed;
+            _proofService = proofRequest._proofService;
+            _provisioningService = proofRequest._provisioningService;
+            _requestedAttributes = proofRequest._requestedAttributes;
+            _requestedAttributesKeys = proofRequest._requestedAttributesKeys;
+            _requestedAttributesMap = proofRequest._requestedAttributesMap;
+            _requestedAttributesRevealedMap = proofRequest._requestedAttributesRevealedMap;
+            _requestedPredicates = proofRequest._requestedPredicates;
+            _requestedPredicatesKeys = proofRequest._requestedPredicatesKeys;
+            _requestedPredicatesMap = proofRequest._requestedPredicatesMap;
+            _userDialogs = proofRequest._userDialogs;
             _attributeNameInEdition = proofRequest._attributeNameInEdition;
             _previousProofAttribute = proofRequest._previousProofAttribute;
             ProofCredentials = proofRequest.ProofCredentials;
             Attributes = proofRequest.Attributes;
             SelectedAttributeName = proofRequest.SelectedAttributeName;
-    }
+        }
 
         public SelectAttributeValueViewModel(IUserDialogs userDialogs,
                                      INavigationService navigationService,
@@ -494,6 +493,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             var connection = await _connectionService.GetAsync(agentContext, _proof.ConnectionId);
             Alias = connection.Alias.Name;
         }
+
         private async Task<bool> isAuthenticatedAsync(ApplicationEventType eventType)
         {
             var result = await CrossFingerprint.Current.IsAvailableAsync(true);
@@ -559,6 +559,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         {
             await NavigationService.PopModalAsync();
         }
+
         #region Bindable Command
 
         public ICommand AcceptProofRequestCommand => new Command(async () =>
@@ -729,16 +730,19 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             get => _proofName;
             set => this.RaiseAndSetIfChanged(ref _proofName, value);
         }
+
         public string ProofState
         {
             get => _proofState;
             set => this.RaiseAndSetIfChanged(ref _proofState, value);
         }
+
         public string ProofVersion
         {
             get => _proofVersion;
             set => this.RaiseAndSetIfChanged(ref _proofVersion, value);
         }
+
         public bool RefreshingProofRequest
         {
             get => _refreshingProofRequest;

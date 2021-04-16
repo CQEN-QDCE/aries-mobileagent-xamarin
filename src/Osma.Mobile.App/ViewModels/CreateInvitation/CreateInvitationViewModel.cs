@@ -58,8 +58,6 @@ namespace Osma.Mobile.App.ViewModels.CreateInvitation
             }
         }
 
-
-
         private ZXingBarcodeImageView QRCodeGenerator(string barcodeValue)
         {
             var barcode = new ZXingBarcodeImageView

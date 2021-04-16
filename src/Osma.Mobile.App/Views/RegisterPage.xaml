@@ -10,10 +10,10 @@
                 FontSize="20"
                 HorizontalOptions="Center"
                 Text="Welcome to Osma"></Label>
-            <Button 
+            <Button
                 VerticalOptions="CenterAndExpand"
                 Text="Create Wallet"
-                Command="{Binding CreateWalletCommand}"/>
+                Command="{Binding CreateWalletCommand}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

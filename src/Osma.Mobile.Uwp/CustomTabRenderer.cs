@@ -1,14 +1,10 @@
 ﻿using Osma.Mobile.Uwp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Markup;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.UWP;
 
 [assembly: ExportRenderer(typeof(TabbedPage), typeof(CustomTabRenderer))]
+
 namespace Osma.Mobile.Uwp
 {
     public class CustomTabRenderer : TabbedPageRenderer
@@ -16,7 +12,6 @@ namespace Osma.Mobile.Uwp
         public CustomTabRenderer()
         {
             this.ElementChanged += CustomTabRenderer_ElementChanged;
-            
         }
 
         private void CustomTabRenderer_ElementChanged(object sender, VisualElementChangedEventArgs e)

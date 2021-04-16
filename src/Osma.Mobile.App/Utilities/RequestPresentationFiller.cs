@@ -35,7 +35,7 @@ namespace Osma.Mobile.App.Utilities
 
             var holderProofObject = JsonConvert.DeserializeObject<ProofRequest>(proofRecord.RequestJson);
             //var credentials = await _proofService.ListCredentialsForProofRequestAsync(context, holderProofObject, "username");
-            
+
             if (proofRecord.State == ProofState.Requested)
             {
                 var proofRequest = JsonConvert.DeserializeObject<ProofRequest>(proofRecord.RequestJson);
@@ -71,7 +71,7 @@ namespace Osma.Mobile.App.Utilities
                                                         if (proof.RequestedAttributesMap[requestedAttribute3.Key]?.CredentialId !=
                                                             requestedAttribute2.CredentialId)
                                                             proof.RequestedAttributesMap[requestedAttribute3.Key] = requestedAttribute2;
-                                                    } 
+                                                    }
                                                     else
                                                     {
                                                         proof.RequestedAttributesMap.Add(requestedAttribute3.Key, requestedAttribute2);

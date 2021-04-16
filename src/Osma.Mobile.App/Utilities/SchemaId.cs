@@ -30,7 +30,7 @@ namespace Osma.Mobile.App.Utilities
 
             string[] parts = value.Split(':');
 
-            if (parts.Length == 8) 
+            if (parts.Length == 8)
             {
                 // schema:sov:did:sov:NcYxiDXkpYi6ov5FcYDi1e:2:gvt:1.0
                 // did = did:sov:NcYxiDXkpYi6ov5FcYDi1e Fully qualified

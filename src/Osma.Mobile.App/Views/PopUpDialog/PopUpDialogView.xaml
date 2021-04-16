@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Osma.Mobile.App.Views.PopUpDialog.PopUpDialogView"
              x:Name="ParentLayout">
     <ContentView.Content>
@@ -9,7 +9,7 @@
             <StackLayout x:Name="PopUpBgLayout"
                     IsVisible="False"
                     BackgroundColor="Black"
-                    Opacity="0.5" >
+                    Opacity="0.5">
                 <!--<Image
           HorizontalOptions="FillAndExpand"
           VerticalOptions="FillAndExpand"
@@ -20,23 +20,20 @@
 
             <!--The Pop-Up Dialog-->
 
-
             <StackLayout x:Name="PopUpDialogLayout"
 				  IsVisible="False"
 				  Margin="30, 50, 30, 50"
 				  BackgroundColor="White"
 				  Orientation="Vertical"
-                   
+
 				  HorizontalOptions="FillAndExpand"
 				  VerticalOptions="FillAndExpand">
-
-
 
                 <StackLayout Orientation="Vertical"
                       HorizontalOptions="FillAndExpand"
                       VerticalOptions="FillAndExpand">
                     <StackLayout HeightRequest="30" BackgroundColor="Accent" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
-                        <Label Text="{Binding Source={x:Reference ParentLayout}, Path=HeaderTitle}"  
+                        <Label Text="{Binding Source={x:Reference ParentLayout}, Path=HeaderTitle}"
                    TextColor="White"
                    HorizontalOptions="FillAndExpand"
                    VerticalOptions="CenterAndExpand" Margin="20,0,0,0"></Label>
@@ -45,8 +42,6 @@
 
                     <ContentView x:Name="ContentView" VerticalOptions="FillAndExpand" />
                 </StackLayout>
-
-
             </StackLayout>
         </Grid>
     </ContentView.Content>

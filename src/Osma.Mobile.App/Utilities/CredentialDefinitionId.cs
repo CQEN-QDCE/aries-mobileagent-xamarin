@@ -1,4 +1,5 @@
 ﻿using System;
+
 // https://github.com/hyperledger/indy-sdk/blob/master/libindy/src/domain/anoncreds/credential_definition.rs
 namespace Osma.Mobile.App.Utilities
 {

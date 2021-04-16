@@ -88,7 +88,8 @@ namespace Osma.Mobile.App.Views.Components
                     int second = int.Parse(time.Split(':')[2]);
                     object fdt = converter.Convert(new DateTime(year, month, day, hour, minute, second), typeof(string), null, CultureInfo.CurrentCulture);
                     cell.DateTimeLabel.Text = fdt.ToString();
-                } else
+                }
+                else
                 {
                     cell.DateTimeLabel.Text = "";
                 }
@@ -102,8 +103,6 @@ namespace Osma.Mobile.App.Views.Components
                 }
             });
         }
-
-
 
         public static readonly BindableProperty DateProperty =
     BindableProperty.Create("Date", typeof(string), typeof(DetailedCell), "",

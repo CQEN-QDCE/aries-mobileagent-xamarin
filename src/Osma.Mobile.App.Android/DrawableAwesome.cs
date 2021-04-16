@@ -72,6 +72,7 @@ namespace Osma.Mobile.App.Droid
                 return height;
             }
         }
+
         public override int IntrinsicWidth
         {
             get

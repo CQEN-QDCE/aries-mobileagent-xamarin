@@ -31,6 +31,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         private readonly IWalletRecordService _recordService;
         private readonly ILifetimeScope _scope;
         private IDisposable _subscription;
+
         public ConnectionsViewModel(IUserDialogs userDialogs,
                                     INavigationService navigationService,
                                     IConnectionService connectionService,
@@ -59,7 +60,8 @@ namespace Osma.Mobile.App.ViewModels.Connections
 
             _subscription = _eventAggregator.GetEventByType<ServiceMessageProcessingEvent>()
             .Where(x => x.MessageType == MessageTypes.ConnectionRequest)
-            .Subscribe(async x => {
+            .Subscribe(async x =>
+            {
                 int bla = 1;
             });
             await base.InitializeAsync(navigationData);
@@ -70,7 +72,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
             //RefreshingConnections = true;
 
             IAgentContext context = await _agentContextProvider.GetContextAsync();
-            
+
             IList<ConnectionRecord> connectionRecords = await _connectionService.ListAsync(context);
 
             connectionRecords = connectionRecords.OrderBy(r => r.CreatedAtUtc).ToList();
@@ -150,7 +152,6 @@ namespace Osma.Mobile.App.ViewModels.Connections
         });
 
         public ICommand ConfigureSettingsCommand => new Command(async () => await ConfigureSettings());
-
 
         #endregion Bindable Command
 

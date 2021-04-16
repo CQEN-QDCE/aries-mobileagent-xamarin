@@ -58,7 +58,7 @@ namespace Osma.Mobile.App
         public App()
         {
             InitializeComponent();
-            
+
             timer = new Timer
             {
                 Enabled = false,
@@ -71,7 +71,8 @@ namespace Osma.Mobile.App
 
         public App(IHost host) : this() => Host = host;
 
-        public static IHostBuilder BuildHost(Assembly platformSpecific = null) {
+        public static IHostBuilder BuildHost(Assembly platformSpecific = null)
+        {
             _platformSpecific = platformSpecific;
             return XamarinHost.CreateDefaultBuilder<App>()
                 .ConfigureServices((_, services) =>
@@ -107,12 +108,12 @@ namespace Osma.Mobile.App
                             //   bcovrin-test
                             options.PoolName = "vonx-pocquebec";
                             options.ProtocolVersion = 2;
-            //                string test = Path.Combine(
-            //path1: basePath,
-            //path2: ".indy_client",
-            //path3: "pool\\vonx-pocquebec\\vonx-pocquebec.txn");
-            //                test = test.Replace("\\", "/");
-            //                options.GenesisFilename = test;
+                            //                string test = Path.Combine(
+                            //path1: basePath,
+                            //path2: ".indy_client",
+                            //path3: "pool\\vonx-pocquebec\\vonx-pocquebec.txn");
+                            //                test = test.Replace("\\", "/");
+                            //                options.GenesisFilename = test;
 
                             int bla = 1;
                         },

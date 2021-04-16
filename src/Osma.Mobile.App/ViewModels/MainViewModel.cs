@@ -1,31 +1,31 @@
 ﻿using Acr.UserDialogs;
+using Hyperledger.Aries.Agents;
+using Hyperledger.Aries.Contracts;
+using Hyperledger.Aries.Decorators;
+using Hyperledger.Aries.Decorators.Service;
+using Hyperledger.Aries.Features.DidExchange;
+using Hyperledger.Aries.Features.PresentProof;
+using Hyperledger.Aries.Models.Events;
+using Hyperledger.Aries.Storage;
+using Osma.Mobile.App.Assemblers;
+using Osma.Mobile.App.Events;
+using Osma.Mobile.App.Services;
 using Osma.Mobile.App.Services.Interfaces;
+using Osma.Mobile.App.Utilities;
 using Osma.Mobile.App.ViewModels.Account;
-using Osma.Mobile.App.ViewModels.Home;
 using Osma.Mobile.App.ViewModels.Connections;
 using Osma.Mobile.App.ViewModels.CreateInvitation;
 using Osma.Mobile.App.ViewModels.Credentials;
+using Osma.Mobile.App.ViewModels.Home;
+using Osma.Mobile.App.ViewModels.Messages;
 using Osma.Mobile.App.ViewModels.ProofRequests;
 using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Hyperledger.Aries.Agents;
-using Osma.Mobile.App.Utilities;
-using Hyperledger.Aries.Features.DidExchange;
-using Hyperledger.Aries.Features.PresentProof;
-using Hyperledger.Aries.Decorators.Service;
-using Hyperledger.Aries.Decorators;
-using System.Linq;
-using Osma.Mobile.App.Events;
-using System.Collections.Generic;
-using Hyperledger.Aries.Contracts;
-using Hyperledger.Aries.Storage;
-using Osma.Mobile.App.Services;
-using Osma.Mobile.App.ViewModels.Messages;
-using System;
-using Hyperledger.Aries.Models.Events;
-using System.Reactive.Linq;
-using Osma.Mobile.App.Assemblers;
 
 namespace Osma.Mobile.App.ViewModels
 {
@@ -87,7 +87,8 @@ namespace Osma.Mobile.App.ViewModels
 
             _subscription = _eventAggregator.GetEventByType<ServiceMessageProcessingEvent>()
             .Where(x => x.MessageType == MessageTypes.PresentProofNames.RequestPresentation)
-            .Subscribe(async x => {
+            .Subscribe(async x =>
+            {
                 await DisplayRequestPresentation(x.RecordId);
             });
         }

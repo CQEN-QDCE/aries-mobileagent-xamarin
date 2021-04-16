@@ -1,15 +1,11 @@
 ﻿using Autofac;
 using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Features.DidExchange;
-using Hyperledger.Aries.Features.PresentProof;
-using Newtonsoft.Json;
 using Osma.Mobile.App.Utilities;
 using Osma.Mobile.App.ViewModels.Connections;
-using Osma.Mobile.App.ViewModels.ProofRequests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Osma.Mobile.App.Assemblers
 {
@@ -30,7 +26,7 @@ namespace Osma.Mobile.App.Assemblers
 
         public ConnectionViewModel Assemble(ConnectionRecord connectionRecord)
         {
-            if (connectionRecord ==  null) return null;
+            if (connectionRecord == null) return null;
 
             ConnectionViewModel connection = _scope.Resolve<ConnectionViewModel>(new NamedParameter("record", connectionRecord));
 

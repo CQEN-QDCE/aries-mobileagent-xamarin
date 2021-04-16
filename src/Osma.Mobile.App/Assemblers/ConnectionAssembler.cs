@@ -28,7 +28,7 @@ namespace Osma.Mobile.App.Assemblers
 
         public async Task<ProofRequestViewModel> Assemble(ProofRecord proofRecord)
         {
-            if (proofRecord ==  null) return null;
+            if (proofRecord == null) return null;
 
             IAgentContext context = await _agentContextProvider.GetContextAsync();
 

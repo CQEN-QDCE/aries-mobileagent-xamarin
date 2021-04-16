@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:Osma.Mobile.App.Views.ProofRequests;assembly=Osma.Mobile.App"
-             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:resources="clr-namespace:Osma.Mobile.App"
              xmlns:behaviours="clr-namespace:Osma.Mobile.App.Behaviors"
              xmlns:converters="clr-namespace:Osma.Mobile.App.Converters"
+             xmlns:views="clr-namespace:Osma.Mobile.App.Views.ProofRequests;assembly=Osma.Mobile.App"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              x:Class="Osma.Mobile.App.Views.ProofRequests.SelectAttributeValuePage"
              x:Name="SelectAttributeValueView"
              Title="Testee"
@@ -32,19 +32,19 @@
                                    Grid.Column="1"
                                    VerticalOptions="Center"
                                    FontSize="Medium"
-                                   Text="{Binding Name}"/>
+                                   Text="{Binding Name}" />
                             <Label Grid.Row="1"
                                    Grid.Column="1"
                                    VerticalOptions="Center"
                                    FontSize="Large"
                                    FontAttributes="Bold"
-                                   Text="{Binding Value}"/>
+                                   Text="{Binding Value}" />
                             <Label Grid.Row="0"
                                    Grid.Column="2"
                                    VerticalOptions="Center"
                                    FontSize="Small"
                                    Text="{Binding RevealDataLabel}"
-                                   IsVisible="{Binding IsNotPredicate}"/>
+                                   IsVisible="{Binding IsNotPredicate}" />
                             <Switch Grid.Row="1"
                                     Grid.RowSpan="2"
                                     Grid.Column="2"
@@ -52,10 +52,10 @@
                                     IsVisible="{Binding IsNotPredicate}"
                                     VerticalOptions="Center">
                                 <Switch.Behaviors>
-                                    <behaviours:EventToCommandBehavior 
-                                        EventName="Toggled" 
+                                    <behaviours:EventToCommandBehavior
+                                        EventName="Toggled"
                                         Command="{Binding Path=BindingContext.ToggledCommand, Source={x:Reference ProofRequestView}}"
-								        CommandParameter="{Binding .}"/>
+								        CommandParameter="{Binding .}" />
                                 </Switch.Behaviors>
                             </Switch>
                         </Grid>
@@ -63,15 +63,15 @@
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="textTemplate">
-                <ViewCell >
+                <ViewCell>
                     <StackLayout Padding="0">
                         <Label Text="textTemplate"
-                               FontSize="Small"/>
+                               FontSize="Small" />
                         <Label Text="{Binding Name}"
-                               FontSize="Small"/>
+                               FontSize="Small" />
                         <Label Text="{Binding Value}"
                                FontSize="Medium"
-                               FontAttributes="Bold"/>
+                               FontAttributes="Bold" />
                         <RadioButton GroupName="1"></RadioButton>
                     </StackLayout>
                 </ViewCell>
@@ -80,19 +80,19 @@
                 <ViewCell>
                     <StackLayout Padding="0">
                         <Label Text="nameTemplate"
-                               FontSize="Small"/>
+                               FontSize="Small" />
                         <Label Text="{Binding Name}"
-                               FontSize="Small"/>
+                               FontSize="Small" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="proofCredentialTemplate">
                 <ViewCell>
                     <StackLayout Padding="20,5,20,5">
-                        <Label FontSize="Medium" TextColor="Black" Text="{Binding SchemaName}"/>
-                        <Label FontSize="Small" Text="{Binding IssuedAt, StringFormat='Issued {0:d}'}"/>
-                        <!--<Label Text="{Binding AttributeName}"/>-->
-                        <Label TextColor="Black" Text="{Binding AttributeValue}"/>
+                        <Label FontSize="Medium" TextColor="Black" Text="{Binding SchemaName}" />
+                        <Label FontSize="Small" Text="{Binding IssuedAt, StringFormat='Issued {0:d}'}" />
+                        <!--<Label Text="{Binding AttributeName}" />-->
+                        <Label TextColor="Black" Text="{Binding AttributeValue}" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
@@ -114,17 +114,17 @@
                                        TextColor="White"
                                        Text="{Binding FileExt}"
                                        FontSize="Default"
-                                       FontAttributes="Bold"/>
+                                       FontAttributes="Bold" />
                             </Frame>
                         </Frame>
                         <Label Text="{Binding Date}"
-                               FontSize="Small"/>
+                               FontSize="Small" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="errorTemplate">
                 <ViewCell>
-                    <StackLayout >
+                    <StackLayout>
                         <Label
                             Text="{Binding ErrorLabel}" />
                     </StackLayout>
@@ -134,53 +134,53 @@
                                                          TextTemplate="{StaticResource textTemplate}"
                                                          FileTemplate="{StaticResource fileTemplate}"
                                                          NameTemplate="{StaticResource nameTemplate}"
-                                                         ErrorTemplate="{StaticResource errorTemplate}"/>
+                                                         ErrorTemplate="{StaticResource errorTemplate}" />
             <views:ProofRequestCredentialTemplateSelector x:Key="proofRequestCredentialTemplateSelector"
-                                                          TextTemplate="{StaticResource proofCredentialTemplate}"/>
+                                                          TextTemplate="{StaticResource proofCredentialTemplate}" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-                <StackLayout>
-                    <StackLayout Orientation="Vertical" BackgroundColor="White">
-                        <Label FontSize="Large" Padding="0"
+        <StackLayout>
+            <StackLayout Orientation="Vertical" BackgroundColor="White">
+                <Label FontSize="Large" Padding="0"
                                TextColor="White"
                                BackgroundColor="#2296F3"
                                HeightRequest="50"
                                Text="{x:Static resources:AppResources.SelectAttributeValueTitle}"
                                VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Center"/>
-                        <Label Margin="10,0,10,10"
+                               HorizontalTextAlignment="Center" />
+                <Label Margin="10,0,10,10"
                                TextColor="Black"
                                Text="{Binding SelectedAttributeName}"
-                               HorizontalTextAlignment="Center"/>
+                               HorizontalTextAlignment="Center" />
                 <Label Margin="10,0,10,20"
                                TextColor="Gray"
                                Text="{Binding AvailableCount}"
-                               HorizontalTextAlignment="Center"/>
-                <BoxView Color="#787878" HeightRequest="1" VerticalOptions="Center"/>
+                               HorizontalTextAlignment="Center" />
+                <BoxView Color="#787878" HeightRequest="1" VerticalOptions="Center" />
                 <ListView BackgroundColor="Transparent" Margin="0,0,0,0"
                                   ItemTemplate="{StaticResource proofRequestCredentialTemplateSelector}"
                                   ItemsSource="{Binding ProofCredentials}"
                                   SelectedItem="{Binding ProofCredential}"
                                   SelectionMode="Single"
                                   HasUnevenRows="true">
-                        </ListView>
-                        <StackLayout Padding="10"
+                </ListView>
+                <StackLayout Padding="10"
                                  Orientation="Horizontal"
                                  HorizontalOptions="FillAndExpand"
                                  VerticalOptions="FillAndExpand">
-                            <Button Style="{DynamicResource RedButtonStyle}"
+                    <Button Style="{DynamicResource RedButtonStyle}"
                                 Command="{Binding NavigateBackCommand}"
                                 BorderRadius="10"
                                 HorizontalOptions="FillAndExpand"
-                                Text="{x:Static resources:AppResources.CancelButtonLabel}"/>
-                            <Button HorizontalOptions="FillAndExpand"
+                                Text="{x:Static resources:AppResources.CancelButtonLabel}" />
+                    <Button HorizontalOptions="FillAndExpand"
                                 Style="{DynamicResource BlueButtonStyle}"
                                 Command="{Binding DoneSelectAttributeValueCommand}"
                                 BorderRadius="10"
-                                Text="{x:Static resources:AppResources.OkButtonLabel}"/>
-                        </StackLayout>
-                    </StackLayout>
+                                Text="{x:Static resources:AppResources.OkButtonLabel}" />
                 </StackLayout>
+            </StackLayout>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -33,7 +33,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         private readonly IEventAggregator _eventAggregator;
         private IDisposable _subscription;
 
-        public CredentialsViewModel(IUserDialogs userDialogs, INavigationService navigationService, ICredentialService credentialService, ICredentialAssembler credentialAssembler, IConnectionService connectionService, IAgentProvider agentContextProvider, IEventAggregator eventAggregator, ILifetimeScope scope) : base (
+        public CredentialsViewModel(IUserDialogs userDialogs, INavigationService navigationService, ICredentialService credentialService, ICredentialAssembler credentialAssembler, IConnectionService connectionService, IAgentProvider agentContextProvider, IEventAggregator eventAggregator, ILifetimeScope scope) : base(
                 AppResources.CredentialsPageTitle,
                 userDialogs,
                 navigationService)
@@ -60,7 +60,8 @@ namespace Osma.Mobile.App.ViewModels.Credentials
 
             _subscription = _eventAggregator.GetEventByType<ServiceMessageProcessingEvent>()
             .Where(x => x.MessageType == MessageTypes.IssueCredentialNames.OfferCredential)
-            .Subscribe(async x => {
+            .Subscribe(async x =>
+            {
                 await DisplayCredentialOffer(x.RecordId);
             });
             await base.InitializeAsync(navigationData);
@@ -71,7 +72,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             RefreshingCredentials = true;
 
             IAgentContext context = await _agentContextProvider.GetContextAsync();
-            
+
             IList<CredentialRecord> credentialRecords = await _credentialService.ListAsync(context);
             credentialRecords = credentialRecords.OrderByDescending(pr => pr.CreatedAtUtc).ToList();
             IList<CredentialViewModel> credentials = await _credentialAssembler.AssembleMany(credentialRecords);

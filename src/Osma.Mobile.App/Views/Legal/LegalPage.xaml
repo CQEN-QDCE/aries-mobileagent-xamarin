@@ -10,8 +10,8 @@
 >
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Test"/>
-            <components:HtmlFromResource FileName="legal.html"/>
+            <Label Text="Test" />
+            <components:HtmlFromResource FileName="legal.html" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

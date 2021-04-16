@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
-             xmlns:behaviours="clr-namespace:Osma.Mobile.App.Behaviors;assembly=Osma.Mobile.App"
              xmlns:resources="clr-namespace:Osma.Mobile.App"
+             xmlns:behaviours="clr-namespace:Osma.Mobile.App.Behaviors;assembly=Osma.Mobile.App"
+             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.LargeTitleDisplay="Always"
              x:Class="Osma.Mobile.App.Views.Home.HomePage"
@@ -36,9 +36,9 @@
             <StackLayout VerticalOptions="FillAndExpand" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <Image Source="{Binding Photo, Converter={StaticResource BytesToImageSource}}" />
                 <Grid Margin="20,10,20,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"></RowDefinition>
                         <RowDefinition Height="24"></RowDefinition>
@@ -53,39 +53,39 @@
                         HorizontalOptions="Center"
                         Command="{Binding SelectPhotoCommand}"
                         TextColor="White"
-                        FontSize="36" FontFamily="{StaticResource FontAwesomeSolid}" Text="{x:Static resources:AppResources.FaUser}"/>
-                        <Label Text="Bienvenue, Martin St-Pierre" Padding="10,0,0,0"
+                        FontSize="36" FontFamily="{StaticResource FontAwesomeSolid}" Text="{x:Static resources:AppResources.FaUser}" />
+                    <Label Text="Bienvenue, Martin St-Pierre" Padding="10,0,0,0"
                        Grid.Row="1" Grid.Column="0"
                        VerticalOptions="Center"
                        Margin="0,0,0,0"
                        TextColor="#787878"
                        HorizontalOptions="Center"
-                       FontSize="Large"/>
-                    </Grid>
-                    <Grid Margin="20,0,20,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="20"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <BoxView Grid.Row="0" 
-                         Grid.Column="0" 
-                         VerticalOptions="Center" 
-                         HeightRequest="1" 
-                         Color="#787878"/>
-                        <Label Grid.Row="0" 
+                       FontSize="Large" />
+                </Grid>
+                <Grid Margin="20,0,20,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <BoxView Grid.Row="0"
+                         Grid.Column="0"
+                         VerticalOptions="Center"
+                         HeightRequest="1"
+                         Color="#787878" />
+                    <Label Grid.Row="0"
                        Grid.Column="1"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        FontSize="Medium"
                        TextColor="#787878"
-                       Text="Notifications"  />
-                        <BoxView Color="#787878" HeightRequest="1" VerticalOptions="Center" Grid.Column="2" Grid.Row="0"/>
-                    </Grid>
-                    <ListView x:Name="notificationListView" Margin="10,0,10,0"
+                       Text="Notifications" />
+                    <BoxView Color="#787878" HeightRequest="1" VerticalOptions="Center" Grid.Column="2" Grid.Row="0" />
+                </Grid>
+                <ListView x:Name="notificationListView" Margin="10,0,10,0"
                       ios:ListView.RowAnimationsEnabled="True"
                       HasUnevenRows="True"
                       IsPullToRefreshEnabled="True"
@@ -93,35 +93,35 @@
                       RefreshCommand="{Binding RefreshCommand}"
                       IsEnabled="{Binding RefreshingNotifications, Converter={StaticResource BooleanInverse}}"
                       ItemsSource="{Binding Notifications}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout Orientation="Vertical" Margin="0,10,5,10">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="44"></ColumnDefinition>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                                <ColumnDefinition Width="80"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition></RowDefinition>
-                                                <RowDefinition></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalTextAlignment="Center" TextColor="#787878" FontSize="20" FontFamily="{StaticResource FontAwesomeSolid}" Text="{Binding Icon}"/>
-                                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Message}" TextColor="#787878" FontSize="Small" MaxLines="1"/>
-                                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding MessageParameter}" TextColor="#505050" FontSize="Medium" MaxLines="1" LineBreakMode="TailTruncation"/>
-                                            <Label Grid.Row="0" Grid.Column="2" HorizontalTextAlignment="End" Text="{Binding Date}" TextColor="#aaaaaa" FontSize="Small"/>
-                                            <Label Grid.Row="1" Grid.Column="2" HorizontalTextAlignment="End" Text="{Binding Time}" TextColor="#aaaaaa" FontSize="Small"/>
-                                        </Grid>
-                                    </StackLayout>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.Behaviors>
-                            <behaviours:EventToCommandBehavior EventName="ItemSelected" Command="{Binding SelectNotificationCommand}" Converter="{StaticResource SelectedItemConverter}" DeselectOnClick="true"/>
-                        </ListView.Behaviors>
-                    </ListView>
-                </StackLayout>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Vertical" Margin="0,10,5,10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="44"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="80"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalTextAlignment="Center" TextColor="#787878" FontSize="20" FontFamily="{StaticResource FontAwesomeSolid}" Text="{Binding Icon}" />
+                                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding Message}" TextColor="#787878" FontSize="Small" MaxLines="1" />
+                                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding MessageParameter}" TextColor="#505050" FontSize="Medium" MaxLines="1" LineBreakMode="TailTruncation" />
+                                        <Label Grid.Row="0" Grid.Column="2" HorizontalTextAlignment="End" Text="{Binding Date}" TextColor="#aaaaaa" FontSize="Small" />
+                                        <Label Grid.Row="1" Grid.Column="2" HorizontalTextAlignment="End" Text="{Binding Time}" TextColor="#aaaaaa" FontSize="Small" />
+                                    </Grid>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.Behaviors>
+                        <behaviours:EventToCommandBehavior EventName="ItemSelected" Command="{Binding SelectNotificationCommand}" Converter="{StaticResource SelectedItemConverter}" DeselectOnClick="true" />
+                    </ListView.Behaviors>
+                </ListView>
+            </StackLayout>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

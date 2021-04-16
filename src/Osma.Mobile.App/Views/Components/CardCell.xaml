@@ -3,11 +3,11 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
           x:Class="Osma.Mobile.App.Views.Components.CardCell">
     <ViewCell.View>
-        <Frame Margin="40,10,40,10" 
+        <Frame Margin="40,10,40,10"
                CornerRadius="10"
                Padding="0"
-               IsClippedToBounds="True" 
-               HasShadow="True"  
+               IsClippedToBounds="True"
+               HasShadow="True"
                BackgroundColor="#f2f2f2"
                AbsoluteLayout.LayoutFlags="XProportional">
             <Grid>
@@ -23,24 +23,24 @@
                     <RowDefinition Height="25"></RowDefinition>
                     <RowDefinition Height="20"></RowDefinition>
                 </Grid.RowDefinitions>
-                <BoxView Grid.Row="0" 
-                         Grid.Column="0" 
-                         Grid.ColumnSpan="3" 
+                <BoxView Grid.Row="0"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="3"
                          Color="#1e73be" />
                 <Frame CornerRadius="5"
                        Padding="2,5,0,0"
                        BackgroundColor="#cde1f5"
-                       Margin="8,0,0,0" 
-                       Grid.Row="1" 
-                       Grid.Column="0" 
-                       Grid.RowSpan="3" 
-                       VerticalOptions="Center" 
+                       Margin="8,0,0,0"
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       Grid.RowSpan="3"
+                       VerticalOptions="Center"
                        HasShadow="False">
-                    <Label FontFamily="{StaticResource FontAwesomeSolid}" 
+                    <Label FontFamily="{StaticResource FontAwesomeSolid}"
                            TextColor="DarkGray"
                            Padding="8,0,8,0"
-                           FontSize="64" 
-                           Text="&#xf007;"/>
+                           FontSize="64"
+                           Text="&#xf007;" />
                 </Frame>
                 <Label x:Name="TitleLabel"
                        Padding="5,0,5,0"
@@ -54,7 +54,7 @@
                        LineBreakMode="TailTruncation"
                        MaxLines="1"
                        FontAttributes="Bold"
-                       FontSize="Medium"/>
+                       FontSize="Medium" />
                 <Label x:Name="SubtitleLabel"
                        Padding="8,0,8,0"
                        Grid.Row="1"
@@ -65,34 +65,34 @@
                        VerticalOptions="Center"
                        TextColor="Black"
                        FontAttributes="Bold"
-                       FontSize="Medium"/>
+                       FontSize="Medium" />
                 <Label Grid.Row="2"
                        Grid.Column="1"
                        VerticalOptions="Center"
                        TextColor="#739bbe"
                        Padding="5,0,0,0"
                        Text="Émis"
-                       FontSize="Small"/>
+                       FontSize="Small" />
                 <Label x:Name="DateTimeLabel"
                        Grid.Row="2"
                        Grid.Column="2"
                        VerticalOptions="Center"
                        TextColor="Black"
                        Margin="0,0,20,0"
-                       FontSize="Small"/>
+                       FontSize="Small" />
                 <Label Grid.Row="3"
                        Grid.Column="1"
                        VerticalOptions="Center"
                        TextColor="#739bbe"
                        Padding="5,0,0,0"
                        Text="Attributs"
-                       FontSize="Small"/>
+                       FontSize="Small" />
                 <Label x:Name="AttributeCountLabel"
                        Grid.Row="3"
                        Grid.Column="2"
                        VerticalOptions="Center"
                        TextColor="Black"
-                       FontSize="Small"/>
+                       FontSize="Small" />
             </Grid>
         </Frame>
     </ViewCell.View>

@@ -53,7 +53,6 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
 
         public string _attributeNameInEdition;
 
-
         public ProofRequestViewModel(IUserDialogs userDialogs,
                                      INavigationService navigationService,
                                      IProofService proofService,
@@ -89,15 +88,15 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             _proofRequest = JsonConvert.DeserializeObject<ProofRequest>(_proof.RequestJson);
 
             ProofName = requestJson["name"]?.ToString();
-            
+
             ProofVersion = "Version - " + requestJson["version"];
-            
+
             string proofState = ProofStateTranslator.Translate(_proof.State);
 
             ProofState = proofState;
 
             _requestedAttributesMap = new Dictionary<string, RequestedAttribute>();
- 
+
             if (_proof.State == Hyperledger.Aries.Features.PresentProof.ProofState.Requested)
             {
                 AreButtonsVisible = true;
@@ -236,7 +235,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
                 .SingleOrDefault(k =>
                     _requestedAttributes[k]["name"]?.ToString() == _previousProofAttribute.Keys.Single());
             string value = string.Empty;
-            foreach(var credentialAttributesValue in proofCredential.CredentialAttributesValues)
+            foreach (var credentialAttributesValue in proofCredential.CredentialAttributesValues)
             {
                 if (credentialAttributesValue.Name == _attributeNameInEdition)
                 {
@@ -270,7 +269,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
                 });
 
             IList<ProofAttribute> newList = new List<ProofAttribute>();
-            foreach(var attr in Attributes)
+            foreach (var attr in Attributes)
             {
                 newList.Add(attr);
             }
@@ -425,9 +424,9 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
                 }
                 else
                 {
-                    foreach(CredentialRecord credentialRecord in credentialRecords)
+                    foreach (CredentialRecord credentialRecord in credentialRecords)
                     {
-                        foreach(var credentialAttributeValue in credentialRecord.CredentialAttributesValues)
+                        foreach (var credentialAttributeValue in credentialRecord.CredentialAttributesValues)
                         {
                             if (credentialAttributeValue.Name == name)
                             {
@@ -456,6 +455,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             var connection = await _connectionService.GetAsync(agentContext, _proof.ConnectionId);
             Alias = connection.Alias.Name;
         }
+
         private async Task<bool> isAuthenticatedAsync(ApplicationEventType eventType)
         {
             var result = await CrossFingerprint.Current.IsAvailableAsync(true);
@@ -493,7 +493,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             }
             if (_previousProofAttribute.Any() && !_previousProofAttribute.ContainsKey(proofAttribute.Name))
                 _proofAttributes[_previousProofAttribute.Keys.Single()] = false;
-            
+
             if (!_proofAttributes.ContainsKey(proofAttribute.Name))
             {
                 _proofAttributes.Add(proofAttribute.Name, true);
@@ -521,6 +521,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         {
             await NavigationService.PopModalAsync();
         }
+
         #region Bindable Command
 
         public ICommand AcceptProofRequestCommand => new Command(async () =>
@@ -550,20 +551,19 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
 
         public ICommand RejectProofRequestCommand => new Command(async () =>
                 {
-            if (await isAuthenticatedAsync(ApplicationEventType.PassCodeAuthorisedProofReject))
-            {
-                await RejectProofRequest();
-            }
-        });
+                    if (await isAuthenticatedAsync(ApplicationEventType.PassCodeAuthorisedProofReject))
+                    {
+                        await RejectProofRequest();
+                    }
+                });
 
         public ICommand SelectProofAttributeCommand => new Command<ProofAttribute>(async (proofAttribute) =>
         {
-            if (proofAttribute != null) 
-            { 
+            if (proofAttribute != null)
+            {
                 await LoadProofCredentials(proofAttribute);
                 await NavigationService.NavigateToAsync(new SelectAttributeValueViewModel(_userDialogs, _navigationService, this), null, NavigationType.Modal);
                 //await NavigationService.NavigateToPopupAsync(true, new SelectAttributeValueViewModel(_userDialogs, _navigationService));
-                
             };
         });
 
@@ -682,16 +682,19 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             get => _proofName;
             set => this.RaiseAndSetIfChanged(ref _proofName, value);
         }
+
         public string ProofState
         {
             get => _proofState;
             set => this.RaiseAndSetIfChanged(ref _proofState, value);
         }
+
         public string ProofVersion
         {
             get => _proofVersion;
             set => this.RaiseAndSetIfChanged(ref _proofVersion, value);
         }
+
         public bool RefreshingProofRequest
         {
             get => _refreshingProofRequest;

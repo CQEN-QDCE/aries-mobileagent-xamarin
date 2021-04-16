@@ -2,32 +2,32 @@
 using Autofac;
 using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Contracts;
+using Hyperledger.Aries.Decorators;
+using Hyperledger.Aries.Decorators.Service;
 using Hyperledger.Aries.Features.DidExchange;
 using Hyperledger.Aries.Features.IssueCredential;
-using Osma.Mobile.App.Services.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ReactiveUI;
 using Hyperledger.Aries.Features.PresentProof;
-using Xamarin.Forms;
-using System.Windows.Input;
-using System.Reactive.Linq;
-using Osma.Mobile.App.Events;
-using System.Linq;
-using Osma.Mobile.App.Utilities;
+using Hyperledger.Aries.Storage;
 using Newtonsoft.Json;
 using Osma.Mobile.App.Assemblers;
-using Osma.Mobile.App.ViewModels.Credentials;
+using Osma.Mobile.App.Events;
 using Osma.Mobile.App.Services;
-using Osma.Mobile.App.ViewModels.ProofRequests;
-using Osma.Mobile.App.ViewModels.Connections;
+using Osma.Mobile.App.Services.Interfaces;
+using Osma.Mobile.App.Utilities;
 using Osma.Mobile.App.ViewModels.Account;
+using Osma.Mobile.App.ViewModels.Connections;
+using Osma.Mobile.App.ViewModels.Credentials;
+using Osma.Mobile.App.ViewModels.ProofRequests;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
+using ReactiveUI;
+using System.Collections.Generic;
 using System.IO;
-using Hyperledger.Aries.Decorators.Service;
-using Hyperledger.Aries.Decorators;
-using Hyperledger.Aries.Storage;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Osma.Mobile.App.ViewModels.Home
 {
@@ -159,9 +159,11 @@ namespace Osma.Mobile.App.ViewModels.Home
                     case ConnectionState.Invited:
                         notificationViewModel.State = NotificationState.Invited;
                         break;
+
                     case ConnectionState.Negotiating:
                         notificationViewModel.State = NotificationState.Negotiating;
                         break;
+
                     case ConnectionState.Connected:
                         notificationViewModel.State = NotificationState.Connected;
                         break;
@@ -196,15 +198,19 @@ namespace Osma.Mobile.App.ViewModels.Home
                     case CredentialState.Issued:
                         notificationViewModel.State = NotificationState.Issued;
                         break;
+
                     case CredentialState.Offered:
                         notificationViewModel.State = NotificationState.Offered;
                         break;
+
                     case CredentialState.Rejected:
-                            notificationViewModel.State = NotificationState.Rejected;
+                        notificationViewModel.State = NotificationState.Rejected;
                         break;
+
                     case CredentialState.Requested:
                         notificationViewModel.State = NotificationState.Requested;
                         break;
+
                     case CredentialState.Revoked:
                         notificationViewModel.State = NotificationState.Revoked;
                         break;
@@ -238,12 +244,15 @@ namespace Osma.Mobile.App.ViewModels.Home
                     case ProofState.Proposed:
                         notificationViewModel.State = NotificationState.Proposed;
                         break;
+
                     case ProofState.Requested:
                         notificationViewModel.State = NotificationState.Requested;
                         break;
+
                     case ProofState.Accepted:
                         notificationViewModel.State = NotificationState.Accepted;
                         break;
+
                     case ProofState.Rejected:
                         notificationViewModel.State = NotificationState.Rejected;
                         break;
@@ -318,18 +327,20 @@ namespace Osma.Mobile.App.ViewModels.Home
         {
             IAgentContext context = await _agentContextProvider.GetContextAsync();
 
-            switch(notification.Type)
+            switch (notification.Type)
             {
                 case NotificationType.Connection:
                     ConnectionRecord connectionRecord = await _connectionService.GetAsync(context, notification.RecordId);
                     ConnectionViewModel connectionViewModel = _connectionAssembler.Assemble(connectionRecord);
                     await NavigationService.NavigateToAsync(connectionViewModel, NavigationType.Modal);
                     break;
+
                 case NotificationType.Credential:
                     CredentialRecord credentialRecord = await _credentialService.GetAsync(context, notification.RecordId);
                     CredentialViewModel credentialViewModel = await _credentialAssembler.Assemble(credentialRecord);
                     await NavigationService.NavigateToAsync(credentialViewModel, NavigationType.Modal);
                     break;
+
                 case NotificationType.ProofRequest:
                     ProofRecord proofRecord = await _proofService.GetAsync(context, notification.RecordId);
                     ProofRequestViewModel proofRequest = await _proofAssembler.Assemble(proofRecord);
@@ -351,6 +362,5 @@ namespace Osma.Mobile.App.ViewModels.Home
         public ICommand ConfigureSettingsCommand => new Command(async () => await ConfigureSettings());
 
         public ICommand DecodeQrCodeFromUrlCommand => new Command(async () => await DecodeQrCodeFromUrl());
-
     }
 }

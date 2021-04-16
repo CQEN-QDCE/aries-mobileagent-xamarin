@@ -7,12 +7,14 @@ namespace Osma.Mobile.App.Utilities
     {
         public static string Translate(ConnectionState value)
         {
-            switch(value)
+            switch (value)
             {
                 case ConnectionState.Invited:
                     return AppResources.ConnectionStateInvited;
+
                 case ConnectionState.Negotiating:
                     return AppResources.ConnectionStateNegotiating;
+
                 case ConnectionState.Connected:
                     return AppResources.ConnectionStateConnected;
             }

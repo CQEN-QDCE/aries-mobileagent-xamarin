@@ -14,24 +14,24 @@
                 <RowDefinition Height="24"></RowDefinition>
                 <RowDefinition Height="24"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label FontFamily="{StaticResource FontAwesomeBrands}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" VerticalOptions="Center" FontSize="32" Text="&#xf26e;"/>
+            <Label FontFamily="{StaticResource FontAwesomeBrands}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" VerticalOptions="Center" FontSize="32" Text="&#xf26e;" />
             <Label x:Name="TitleLabel"
                    Grid.Row="0"
                    Grid.Column="1"
                    FontSize="Medium"
                    FontAttributes="Bold"
-                   TextColor="Black"/>
+                   TextColor="Black" />
             <Label x:Name="SubtitleLabel"
                    Grid.Row="1"
                    Grid.Column="2"
                    HorizontalTextAlignment="End"
-                   FontSize="Small"/>
+                   FontSize="Small" />
             <Label x:Name="DateTimeLabel"
                    Grid.Row="1"
                    Grid.Column="1"
                    VerticalOptions="Center"
-                   FontSize="Small"/>
-            <Label FontFamily="{StaticResource FontAwesomeSolid}" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" VerticalOptions="Center" HorizontalTextAlignment="End" FontSize="16" Text="&#xf105;"/>
+                   FontSize="Small" />
+            <Label FontFamily="{StaticResource FontAwesomeSolid}" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" VerticalOptions="Center" HorizontalTextAlignment="End" FontSize="16" Text="&#xf105;" />
             <Frame x:Name="NewLabelContainer"
                    IsVisible="false"
                    Grid.Row="0"
@@ -47,7 +47,7 @@
                        HorizontalTextAlignment="Center"
                        FontSize="Medium"
                        TextColor="White"
-                       Text="New"/>
+                       Text="New" />
             </Frame>
             <Frame IsVisible="false"
                    Grid.Row="0"
@@ -64,7 +64,7 @@
                         VerticalOptions="Center"
                         FontSize="Medium"
                         TextColor="White"
-                        Text="Delete"/>
+                        Text="Delete" />
             </Frame>
         </Grid>
     </ViewCell.View>

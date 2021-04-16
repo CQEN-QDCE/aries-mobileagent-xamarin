@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Osma.Mobile.App.Views.Account.AccountPage"
-             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
              xmlns:resources="clr-namespace:Osma.Mobile.App"
+             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
              xmlns:account="clr-namespace:Osma.Mobile.App.Views.Account;assembly=Osma.Mobile.App"
              xmlns:components="clr-namespace:Osma.Mobile.App.Views.Components;assembly=Osma.Mobile.App"
+             x:Class="Osma.Mobile.App.Views.Account.AccountPage"
              Title="{x:Static resources:AppResources.SettingsPageTitle}"
              BackgroundColor="White">
     <ContentPage.Resources>
@@ -22,39 +22,34 @@
             <Label Text="Test"></Label>
             <TableView HasUnevenRows="true" Intent="Menu">
                 <TableSection>
-                        <components:DetailedCell
+                    <components:DetailedCell
                             Title="{Binding FullName}"
-                            ImageURL="{Binding AvatarUrl}"
-                        />
-                    </TableSection>
-                     <TableSection>
-                        <account:AccountMenuButtonView
+                            ImageURL="{Binding AvatarUrl}" />
+                </TableSection>
+                <TableSection>
+                    <account:AccountMenuButtonView
                             Title="Backup Your App"
                             Subtitle="Create a backup in case anything happens"
                             Image="save_icon.png"
-                            TappedCommand="{Binding NavigateToBackupCommand}"
-                        />
-                        <account:AccountMenuButtonView
+                            TappedCommand="{Binding NavigateToBackupCommand}" />
+                    <account:AccountMenuButtonView
                             Title="Authentication"
                             Subtitle="Because it's private"
                             Image="security_icon.png"
-                            TappedCommand="{Binding NavigateToAuthenticationCommand}"
-                        />
+                            TappedCommand="{Binding NavigateToAuthenticationCommand}" />
                     <account:AccountMenuButtonView
                         Title="Legal"
                          Subtitle="All the cool tech we're using"
                         Image="legal_icon.png"
-                        TappedCommand="{Binding NavigateToLegalPageCommand}"
-                    />
+                        TappedCommand="{Binding NavigateToLegalPageCommand}" />
                     <account:AccountMenuButtonView
                         Title="{Binding AppVersion, StringFormat='Version: {0}'}"
                         Subtitle="{Binding BuildVersion, StringFormat='Build: {0}'}"
                         Image="info_icon.png"
                         TappedCommand="{Binding NavigateToDebugCommand}"
-                        NumberOfTapsRequired="8"
-                    />
-                    </TableSection>
-                </TableView>
-            </StackLayout>
+                        NumberOfTapsRequired="8" />
+                </TableSection>
+            </TableView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

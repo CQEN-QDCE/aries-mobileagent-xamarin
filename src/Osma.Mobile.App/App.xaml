@@ -19,7 +19,7 @@
                 <On Platform="Android" Value="FontAwesome5Regular.otf#Regular" />
                 <On Platform="iOS" Value="FontAwesome5Free-Regular" />
             </OnPlatform>
-            
+
             <Color x:Key="BasePageColor">#EFEFF4</Color>
             <Color x:Key="DarkPageColor">#F8F8F8</Color>
             <Color x:Key="BaseContentViewColor">#FFFFFF</Color>
@@ -27,7 +27,7 @@
             <x:Double x:Key="BaseFontSize">16</x:Double>
             <Color x:Key="BaseTextColor">#7b7b7b</Color>
             <Color x:Key="LightTextColor">#FFFFFF</Color>
-            
+
             <Color x:Key="BlueAccentColor">#3891D6</Color>
             <Color x:Key="RedAccentColor">#be282d</Color>
             <Color x:Key="GreenAccentColor">#73DA73</Color>
@@ -75,7 +75,7 @@
                     Property="HorizontalTextAlignment"
                     Value="Start" />
             </Style>
-            
+
             <Style
                 x:Key="BlueButtonStyle"
                 TargetType="Button"
@@ -120,8 +120,7 @@
                     Property="BackgroundColor"
                     Value="{StaticResource GreenAccentColor}" />
             </Style>
-            
-            
+
             <Style
                 x:Key="ButtonStyleBase"
                 TargetType="Button">
@@ -134,33 +133,30 @@
                 <Setter Property="Padding" Value="12,6" />
                 <Setter Property="Margin" Value="0" />
             </Style>
-            
+
             <Style
                 x:Key="ButtonStylePrimary"
                 TargetType="Button"
                 ApplyToDerivedTypes="true"
-                BasedOn="{StaticResource ButtonStyleBase}"
-            >
+                BasedOn="{StaticResource ButtonStyleBase}">
                 <Setter Property="TextColor" Value="{StaticResource LightTextColor}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource BlueAccentColor}" />
             </Style>
-            
+
             <Style
                 x:Key="ButtonStyleSecondary"
                 TargetType="Button"
                 ApplyToDerivedTypes="true"
-                BasedOn="{StaticResource ButtonStyleBase}"
-            >
+                BasedOn="{StaticResource ButtonStyleBase}">
                 <Setter Property="TextColor" Value="{StaticResource BaseTextColor}" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
-            
+
             <Style
                 x:Key="ButtonStyleDestructive"
                 TargetType="Button"
                 ApplyToDerivedTypes="true"
-                BasedOn="{StaticResource ButtonStyleBase}"
-            >
+                BasedOn="{StaticResource ButtonStyleBase}">
                 <Setter Property="TextColor" Value="{StaticResource LightTextColor}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource RedAccentColor}" />
             </Style>
@@ -168,25 +164,23 @@
                 x:Key="ButtonStyleAccept"
                 TargetType="Button"
                 ApplyToDerivedTypes="true"
-                BasedOn="{StaticResource ButtonStyleBase}"
-            >
+                BasedOn="{StaticResource ButtonStyleBase}">
                 <Setter Property="TextColor" Value="{StaticResource LightTextColor}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource GreenAccentColor}" />
-            </Style>           
+            </Style>
             <Style
                 x:Key="IconButtonStyle"
                 TargetType="ImageButton"
-                ApplyToDerivedTypes="true"
-            >
+                ApplyToDerivedTypes="true">
                 <Setter Property="Aspect" Value="AspectFit" />
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Padding" Value="16" />
                 <Setter Property="CornerRadius" Value="50" />
-                
+
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
-                       <VisualStateGroup x:Name="CommonStates">
+                        <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor" Value="Transparent" />
@@ -201,7 +195,6 @@
                     </VisualStateGroupList>
                 </Setter>
             </Style>
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>

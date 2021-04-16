@@ -8,7 +8,6 @@ namespace Osma.Mobile.App.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
             string param = System.Convert.ToString(parameter) ?? "u";
 
             //switch (param.ToUpper())
@@ -32,36 +31,47 @@ namespace Osma.Mobile.App.Converters
                 case 1:
                     date += "JAN";
                     break;
+
                 case 2:
                     date += "FÉV";
                     break;
+
                 case 3:
                     date += "MAR";
                     break;
+
                 case 4:
                     date += "AVR";
                     break;
+
                 case 5:
                     date += "MAI";
                     break;
+
                 case 6:
                     date += "JUI";
                     break;
+
                 case 7:
                     date += "JUI";
                     break;
+
                 case 8:
                     date += "AOU";
                     break;
+
                 case 9:
                     date += "SEP";
                     break;
+
                 case 10:
                     date += "OCT";
                     break;
+
                 case 11:
                     date += "NOV";
                     break;
+
                 case 12:
                     date += "DÉC";
                     break;
@@ -69,7 +79,6 @@ namespace Osma.Mobile.App.Converters
             date += " " + datetime.Year;
             date += " | " + datetime.Hour + "H" + (datetime.Minute < 10 ? "0" + datetime.Minute : datetime.Minute.ToString());
             return date;
-
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

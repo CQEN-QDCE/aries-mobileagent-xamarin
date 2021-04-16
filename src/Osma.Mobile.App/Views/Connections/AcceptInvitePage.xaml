@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
-             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:resources="clr-namespace:Osma.Mobile.App"
+             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
              x:Class="Osma.Mobile.App.Views.Connections.AcceptInvitePage">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -33,10 +32,10 @@
                 <Label FontSize="26"
                        TextColor="#505050"
                        HorizontalTextAlignment="Center"
-                       Text="{Binding InviteTitle}"/>
+                       Text="{Binding InviteTitle}" />
                 <Label TextColor="#787878"
                        HorizontalTextAlignment="Center"
-                       Text="{Binding InviteContents}"/>
+                       Text="{Binding InviteContents}" />
             </StackLayout>
             <StackLayout Grid.Row="2"
                          Padding="10"
@@ -48,13 +47,13 @@
                         Command="{Binding RejectInviteCommand}"
                         BorderRadius="10"
                         HorizontalOptions="FillAndExpand"
-                        Text="{x:Static resources:AppResources.RefuseButtonLabel}"/>
+                        Text="{x:Static resources:AppResources.RefuseButtonLabel}" />
                 <Button HorizontalOptions="FillAndExpand"
                         Style="{DynamicResource BlueButtonStyle}"
                         IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverse}}"
                         Command="{Binding AcceptInviteCommand}"
                         BorderRadius="10"
-                        Text="{x:Static resources:AppResources.AcceptButtonLabel}"/>
+                        Text="{x:Static resources:AppResources.AcceptButtonLabel}" />
             </StackLayout>
         </Grid>
     </ContentPage.Content>

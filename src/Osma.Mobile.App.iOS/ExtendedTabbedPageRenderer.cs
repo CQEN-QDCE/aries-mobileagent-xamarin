@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(TabbedPage), typeof(ExtendedTabbedPageRenderer))]
+
 namespace Osma.Mobile.App.iOS
 {
     public class ExtendedTabbedPageRenderer : TabbedRenderer
@@ -47,7 +48,7 @@ namespace Osma.Mobile.App.iOS
                 {
                     MessagingCenter.Send<object>(this, "ScanInvite");
                 };
- 
+
                 this.ShouldSelectViewController += (UITabBarController tabBarController, UIViewController viewController) =>
                 {
                     if (viewController == tabBarController.ViewControllers[2])

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:components="clr-namespace:Osma.Mobile.App.Views.Components;assembly=Osma.Mobile.App"
-             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
-             xmlns:behaviours="clr-namespace:Osma.Mobile.App.Behaviors;assembly=Osma.Mobile.App"
-             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:resources="clr-namespace:Osma.Mobile.App"
+             xmlns:behaviours="clr-namespace:Osma.Mobile.App.Behaviors;assembly=Osma.Mobile.App"
+             xmlns:converters="clr-namespace:Osma.Mobile.App.Converters;assembly=Osma.Mobile.App"
+             xmlns:components="clr-namespace:Osma.Mobile.App.Views.Components;assembly=Osma.Mobile.App"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.LargeTitleDisplay="Always"
              x:Class="Osma.Mobile.App.Views.Connections.ConnectionsPage"
              Title="{Binding Name}"
@@ -44,11 +44,11 @@
                                                      Date="{Binding DateTime}"
                                                      Time="{Binding DateTime}"
                                                      DateTime="{Binding DateTime}"
-                                                     ImageURL="{Binding ConnectionImageUrl}"/>
+                                                     ImageURL="{Binding ConnectionImageUrl}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     <ListView.Behaviors>
-                        <behaviours:EventToCommandBehavior EventName="ItemSelected" Command="{Binding SelectConnectionCommand}" Converter="{StaticResource SelectedItemConverter}" DeselectOnClick="true"/>
+                        <behaviours:EventToCommandBehavior EventName="ItemSelected" Command="{Binding SelectConnectionCommand}" Converter="{StaticResource SelectedItemConverter}" DeselectOnClick="true" />
                     </ListView.Behaviors>
                 </ListView>
             </StackLayout>
@@ -61,11 +61,11 @@
                     HorizontalOptions="CenterAndExpand">
                     <ActivityIndicator
                         IsVisible="{Binding RefreshingConnections}"
-                        IsRunning="{Binding RefreshingConnections}"/>
+                        IsRunning="{Binding RefreshingConnections}" />
                     <Label
                         HorizontalOptions="CenterAndExpand"
                         HorizontalTextAlignment="Center"
-                        IsVisible="{Binding RefreshingConnections, Converter={StaticResource BooleanInverse}}" 
+                        IsVisible="{Binding RefreshingConnections, Converter={StaticResource BooleanInverse}}"
                         Text="You have no connections - Click connect to get started" />
                 </StackLayout>
             </StackLayout>
