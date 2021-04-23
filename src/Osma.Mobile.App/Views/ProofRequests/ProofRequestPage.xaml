@@ -49,7 +49,7 @@
                                    VerticalOptions="Center"
                                    FontSize="Small"
                                    Text="{Binding RevealDataLabel}"
-                                   IsVisible="{Binding IsNotPredicate}" />
+                                   IsVisible="{Binding IsPredicate}" />
                         </Grid>
                     </ViewCell.View>
                 </ViewCell>
@@ -174,10 +174,9 @@
                       HasUnevenRows="true"
                       IsPullToRefreshEnabled="true"
                       IsRefreshing="{Binding RefreshingProofRequest}"
-                      RefreshCommand="{Binding RefreshCommand}"
                       IsEnabled="{Binding RefreshingProofRequest, Converter={StaticResource BooleanInverse}}">
                 <ListView.Behaviors>
-                    <behaviours:EventToCommandBehavior EventName="ItemSelected" Command="{Binding SelectProofAttributeCommand}" Converter="{StaticResource SelectedItemConverter}" DeselectOnClick="true" />
+                    <behaviours:EventToCommandBehavior EventName="ItemSelected" Command="{Binding SelectAttributeValueCommand}" Converter="{StaticResource SelectedItemConverter}" DeselectOnClick="true" />
                 </ListView.Behaviors>
             </ListView>
             <StackLayout Padding="10"
@@ -186,13 +185,13 @@
                          VerticalOptions="FillAndExpand"
                          IsVisible="{Binding AreButtonsVisible}">
                 <Button Style="{DynamicResource RedButtonStyle}"
-                        Command="{Binding RejectProofRequestCommand}"
+                        Command="{Binding RefuseCommand}"
                         BorderRadius="10"
                         HorizontalOptions="FillAndExpand"
                         Text="{x:Static resources:AppResources.RefuseButtonLabel}" />
                 <Button HorizontalOptions="FillAndExpand"
                         Style="{DynamicResource BlueButtonStyle}"
-                        Command="{Binding AcceptProofRequestCommand}"
+                        Command="{Binding AcceptCommand}"
                         BorderRadius="10"
                         Text="{x:Static resources:AppResources.AcceptButtonLabel}" />
             </StackLayout>

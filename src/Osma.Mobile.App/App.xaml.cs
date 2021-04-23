@@ -124,6 +124,7 @@ namespace Osma.Mobile.App
                     services.AddSingleton<IConnectionAssembler, ConnectionAssembler>();
                     services.AddSingleton<ICredentialAssembler, CredentialAssembler>();
                     services.AddSingleton<IProofAssembler, ProofAssembler>();
+                    services.AddSingleton<IProofCredentialSelector, ProofCredentialSelector>();
                     services.AddSingleton<IRequestPresentationFiller, RequestPresentationFiller>();
 
                     var containerBuilder = new ContainerBuilder();

@@ -306,6 +306,7 @@ namespace Osma.Mobile.App.ViewModels.Home
                     proofRecord.SetTag("RecipientKey", service.RecipientKeys.ToList()[0]);
                     proofRecord.SetTag("ServiceEndpoint", service.ServiceEndpoint);
                     await _recordService.UpdateAsync(context.Wallet, proofRecord);
+
                     _eventAggregator.Publish(new ApplicationEvent { Type = ApplicationEventType.ProofRequestUpdated });
                     break;
 
@@ -323,7 +324,7 @@ namespace Osma.Mobile.App.ViewModels.Home
             });
         }
 
-        public async Task SelectConnection(Notification notification)
+        public async Task SelectNotification(Notification notification)
         {
             IAgentContext context = await _agentContextProvider.GetContextAsync();
 
@@ -356,7 +357,7 @@ namespace Osma.Mobile.App.ViewModels.Home
 
         public ICommand SelectNotificationCommand => new Command<Notification>(async (notification) =>
         {
-            if (notification != null) await SelectConnection(notification);
+            if (notification != null) await SelectNotification(notification);
         });
 
         public ICommand ConfigureSettingsCommand => new Command(async () => await ConfigureSettings());

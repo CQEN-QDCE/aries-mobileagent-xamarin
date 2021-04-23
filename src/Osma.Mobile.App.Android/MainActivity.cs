@@ -2,12 +2,14 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Runtime;
 using FFImageLoading.Forms.Platform;
 using Java.Lang;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Xamarin.Forms;
 
 namespace Osma.Mobile.App.Droid
@@ -22,6 +24,11 @@ namespace Osma.Mobile.App.Droid
 
             base.OnCreate(bundle);
 
+            AndroidEnvironment.UnhandledExceptionRaiser += delegate (object sender, RaiseThrowableEventArgs args) {
+                typeof(System.Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .SetValue(args.Exception, null);
+                throw args.Exception;
+            };
             Forms.Init(this, bundle);
 
             App.ScreenHeight = (int)(Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density);
@@ -51,6 +58,7 @@ namespace Osma.Mobile.App.Droid
             LoadApplication(host.Services.GetRequiredService<App>());
 
             CheckAndRequestRequiredPermissions();
+
         }
 
         private readonly string[] _permissionsRequired =

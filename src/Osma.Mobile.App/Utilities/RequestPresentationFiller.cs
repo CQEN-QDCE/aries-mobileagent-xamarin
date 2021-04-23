@@ -66,16 +66,17 @@ namespace Osma.Mobile.App.Utilities
                                                 if (cav.Name == requestedAttribute.Name)
                                                 {
                                                     pa.Value = cav.Value.ToString();
-                                                    if (proof.RequestedAttributesMap.ContainsKey(requestedAttribute3.Key))
-                                                    {
-                                                        if (proof.RequestedAttributesMap[requestedAttribute3.Key]?.CredentialId !=
-                                                            requestedAttribute2.CredentialId)
-                                                            proof.RequestedAttributesMap[requestedAttribute3.Key] = requestedAttribute2;
-                                                    }
-                                                    else
-                                                    {
-                                                        proof.RequestedAttributesMap.Add(requestedAttribute3.Key, requestedAttribute2);
-                                                    }
+                                                    pa.CredentialId = credentialRecord.CredentialId;
+                                                    //if (proof.RequestedAttributesMap.ContainsKey(requestedAttribute3.Key))
+                                                    //{
+                                                    //    if (proof.RequestedAttributesMap[requestedAttribute3.Key]?.CredentialId !=
+                                                    //        requestedAttribute2.CredentialId)
+                                                    //        proof.RequestedAttributesMap[requestedAttribute3.Key] = requestedAttribute2;
+                                                    //}
+                                                    //else
+                                                    //{
+                                                    //    proof.RequestedAttributesMap.Add(requestedAttribute3.Key, requestedAttribute2);
+                                                    //}
                                                 }
                                             }
                                         }

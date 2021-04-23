@@ -86,10 +86,12 @@ namespace Osma.Mobile.App.ViewModels
             });
 
             _subscription = _eventAggregator.GetEventByType<ServiceMessageProcessingEvent>()
-            .Where(x => x.MessageType == MessageTypes.PresentProofNames.RequestPresentation)
             .Subscribe(async x =>
             {
-                await DisplayRequestPresentation(x.RecordId);
+                if (x.MessageType == MessageTypes.PresentProofNames.RequestPresentation || x.MessageType == "https://didcomm.org/present-proof/1.0/request-presentation")
+                {
+                    await DisplayRequestPresentation(x.RecordId);
+                }
             });
         }
 

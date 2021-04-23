@@ -30,41 +30,61 @@ namespace Osma.Mobile.App.Assemblers
         {
             if (proofRecord == null) return null;
 
-            IAgentContext context = await _agentContextProvider.GetContextAsync();
+            ProofRequestViewModel proofRequest2 = _scope.Resolve<ProofRequestViewModel>(new NamedParameter("proof", proofRecord));
 
-            ProofRequestViewModel proof = _scope.Resolve<ProofRequestViewModel>(new NamedParameter("proof", proofRecord));
+            proofRequest2.Id = proofRecord.Id;
 
-            proof.Id = proofRecord.Id;
-
-            proof.IsNew = proofRecord.State == ProofState.Requested && string.IsNullOrEmpty(proofRecord.GetTag("IsNew"));
+            //proof.IsNew = proofRecord.State == ProofState.Requested && string.IsNullOrEmpty(proofRecord.GetTag("IsNew"));
 
             if (proofRecord.CreatedAtUtc.HasValue)
             {
-                proof.Alias = proofRecord.CreatedAtUtc.Value.ToLocalTime().ToString();
+                //proof.Alias = proofRecord.CreatedAtUtc.Value.ToLocalTime().ToString();
             }
 
             if (proofRecord.ProofJson != null)
             {
                 var partialProof = JsonConvert.DeserializeObject<PartialProof>(proofRecord.ProofJson);
                 var proofRequest = JsonConvert.DeserializeObject<ProofRequest>(proofRecord.RequestJson);
-                proof.Attributes.Clear();
+                proofRequest2.Attributes.Clear();
                 foreach (var revealedAttributeKey in partialProof.RequestedProof.RevealedAttributes.Keys)
                 {
-                    var proofAttribute = new ViewModels.ProofRequests.ProofAttribute
+                    var proofAttribute = new ViewModels.ProofRequests.ProofAttributeViewModel
                     {
                         Name = proofRequest.RequestedAttributes[revealedAttributeKey].Name, // TODO: Que faire pour gérer l'attribut Names?
-                        IsNotPredicate = true,
+                        IsPredicate = false,
                         IsRevealed = true,
                         Type = "Text",
                         Value = partialProof.RequestedProof.RevealedAttributes[revealedAttributeKey].Raw
                     };
-                    proof.Attributes.Add(proofAttribute);
+                    proofRequest2.Attributes.Add(proofAttribute);
+                }
+            } 
+            else
+            {
+                ProofRequest proofRequest = JsonConvert.DeserializeObject<ProofRequest>(proofRecord.RequestJson);
+                proofRequest2.Attributes.Clear();
+                foreach(KeyValuePair<string, ProofAttributeInfo> requestedAttribute in proofRequest.RequestedAttributes)
+                {
+                    proofRequest2.Attributes.Add(new ProofAttributeViewModel
+                    {
+                        Id = requestedAttribute.Key,
+                        Name = requestedAttribute.Value.Name // TODO: Que faire pour gérer l'attribut Names?
+                    });
+                }
+                foreach (KeyValuePair<string, ProofPredicateInfo> requestedAttribute in proofRequest.RequestedPredicates)
+                {
+                    proofRequest2.Attributes.Add(new ProofAttributeViewModel
+                    {
+                        Id = requestedAttribute.Key,
+                        Name = requestedAttribute.Value.Name, // TODO: Que faire pour gérer l'attribut Names?
+                        IsPredicate = true
+                    });
                 }
             }
 
-            proof.ProofState = ProofStateTranslator.Translate(proofRecord.State);
+            proofRequest2.State = ProofStateTranslator.Translate(proofRecord.State);
 
-            return proof;
+            return proofRequest2;
         }
 
         public async Task<IList<ProofRequestViewModel>> AssembleMany(IList<ProofRecord> proofRecords)

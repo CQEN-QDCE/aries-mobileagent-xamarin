@@ -27,7 +27,7 @@ namespace Osma.Mobile.App.Views.ProofRequests
             }
 
             ProofRequestAttributeType proofRequestAttributeType;
-            var proofRequestAttribute = item as ProofAttribute;
+            var proofRequestAttribute = item as ProofAttributeViewModel;
 
             if (proofRequestAttribute is null)
             {

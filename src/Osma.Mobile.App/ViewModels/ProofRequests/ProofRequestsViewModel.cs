@@ -70,29 +70,29 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         {
             await RefreshProofs();
 
-            _eventAggregator.GetEventByType<ApplicationEvent>()
-                           .Where(_ => _.Type == ApplicationEventType.ProofRequestUpdated)
-                           .Subscribe(async _ => { await RefreshProofs(); await DetectNewProofRequest(); });
+            //_eventAggregator.GetEventByType<ApplicationEvent>()
+            //               .Where(_ => _.Type == ApplicationEventType.ProofRequestUpdated)
+            //               .Subscribe(async _ => { await RefreshProofs(); await DetectNewProofRequest(); });
 
             await base.InitializeAsync(navigationData);
         }
 
-        public async Task DetectNewProofRequest()
-        {
-            var context = await _agentContextProvider.GetContextAsync();
+        //public async Task DetectNewProofRequest()
+        //{
+        //    var context = await _agentContextProvider.GetContextAsync();
 
-            foreach (var proofRequest in ProofRequests)
-            {
-                if (proofRequest.IsNew)
-                {
-                    var record = await _recordService.GetAsync<ProofRecord>(context.Wallet, proofRequest.Id);
-                    record.SetTag("IsNew", "false");
-                    await _recordService.UpdateAsync(context.Wallet, record);
-                    await SelectProofRequest(proofRequest);
-                    break;
-                }
-            }
-        }
+        //    foreach (var proofRequest in ProofRequests)
+        //    {
+        //        if (proofRequest.IsNew)
+        //        {
+        //            var record = await _recordService.GetAsync<ProofRecord>(context.Wallet, proofRequest.Id);
+        //            record.SetTag("IsNew", "false");
+        //            await _recordService.UpdateAsync(context.Wallet, record);
+        //            await SelectProofRequest(proofRequest);
+        //            break;
+        //        }
+        //    }
+        //}
 
         public async Task RefreshProofs()
         {
