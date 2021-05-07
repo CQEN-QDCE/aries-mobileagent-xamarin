@@ -73,7 +73,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
 
         public ICommand AcceptCommand => new Command(async () =>
         {
-            if (_proofCredential != null) _selection(_proofCredential);
+            if (_selectedProofCredential != null) _selection(_selectedProofCredential);
 
             await NavigationService.PopModalAsync();
         });
@@ -92,7 +92,7 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
         private string _selectedAttributeName;
         private IList<ProofCredential> _proofCredentials;
 
-        private ProofCredential _proofCredential;
+        private ProofCredential _selectedProofCredential;
 
         public string SelectedAttributeName
         {
@@ -106,10 +106,10 @@ namespace Osma.Mobile.App.ViewModels.ProofRequests
             set => this.RaiseAndSetIfChanged(ref _errorLabel, value);
         }
 
-        public ProofCredential ProofCredential
+        public ProofCredential SelectedProofCredential
         {
-            get => _proofCredential;
-            set => this.RaiseAndSetIfChanged(ref _proofCredential, value);
+            get => _selectedProofCredential;
+            set => this.RaiseAndSetIfChanged(ref _selectedProofCredential, value);
         }
 
         public IList<ProofCredential> ProofCredentials

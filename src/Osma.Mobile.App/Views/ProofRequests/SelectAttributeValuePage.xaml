@@ -114,7 +114,7 @@
                 <ListView BackgroundColor="Transparent" Margin="0,0,0,0"
                           ItemTemplate="{StaticResource proofRequestCredentialTemplateSelector}"
                           ItemsSource="{Binding ProofCredentials}"
-                          SelectedItem="{Binding ProofCredential}"
+                          SelectedItem="{Binding SelectedProofCredential}"
                           SelectionMode="Single"
                           HasUnevenRows="true">
                 </ListView>

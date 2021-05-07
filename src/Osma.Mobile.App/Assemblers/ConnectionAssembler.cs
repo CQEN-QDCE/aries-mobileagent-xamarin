@@ -1,17 +1,15 @@
 ﻿using Autofac;
 using Hyperledger.Aries.Agents;
 using Hyperledger.Aries.Features.DidExchange;
-using Hyperledger.Aries.Features.PresentProof;
-using Newtonsoft.Json;
 using Osma.Mobile.App.Utilities;
-using Osma.Mobile.App.ViewModels.ProofRequests;
+using Osma.Mobile.App.ViewModels.Connections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Osma.Mobile.App.Assemblers
 {
-    public class ProofAssembler : IProofAssembler
+    public class ConnectionAssembler : IConnectionAssembler
     {
         private readonly IAgentProvider _agentContextProvider;
 
@@ -19,86 +17,46 @@ namespace Osma.Mobile.App.Assemblers
 
         private readonly ILifetimeScope _scope;
 
-        public ProofAssembler(IAgentProvider agentContextProvider, IConnectionService connectionService, ILifetimeScope scope)
+        public ConnectionAssembler(IAgentProvider agentContextProvider, IConnectionService connectionService, ILifetimeScope scope)
         {
             _agentContextProvider = agentContextProvider;
             _connectionService = connectionService;
             _scope = scope;
         }
 
-        public async Task<ProofRequestViewModel> Assemble(ProofRecord proofRecord)
+        public ConnectionViewModel Assemble(ConnectionRecord connectionRecord)
         {
-            if (proofRecord == null) return null;
+            if (connectionRecord == null) return null;
 
-            ProofRequestViewModel proofRequest2 = _scope.Resolve<ProofRequestViewModel>(new NamedParameter("proof", proofRecord));
+            ConnectionViewModel connection = _scope.Resolve<ConnectionViewModel>(new NamedParameter("record", connectionRecord));
 
-            proofRequest2.Id = proofRecord.Id;
+            if (string.IsNullOrWhiteSpace(connection.ConnectionName)) connection.ConnectionName = "Agent Médiateur";
 
-            //proof.IsNew = proofRecord.State == ProofState.Requested && string.IsNullOrEmpty(proofRecord.GetTag("IsNew"));
+            connection.ConnectionSubtitle = ConnectionStateTranslator.Translate(connectionRecord.State);
 
-            if (proofRecord.CreatedAtUtc.HasValue)
+            DateTime datetime = DateTime.Now;
+
+            if (connectionRecord.CreatedAtUtc.HasValue)
             {
-                //proof.Alias = proofRecord.CreatedAtUtc.Value.ToLocalTime().ToString();
+                datetime = connectionRecord.CreatedAtUtc.Value.ToLocalTime();
+                connection.DateTime = datetime;
             }
 
-            if (proofRecord.ProofJson != null)
-            {
-                var partialProof = JsonConvert.DeserializeObject<PartialProof>(proofRecord.ProofJson);
-                var proofRequest = JsonConvert.DeserializeObject<ProofRequest>(proofRecord.RequestJson);
-                proofRequest2.Attributes.Clear();
-                foreach (var revealedAttributeKey in partialProof.RequestedProof.RevealedAttributes.Keys)
-                {
-                    var proofAttribute = new ViewModels.ProofRequests.ProofAttributeViewModel
-                    {
-                        Name = proofRequest.RequestedAttributes[revealedAttributeKey].Name, // TODO: Que faire pour gérer l'attribut Names?
-                        IsPredicate = false,
-                        IsRevealed = true,
-                        Type = "Text",
-                        Value = partialProof.RequestedProof.RevealedAttributes[revealedAttributeKey].Raw
-                    };
-                    proofRequest2.Attributes.Add(proofAttribute);
-                }
-            } 
-            else
-            {
-                ProofRequest proofRequest = JsonConvert.DeserializeObject<ProofRequest>(proofRecord.RequestJson);
-                proofRequest2.Attributes.Clear();
-                foreach(KeyValuePair<string, ProofAttributeInfo> requestedAttribute in proofRequest.RequestedAttributes)
-                {
-                    proofRequest2.Attributes.Add(new ProofAttributeViewModel
-                    {
-                        Id = requestedAttribute.Key,
-                        Name = requestedAttribute.Value.Name // TODO: Que faire pour gérer l'attribut Names?
-                    });
-                }
-                foreach (KeyValuePair<string, ProofPredicateInfo> requestedAttribute in proofRequest.RequestedPredicates)
-                {
-                    proofRequest2.Attributes.Add(new ProofAttributeViewModel
-                    {
-                        Id = requestedAttribute.Key,
-                        Name = requestedAttribute.Value.Name, // TODO: Que faire pour gérer l'attribut Names?
-                        IsPredicate = true
-                    });
-                }
-            }
-
-            proofRequest2.State = ProofStateTranslator.Translate(proofRecord.State);
-
-            return proofRequest2;
+            return connection;
         }
 
-        public async Task<IList<ProofRequestViewModel>> AssembleMany(IList<ProofRecord> proofRecords)
+        public IList<ConnectionViewModel> AssembleMany(IList<ConnectionRecord> connectionRecords)
         {
-            if (proofRecords == null) return null;
+            if (connectionRecords == null) return null;
 
-            IList<ProofRequestViewModel> proofs = new List<ProofRequestViewModel>();
+            IList<ConnectionViewModel> connections = new List<ConnectionViewModel>();
 
-            foreach (ProofRecord proofRecord in proofRecords.OrderByDescending(pr => pr.CreatedAtUtc))
+            foreach (ConnectionRecord connectionRecord in connectionRecords.OrderByDescending(pr => pr.CreatedAtUtc))
             {
-                proofs.Add(await Assemble(proofRecord));
+                connections.Add(Assemble(connectionRecord));
             }
 
-            return proofs;
+            return connections;
         }
     }
 }
